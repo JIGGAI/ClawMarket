@@ -54,13 +54,13 @@ export default function HomePage() {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  className="rounded-md bg-[var(--text)] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+                  className="rounded-md bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
                   href="/marketplace"
                 >
                   Browse Marketplace
                 </Link>
                 <a
-                  className="rounded-md border border-[var(--border)] bg-white/60 px-4 py-2 text-sm font-medium text-[var(--text)] shadow-sm transition hover:bg-white"
+                  className="rounded-md border border-[var(--border)] bg-white/60 px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                   href="https://github.com/rjdjohnston/clawcipes"
                   target="_blank"
                   rel="noreferrer"

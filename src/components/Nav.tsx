@@ -12,13 +12,13 @@ export function Nav() {
         </Link>
 
         <nav className="flex items-center gap-4 text-sm text-[var(--muted)]">
-          <Link className="hover:text-[var(--text)]" href="/marketplace">
+          <Link className="hover:text-[color:var(--coral-bright)]" href="/marketplace">
             Marketplace
           </Link>
-          <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
+          <a className="hover:text-[color:var(--coral-bright)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
-          <a className="hover:text-[var(--text)]" href={githubUrl} target="_blank" rel="noreferrer">
+          <a className="hover:text-[color:var(--coral-bright)]" href={githubUrl} target="_blank" rel="noreferrer">
             GitHub
           </a>
           <div className="ml-2 flex items-center gap-2">
