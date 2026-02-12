@@ -19,7 +19,7 @@ export default function DocsPage() {
               Docs coming soon
             </h1>
             <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
-              We're working on comprehensive documentation for Clawcipes recipes, team workflows, and agent configuration.
+              We&apos;re working on comprehensive documentation for Clawcipes recipes, team workflows, and agent configuration.
             </p>
 
             <div className="mt-10 flex flex-wrap justify-center gap-4">

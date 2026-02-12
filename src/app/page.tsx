@@ -19,7 +19,7 @@ function Card({
   body: string;
 }) {
   return (
-    <div className="rounded-2xl bg-white/80 p-6 shadow-lg">
+    <div className="rounded-2xl bg-white/60 p-6">
       <h3 className="text-lg font-semibold tracking-tight text-[var(--text)]">{title}</h3>
       <p className="mt-2 text-base leading-7 text-[var(--muted)]">{body}</p>
     </div>
@@ -176,26 +176,36 @@ export default function HomePage() {
       {/* FEATURE: Shared context */}
       <FadeIn>
         <section className="bg-slate-50 px-6 py-20 lg:px-16">
-          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-start">
-            <div>
-              <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Pantry</p>
-              <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-                Shared, file-based context
-              </h2>
-              <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
-                Your team doesn't "forget." Context lives in a shared workspace: Markdown notes, tickets, checklists, and
-                artifacts that stay reviewable, greppable, and versioned.
-              </p>
-            </div>
-            <div className="grid gap-5">
-              <Card
-                title="Readable in git"
-                body="Workflows and decisions are files, not hidden state. PRs show what changed and why."
-              />
-              <Card
-                title="Deterministic scaffolding"
-                body="Start from a known-good structure every time — lanes, roles, templates, and conventions included."
-              />
+          <div className="mx-auto max-w-7xl">
+            <div className="relative overflow-hidden rounded-3xl bg-white/70 px-8 py-12 lg:px-12">
+              <div className="pointer-events-none absolute left-6 top-6 h-10 w-10 border-l-2 border-t-2 border-dashed border-slate-200" />
+              <div className="pointer-events-none absolute right-6 top-6 h-10 w-10 border-r-2 border-t-2 border-dashed border-slate-200" />
+              <div className="pointer-events-none absolute bottom-6 left-6 h-10 w-10 border-b-2 border-l-2 border-dashed border-slate-200" />
+              <div className="pointer-events-none absolute bottom-6 right-6 h-10 w-10 border-b-2 border-r-2 border-dashed border-slate-200" />
+
+              <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Pantry</p>
+                  <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+                    Shared, file-based context
+                  </h2>
+                  <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
+                    Your team doesn&apos;t &quot;forget.&quot; Context lives in a shared workspace: Markdown notes, tickets, checklists,
+                    and artifacts that stay reviewable, greppable, and versioned.
+                  </p>
+                </div>
+
+                <div className="grid gap-4">
+                  <Card
+                    title="Readable in git"
+                    body="Workflows and decisions are files, not hidden state. PRs show what changed and why."
+                  />
+                  <Card
+                    title="Deterministic scaffolding"
+                    body="Start from a known-good structure every time — lanes, roles, templates, and conventions included."
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>

@@ -97,7 +97,7 @@ function RecipeCard({
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="group block rounded-2xl bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+      className="group block rounded-2xl bg-white/70 p-6 transition hover:bg-white"
     >
       <div className="flex items-start gap-4">
         <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 shadow-md">
@@ -113,7 +113,7 @@ function RecipeCard({
         </div>
       </div>
       <p className="mt-4 text-base leading-7 text-[var(--muted)]">{description}</p>
-      <div className="mt-4 overflow-x-auto rounded-lg bg-slate-900 px-4 py-3 font-mono text-xs text-slate-300">
+      <div className="mt-4 overflow-x-auto rounded-lg bg-slate-900/95 px-4 py-3 font-mono text-xs text-slate-300">
         <span className="text-emerald-400">$</span> {command}
       </div>
     </a>
