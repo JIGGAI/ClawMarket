@@ -1,6 +1,20 @@
 import Link from "next/link";
 
 const githubUrl = "https://github.com/rjdjohnston/clawcipes";
+const xUrl = "https://x.com/clawcipes";
+
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+    >
+      <path d="M18.244 2H21.62l-7.38 8.437L22.922 22h-6.87l-5.38-7.01L4.54 22H1.16l7.894-9.02L1 2h7.04l4.86 6.41L18.244 2Zm-1.205 18h1.87L6.98 3.9H4.98l12.06 16.1Z" />
+    </svg>
+  );
+}
 
 export function Nav() {
   return (
@@ -17,6 +31,16 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/docs">
             Docs
           </Link>
+          <a
+            className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-[var(--text)] shadow-sm hover:bg-slate-50"
+            href={xUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Clawcipes on X"
+            title="@clawcipes on X"
+          >
+            <XIcon className="h-4 w-4" />
+          </a>
           <a
             className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
             href={githubUrl}
