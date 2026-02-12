@@ -40,3 +40,12 @@ body {
 .floaty {
   animation: floaty 5.5s ease-in-out infinite;
 }
+
+/* Quickstart-ish code block styling */
+.codeblock {
+  box-shadow: var(--shadow);
+}
+
+.code-dot:nth-child(1) { background: #ff5f57; }
+.code-dot:nth-child(2) { background: #febc2e; }
+.code-dot:nth-child(3) { background: #28c840; }

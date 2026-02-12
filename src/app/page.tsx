@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { FadeIn } from "@/components/FadeIn";
+import { CopyLineButton } from "@/components/CopyLineButton";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
@@ -97,6 +98,62 @@ export default function HomePage() {
                 <p className="mt-4 text-center text-xs text-[var(--muted)]">
                   Kitchen scenes and illustrations are placeholders — swap in your custom art anytime.
                 </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* QUICK START (match openclaw.ai style; no scaffold command) */}
+      <FadeIn className="mt-14">
+        <section>
+          <h2 className="text-2xl font-semibold tracking-tight text-[var(--text)]">
+            <span className="mr-2 text-[color:var(--coral-bright)]">⟩</span>
+            Quick Start
+          </h2>
+
+          <div className="codeblock mt-6 overflow-hidden rounded-2xl border border-[var(--border)] bg-white/65">
+            <div className="flex flex-wrap items-center gap-3 border-b border-[var(--border)] px-4 py-3">
+              <div className="flex items-center gap-2">
+                <span className="code-dot inline-block size-2.5 rounded-full" />
+                <span className="code-dot inline-block size-2.5 rounded-full" />
+                <span className="code-dot inline-block size-2.5 rounded-full" />
+              </div>
+
+              <div className="ml-auto flex items-center gap-1 rounded-full border border-[var(--border)] bg-white/70 p-1 text-xs text-[var(--muted)]">
+                <button className="rounded-full bg-white px-3 py-1 font-semibold text-[var(--text)] shadow-sm">
+                  npm
+                </button>
+                <button className="rounded-full px-3 py-1 hover:text-[color:var(--coral-bright)]">pnpm</button>
+                <button className="rounded-full px-3 py-1 hover:text-[color:var(--coral-bright)]">yarn</button>
+              </div>
+            </div>
+
+            <div className="px-5 py-5 font-mono text-sm">
+              <div className="mb-3 text-xs text-[var(--muted)]"># Install Clawcipes into OpenClaw (then restart gateway)</div>
+
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 text-[var(--text)]">
+                  <span className="mr-3 text-[var(--muted)]">$</span>
+                  <span>openclaw plugins install @clawcipes/recipes</span>
+                </div>
+                <span className="shrink-0">
+                  <CopyLineButton text="openclaw plugins install @clawcipes/recipes" />
+                </span>
+              </div>
+
+              <div className="mt-3 flex items-start justify-between gap-3">
+                <div className="min-w-0 text-[var(--text)]">
+                  <span className="mr-3 text-[var(--muted)]">$</span>
+                  <span>openclaw gateway restart</span>
+                </div>
+                <span className="shrink-0">
+                  <CopyLineButton text="openclaw gateway restart" />
+                </span>
+              </div>
+
+              <div className="mt-4 text-xs text-[var(--muted)]">
+                (We’ll add the scaffold command in a later section — this block stays install-only.)
               </div>
             </div>
           </div>
