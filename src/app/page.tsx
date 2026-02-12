@@ -1,97 +1,254 @@
+import Image from "next/image";
 import Link from "next/link";
+
+import { FadeIn } from "@/components/FadeIn";
+
+const agents = [
+  { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
+  { name: "Dev", icon: "🧑‍🔧", blurb: "Builds features and keeps quality high." },
+  { name: "DevOps", icon: "🧯", blurb: "Keeps deployments, infra, and safety tight." },
+  { name: "QA", icon: "🔍", blurb: "Verifies recipes and catches regressions." },
+];
+
+function Card({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
+  return (
+    <div
+      className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]"
+      style={{ backdropFilter: "blur(10px)" }}
+    >
+      <h3 className="text-base font-semibold tracking-tight text-[var(--text)]">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{body}</p>
+    </div>
+  );
+}
 
 export default function HomePage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
-      <section className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-10">
-        <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-widest text-white/60">OpenClaw Recipes Plugin</p>
-          <h1 className="mt-4 text-5xl font-semibold tracking-tight">
-            Clawcipes: scaffold teams, ship work, keep it file-first.
-          </h1>
-          <p className="mt-5 text-lg text-white/70">
-            Clawcipes turns Markdown recipes into repeatable teams and specialist agents. You get a shared workspace,
-            deterministic scaffolding, and a ticket workflow that plays nicely with git.
+      {/* HERO */}
+      <FadeIn>
+        <section className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-white/60 p-10 shadow-[var(--shadow)]">
+          <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+            <div className="max-w-xl">
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">
+                Clawcipes — OpenClaw Recipes
+              </p>
+
+              <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[var(--text)]">
+                File-first teams.
+                <span className="block">
+                  A whole kitchen of agents.
+                </span>
+              </h1>
+
+              <p className="mt-5 text-lg leading-7 text-[var(--muted)]">
+                Scaffold repeatable workflows from Markdown recipes: shared context, deterministic structure, cron-powered
+                loops, and an agile lane system that stays readable in git.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  className="rounded-md bg-[var(--text)] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+                  href="/marketplace"
+                >
+                  Browse Marketplace
+                </Link>
+                <a
+                  className="rounded-md border border-[var(--border)] bg-white/60 px-4 py-2 text-sm font-medium text-[var(--text)] shadow-sm transition hover:bg-white"
+                  href="https://github.com/rjdjohnston/clawcipes"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View on GitHub
+                </a>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
+                <span className="rounded-full border border-[var(--border)] bg-white/60 px-3 py-1">Shared context</span>
+                <span className="rounded-full border border-[var(--border)] bg-white/60 px-3 py-1">Teams of agents</span>
+                <span className="rounded-full border border-[var(--border)] bg-white/60 px-3 py-1">Cron workflows</span>
+                <span className="rounded-full border border-[var(--border)] bg-white/60 px-3 py-1">Agile lanes</span>
+              </div>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-sm">
+              <div className="absolute -inset-10 rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--cyan-bright) 25%, transparent), transparent 55%), radial-gradient(circle at 70% 30%, color-mix(in oklab, var(--coral-bright) 25%, transparent), transparent 55%)",
+                  filter: "blur(18px)",
+                }}
+              />
+              <div className="relative rounded-3xl border border-[var(--border)] bg-white/70 p-6 shadow-[var(--shadow)]">
+                <Image
+                  className="floaty mx-auto rounded-2xl"
+                  src="/chef.jpg"
+                  alt="Clawcipes chef mascot"
+                  width={520}
+                  height={520}
+                  priority
+                />
+                <p className="mt-4 text-center text-xs text-[var(--muted)]">
+                  Kitchen scenes and illustrations are placeholders — swap in your custom art anytime.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Shared context */}
+      <FadeIn className="mt-14">
+        <section className="rounded-3xl border border-[var(--border)] bg-white/55 p-10 shadow-[var(--shadow)]">
+          <div className="grid gap-8 md:grid-cols-2 md:items-start">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">The Pantry</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text)]">
+                Shared, file-based context
+              </h2>
+              <p className="mt-4 text-[var(--muted)]">
+                Your team doesn’t “forget.” Context lives in a shared workspace: Markdown notes, tickets, checklists, and
+                artifacts that stay reviewable, greppable, and versioned.
+              </p>
+            </div>
+            <div className="grid gap-4">
+              <Card
+                title="Readable in git"
+                body="Workflows and decisions are files, not hidden state. PRs show what changed and why."
+              />
+              <Card
+                title="Deterministic scaffolding"
+                body="Start from a known-good structure every time — lanes, roles, templates, and conventions included."
+              />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Agents */}
+      <FadeIn className="mt-14">
+        <section className="rounded-3xl border border-[var(--border)] bg-white/55 p-10 shadow-[var(--shadow)]">
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">The Line</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text)]">A team of agents</h2>
+          <p className="mt-4 max-w-3xl text-[var(--muted)]">
+            Specialists you can message like coworkers. Each role has its own tools, templates, and responsibilities — and
+            you can extend them with recipes.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              className="rounded-md border border-white/15 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/15"
-              href="/marketplace"
-            >
-              Browse Marketplace
-            </Link>
-            <a
-              className="rounded-md border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/90 hover:bg-white/10"
-              href="https://github.com/rjdjohnston/clawcipes"
-              target="_blank"
-              rel="noreferrer"
-            >
-              View on GitHub
-            </a>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {agents.map((a) => (
+              <div
+                key={a.name}
+                className="group rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] transition hover:-translate-y-0.5"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="grid size-10 place-items-center rounded-xl border border-[var(--border)] bg-white"
+                    style={{
+                      boxShadow:
+                        "0 10px 25px rgba(15,23,42,0.06)",
+                    }}
+                  >
+                    <span className="text-lg">{a.icon}</span>
+                  </div>
+                  <div>
+                    <div className="text-base font-semibold text-[var(--text)]">{a.name}</div>
+                    <div className="text-sm text-[var(--muted)]">{a.blurb}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </section>
 
-      <section className="mt-12 grid gap-4 md:grid-cols-3">
-        {[
-          {
-            title: "Scaffold teams fast",
-            body: "Spin up a shared workspace + role agents from a recipe. Consistent lanes: backlog → in-progress → testing → done.",
-          },
-          {
-            title: "Safe automation",
-            body: "Recipes can define optional cron loops (prompt by default). Install them when you're ready — not silently.",
-          },
-          {
-            title: "Docs that don’t rot",
-            body: "Templates bake workflow language into TEAM.md/TICKETS.md, plus QA verification conventions (QA_CHECKLIST.md).",
-          },
-        ].map((f) => (
-          <div key={f.title} className="rounded-xl border border-white/10 bg-white/[0.03] p-6">
-            <h2 className="text-lg font-medium">{f.title}</h2>
-            <p className="mt-2 text-sm text-white/70">{f.body}</p>
+          <p className="mt-6 text-xs text-[var(--muted)]">
+            (Placeholder names/icons — tell me the exact agent names you want listed and I’ll update them.)
+          </p>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Cron */}
+      <FadeIn className="mt-14">
+        <section className="rounded-3xl border border-[var(--border)] bg-white/55 p-10 shadow-[var(--shadow)]">
+          <div className="grid gap-8 md:grid-cols-2">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">The Timer</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text)]">Workflow setup by cron</h2>
+              <p className="mt-4 text-[var(--muted)]">
+                Recurring check-ins, board hygiene, PR watchers, reminders — defined in recipes, installed only with
+                consent, and easy to inspect as files.
+              </p>
+            </div>
+            <div className="grid gap-4">
+              <Card
+                title="Opt-in by default"
+                body="Cron jobs can be suggested by a recipe, but installation is prompt-gated. No surprises."
+              />
+              <Card
+                title="Repeatable operations"
+                body="Run the same loop daily without losing track: triage, verify, ship, report — always in the same shape."
+              />
+            </div>
           </div>
-        ))}
-      </section>
+        </section>
+      </FadeIn>
 
-      <section className="mt-12 rounded-xl border border-white/10 bg-white/[0.03] p-8">
-        <h2 className="text-xl font-medium">How it works</h2>
-        <ol className="mt-4 grid gap-3 text-sm text-white/70 md:grid-cols-3">
-          <li>
-            <span className="text-white">1) Install</span>
-            <div className="mt-1">Install the recipes plugin into OpenClaw.</div>
-          </li>
-          <li>
-            <span className="text-white">2) Scaffold</span>
-            <div className="mt-1">Generate a team workspace from a recipe.</div>
-          </li>
-          <li>
-            <span className="text-white">3) Run the workflow</span>
-            <div className="mt-1">Dispatch → backlog → in-progress → testing → done.</div>
-          </li>
-        </ol>
+      {/* FEATURE: Agile */}
+      <FadeIn className="mt-14">
+        <section className="rounded-3xl border border-[var(--border)] bg-white/55 p-10 shadow-[var(--shadow)]">
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">The Pass</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text)]">An agile process that sticks</h2>
+          <p className="mt-4 max-w-3xl text-[var(--muted)]">
+            Dispatch → backlog → in-progress → testing → done. Simple swim lanes, clean handoffs, and verification
+            checklists — all as files.
+          </p>
 
-        <pre className="mt-6 overflow-x-auto rounded-lg border border-white/10 bg-black/40 p-4 text-xs text-white/80">
-          <code>{`openclaw plugins install @clawcipes/recipes
-openclaw gateway restart
-openclaw recipes scaffold-team development-team --team-id my-team-team --overwrite --apply-config`}</code>
-        </pre>
-      </section>
-
-      <footer className="mt-16 border-t border-white/10 pt-8 text-sm text-white/60">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p>© {new Date().getFullYear()} Clawcipes</p>
-          <div className="flex gap-4">
-            <a href="https://docs.openclaw.ai" target="_blank" rel="noreferrer" className="hover:text-white">
-              Docs
-            </a>
-            <a href="https://github.com/rjdjohnston/clawcipes" target="_blank" rel="noreferrer" className="hover:text-white">
-              GitHub
-            </a>
+          <div className="mt-8 grid gap-4 md:grid-cols-4">
+            {["Backlog", "In progress", "Testing", "Done"].map((lane, idx) => (
+              <div
+                key={lane}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow)]"
+              >
+                <div className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Lane {idx + 1}</div>
+                <div className="mt-2 text-base font-semibold text-[var(--text)]">{lane}</div>
+                <div className="mt-2 text-sm text-[var(--muted)]">
+                  {idx === 0 && "What’s next, written down."}
+                  {idx === 1 && "Focused work, owned."}
+                  {idx === 2 && "Proof, verification, QA."}
+                  {idx === 3 && "Shipped — and documented."}
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </footer>
+        </section>
+      </FadeIn>
+
+      {/* FOOTER */}
+      <FadeIn className="mt-16">
+        <footer className="rounded-3xl border border-[var(--border)] bg-white/55 p-10 shadow-[var(--shadow)]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-[var(--muted)]">© {new Date().getFullYear()} Clawcipes</p>
+            <div className="flex gap-4 text-sm text-[var(--muted)]">
+              <a href="https://docs.openclaw.ai" target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">
+                Docs
+              </a>
+              <a
+                href="https://github.com/rjdjohnston/clawcipes"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-[var(--text)]"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+        </footer>
+      </FadeIn>
     </main>
   );
 }
