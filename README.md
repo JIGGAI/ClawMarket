@@ -1,6 +1,14 @@
 # Clawcipes Site (MVP)
 
-Marketing site + Marketplace landing for **Clawcipes** (OpenClaw recipes plugin).
+Public marketing site for **Clawcipes** (OpenClaw Recipes plugin).
+
+## Stack
+- Next.js (App Router)
+- Tailwind CSS
+
+## Pages
+- `/` — landing (positioning + features + CTA)
+- `/marketplace` — marketplace landing (featured recipes; static data OK for MVP)
 
 ## Local dev
 
@@ -9,24 +17,26 @@ npm install
 npm run dev
 ```
 
-Open: http://localhost:3000
-
-## Build
+## Build / lint
 
 ```bash
+npm run lint
 npm run build
-npm run start
 ```
 
 ## Deploy (Vercel)
 
-1) Create a new Vercel project from this repo/folder.
-2) Framework preset: Next.js.
-3) Build command: `npm run build`
-4) Output: default
+1) Push this repo to GitHub.
+2) In Vercel: **New Project → Import** the repo.
+3) Framework preset: **Next.js** (defaults are fine).
 
-After deploy, update `metadataBase` in `src/app/layout.tsx` to your real domain.
+### Canonical URL (important for metadata/OG)
 
-## Links
-- Docs: https://docs.openclaw.ai
-- GitHub: https://github.com/rjdjohnston/clawcipes
+Set one of these in Vercel project env vars:
+
+- `NEXT_PUBLIC_SITE_URL` (recommended; e.g. `https://clawcipes.dev`)
+
+If `NEXT_PUBLIC_SITE_URL` is not set, the app will fall back to Vercel’s `VERCEL_URL` for preview deployments.
+
+## Notes
+- “Signup/Login” is intentionally a placeholder link for MVP (no auth in scope).
