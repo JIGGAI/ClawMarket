@@ -1,10 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  /* OpenClaw palette (source: openclaw.ai) */
+  --coral-bright: #ff4d4d;
+  --coral-mid: #e63946;
+  --cyan-bright: #00e5cc;
+  --cyan-mid: #14b8a6;
+
+  /* Light theme surfaces */
+  --bg: #ffffff;
+  --bg-soft: #f6f8fb;
+  --card: rgba(255, 255, 255, 0.72);
+  --border: rgba(17, 24, 39, 0.10);
+  --text: #0b1220;
+  --muted: rgba(11, 18, 32, 0.68);
+
+  --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
 }
 
-html,
+html {
+  color-scheme: light;
+}
+
 body {
-  height: 100%;
+  background:
+    radial-gradient(900px 500px at 15% -10%, color-mix(in oklab, var(--cyan-bright) 18%, transparent), transparent 60%),
+    radial-gradient(800px 500px at 85% -10%, color-mix(in oklab, var(--coral-bright) 18%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+  color: var(--text);
+}
+
+@keyframes floaty {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.floaty {
+  animation: floaty 5.5s ease-in-out infinite;
 }
