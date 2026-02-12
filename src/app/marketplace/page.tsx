@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/FadeIn";
+import { fetchMarketplaceRecipes } from "@/lib/marketplace";
 
 export const metadata = {
   title: "Marketplace – Clawcipes",
@@ -7,70 +8,26 @@ export const metadata = {
 
 const repoBase = "https://github.com/rjdjohnston/clawcipes/blob/main/recipes/default";
 
-const teamRecipes = [
+const fallbackTeamRecipes = [
   {
     id: "development-team",
     name: "Development Team",
     icon: "👨‍💻",
-    description: "A small engineering team with lead, dev, devops, and QA roles. Includes agile lanes, shared context, and cron-powered triage/execution loops.",
+    description:
+      "A small engineering team with lead, dev, devops, and QA roles. Includes agile lanes, shared context, and cron-powered triage/execution loops.",
   },
-  {
-    id: "product-team",
-    name: "Product Team",
-    icon: "📦",
-    description: "Product-focused team with lead, PM, designer, dev, and QA. Great for product development workflows with design and spec handoffs.",
-  },
-  {
-    id: "research-team",
-    name: "Research Team",
-    icon: "🔬",
-    description: "Research-oriented team for deep dives, literature reviews, and synthesis. Includes lead, researchers, and analyst roles.",
-  },
-  {
-    id: "writing-team",
-    name: "Writing Team",
-    icon: "✍️",
-    description: "Content creation team with lead, writers, and editors. Perfect for blogs, documentation, and marketing content pipelines.",
-  },
-  {
-    id: "social-team",
-    name: "Social Team",
-    icon: "📱",
-    description: "Social media and community team with lead, writer, editor, and research roles. Manage content calendars and engagement.",
-  },
-  {
-    id: "customer-support-team",
-    name: "Customer Support Team",
-    icon: "🎧",
-    description: "Support-focused team for handling tickets, escalations, and knowledge base maintenance.",
-  },
+  { id: "product-team", name: "Product Team", icon: "📦", description: "Product-focused team with lead, PM, designer, dev, and QA." },
+  { id: "research-team", name: "Research Team", icon: "🔬", description: "Citations-first research pipeline: sources → notes → briefs." },
+  { id: "writing-team", name: "Writing Team", icon: "✍️", description: "Briefs → outlines → drafts → review/edit (testing) → done." },
+  { id: "social-team", name: "Social Team", icon: "📱", description: "Draft → approval/review (testing) → schedule/publish." },
+  { id: "customer-support-team", name: "Customer Support Team", icon: "🎧", description: "Triage → resolve → verification (testing) → done/outbox." },
 ];
 
-const agentRecipes = [
-  {
-    id: "developer",
-    name: "Developer",
-    icon: "🧑‍🔧",
-    description: "A standalone software engineer agent. Implements features, writes tests, and keeps code quality high.",
-  },
-  {
-    id: "researcher",
-    name: "Researcher",
-    icon: "🔍",
-    description: "A standalone research agent. Performs deep dives, gathers sources, and synthesizes findings into reports.",
-  },
-  {
-    id: "editor",
-    name: "Editor",
-    icon: "📝",
-    description: "A standalone editor agent. Reviews and refines written content for clarity, style, and correctness.",
-  },
-  {
-    id: "project-manager",
-    name: "Project Manager",
-    icon: "📋",
-    description: "A standalone PM agent. Tracks tasks, coordinates work, and keeps projects on schedule.",
-  },
+const fallbackAgentRecipes = [
+  { id: "developer", name: "Developer", icon: "🧑‍🔧", description: "Standalone software engineer agent." },
+  { id: "researcher", name: "Researcher", icon: "🔍", description: "Standalone research agent." },
+  { id: "editor", name: "Editor", icon: "📝", description: "Standalone editor agent." },
+  { id: "project-manager", name: "Project Manager", icon: "📋", description: "Standalone PM agent." },
 ];
 
 function RecipeCard({
@@ -120,7 +77,17 @@ function RecipeCard({
   );
 }
 
-export default function MarketplacePage() {
+export default async function MarketplacePage() {
+  const live = await fetchMarketplaceRecipes();
+
+  const teamRecipes = live
+    ? live.filter((r) => r.kind === "team").map((r) => ({ id: r.slug, name: r.name, icon: "🍳", description: r.description }))
+    : fallbackTeamRecipes;
+
+  const agentRecipes = live
+    ? live.filter((r) => r.kind === "agent").map((r) => ({ id: r.slug, name: r.name, icon: "🤖", description: r.description }))
+    : fallbackAgentRecipes;
+
   return (
     <main className="w-full">
       <FadeIn>
