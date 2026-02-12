@@ -95,9 +95,6 @@ export default function HomePage() {
                   height={520}
                   priority
                 />
-                <p className="mt-4 text-center text-sm text-[var(--muted)]">
-                  Kitchen scenes and illustrations are placeholders — swap in your custom art anytime.
-                </p>
               </div>
             </div>
           </div>
