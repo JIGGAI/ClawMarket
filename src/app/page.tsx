@@ -45,16 +45,13 @@ export default function HomePage() {
               </p>
 
               <h1 className="mt-6 text-5xl font-bold tracking-tight text-[var(--text)] sm:text-6xl lg:text-7xl">
-                File-first teams.
-                <span className="block">
-                  A whole kitchen of{" "}
-                  <span className="italic text-[color:var(--coral-bright)]">agents</span>.
-                </span>
+                Stop hacking agents.
+                <span className="block">Start cooking with recipes.</span>
               </h1>
 
               <p className="mt-6 text-xl leading-8 text-[var(--muted)] lg:text-2xl">
-                Scaffold repeatable workflows from Markdown recipes: shared context, deterministic structure, cron-powered
-                loops, and an agile lane system that stays readable in git.
+                Markdown blueprints build complete OpenClaw teams: file-first context, recurring cron magic, coworker-style
+                specialists, agile flow locked in git. From scaffold to shipped — repeatable, reviewable, every time.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4">
