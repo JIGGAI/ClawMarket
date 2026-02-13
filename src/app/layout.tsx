@@ -5,11 +5,7 @@ import { Nav } from "@/components/Nav";
 function getSiteUrl(): string {
   // Prefer an explicit canonical URL in production.
   // On Vercel, VERCEL_URL is set (without protocol), so we can infer a preview URL.
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined) ??
-    "https://clawcipes.dev"
-  );
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://clawkitchen.ai";
 }
 
 const siteUrl = getSiteUrl();

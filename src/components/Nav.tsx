@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+const docsUrl = "https://docs.openclaw.ai";
 const githubUrl = "https://github.com/rjdjohnston/clawcipes";
 const xUrl = "https://x.com/clawcipes";
 
@@ -28,9 +29,9 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/marketplace">
             Marketplace
           </Link>
-          <Link className="hover:text-[var(--text)]" href="/docs">
+          <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
-          </Link>
+          </a>
           <a
             className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-[var(--text)] shadow-sm hover:bg-slate-50"
             href={xUrl}
@@ -41,14 +42,22 @@ export function Nav() {
           >
             <XIcon className="h-4 w-4" />
           </a>
-          <a
-            className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
-            href={githubUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub
-          </a>
+          <div className="flex items-center gap-3">
+            <a className="hover:text-[var(--text)]" href="#signup">
+              Signup
+            </a>
+            <a className="hover:text-[var(--text)]" href="#login">
+              Login
+            </a>
+            <a
+              className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
+              href={githubUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
+          </div>
         </nav>
       </div>
     </header>
