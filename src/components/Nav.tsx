@@ -22,7 +22,7 @@ export function Nav() {
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-16">
         <Link href="/" className="text-xl font-bold tracking-tight text-[var(--text)]">
-          <span className="mr-1">🦞</span> Clawcipes
+          <span className="mr-1">🦞</span> ClawRecipes
         </Link>
 
         <nav className="flex items-center gap-6 text-base text-[var(--muted)]">
@@ -37,7 +37,7 @@ export function Nav() {
             href={xUrl}
             target="_blank"
             rel="noreferrer"
-            aria-label="Clawcipes on X"
+            aria-label="ClawRecipes on X"
             title="@clawcipes on X"
           >
             <XIcon className="h-4 w-4" />
