@@ -41,7 +41,7 @@ export default function HomePage() {
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-[var(--muted)]">
-                Clawcipes — OpenClaw Recipes
+                ClawRecipes — OpenClaw Recipes
               </p>
 
               <h1 className="mt-6 text-5xl font-bold tracking-tight text-[var(--text)] sm:text-6xl lg:text-7xl">
@@ -90,7 +90,7 @@ export default function HomePage() {
                 <Image
                   className="floaty mx-auto rounded-2xl"
                   src="/chef.jpg"
-                  alt="Clawcipes chef mascot"
+                  alt="ClawRecipes chef mascot"
                   width={520}
                   height={520}
                   priority
@@ -128,7 +128,7 @@ export default function HomePage() {
               </div>
 
               <div className="px-6 py-6 font-mono text-base">
-                <div className="mb-4 text-slate-500"># Install Clawcipes into OpenClaw (then restart gateway)</div>
+                <div className="mb-4 text-slate-500"># Install ClawRecipes into OpenClaw (then restart gateway)</div>
 
                 <div className="flex items-start justify-between gap-3">
                   <div className="text-slate-100">
@@ -304,7 +304,7 @@ export default function HomePage() {
       <FadeIn>
         <footer className="border-t border-slate-100 bg-white px-6 py-12 lg:px-16">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-            <p className="text-base text-[var(--muted)]">© {new Date().getFullYear()} Clawcipes</p>
+            <p className="text-base text-[var(--muted)]">© {new Date().getFullYear()} ClawRecipes</p>
             <div className="flex gap-6 text-base text-[var(--muted)]">
               <a href="https://docs.openclaw.ai" target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">
                 Docs

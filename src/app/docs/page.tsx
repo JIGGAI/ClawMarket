@@ -2,8 +2,8 @@ import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 
 export const metadata = {
-  title: "Docs – Clawcipes",
-  description: "Documentation for Clawcipes recipes and workflows.",
+  title: "Docs – ClawRecipes",
+  description: "Documentation for ClawRecipes recipes and workflows.",
 };
 
 export default function DocsPage() {
@@ -19,7 +19,7 @@ export default function DocsPage() {
               Docs coming soon
             </h1>
             <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
-              We&apos;re working on comprehensive documentation for Clawcipes recipes, team workflows, and agent configuration.
+              We&apos;re working on comprehensive documentation for ClawRecipes recipes, team workflows, and agent configuration.
             </p>
 
             <div className="mt-10 flex flex-wrap justify-center gap-4">

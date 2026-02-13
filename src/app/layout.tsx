@@ -11,12 +11,12 @@ function getSiteUrl(): string {
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Clawcipes — OpenClaw Recipes",
+  title: "ClawRecipes — OpenClaw Recipes",
   description:
-    "Clawcipes is an OpenClaw recipes plugin for scaffolding teams and running a file-first workflow (backlog → in-progress → testing → done).",
+    "ClawRecipes is an OpenClaw recipes plugin for scaffolding teams and running a file-first workflow (backlog → in-progress → testing → done).",
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "Clawcipes — OpenClaw Recipes",
+    title: "ClawRecipes — OpenClaw Recipes",
     description:
       "Scaffold teams, ship work, keep it file-first. Browse featured recipes and launch a shared workspace in minutes.",
     type: "website",

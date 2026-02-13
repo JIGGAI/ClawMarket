@@ -2,8 +2,8 @@ import { FadeIn } from "@/components/FadeIn";
 import { fetchMarketplaceRecipes } from "@/lib/marketplace";
 
 export const metadata = {
-  title: "Marketplace – Clawcipes",
-  description: "Browse available Clawcipes recipes for OpenClaw.",
+  title: "Marketplace – ClawRecipes",
+  description: "Browse available ClawRecipes recipes for OpenClaw.",
 };
 
 const repoBase = "https://github.com/rjdjohnston/clawcipes/blob/main/recipes/default";
