@@ -54,23 +54,7 @@ export function Nav() {
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
-          <a
-            className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-[var(--text)] shadow-sm hover:bg-slate-50"
-            href={xUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="ClawRecipes on X"
-            title="@clawrecipes on X"
-          >
-            <XIcon className="h-4 w-4" />
-          </a>
-          <div className="flex items-center gap-3">
-            <a className="hover:text-[var(--text)]" href="#signup">
-              Signup
-            </a>
-            <a className="hover:text-[var(--text)]" href="#login">
-              Login
-            </a>
+          <div className="flex items-center gap-2">
             <a
               className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
               href={githubUrl}
@@ -78,6 +62,16 @@ export function Nav() {
               rel="noreferrer"
             >
               GitHub
+            </a>
+            <a
+              className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-[var(--text)] shadow-sm hover:bg-slate-50"
+              href={xUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="ClawRecipes on X"
+              title="@clawrecipes on X"
+            >
+              <XIcon className="h-4 w-4" />
             </a>
           </div>
         </nav>
@@ -113,30 +107,24 @@ export function Nav() {
                 >
                   Docs
                 </a>
-                <a
-                  className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]"
-                  href={xUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => setOpen(false)}
-                >
-                  X
-                </a>
                 <div className="my-2 h-px w-full bg-slate-100" />
-                <a className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="#signup" onClick={() => setOpen(false)}>
-                  Signup
-                </a>
-                <a className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="#login" onClick={() => setOpen(false)}>
-                  Login
-                </a>
                 <a
-                  className="mt-1 inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
+                  className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
                   href={githubUrl}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setOpen(false)}
                 >
                   GitHub
+                </a>
+                <a
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-base font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50"
+                  href={xUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setOpen(false)}
+                >
+                  X
                 </a>
               </div>
             </div>
