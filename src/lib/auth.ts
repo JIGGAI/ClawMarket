@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Discord from "next-auth/providers/discord";
 import Twitter from "next-auth/providers/twitter";
-import Email from "next-auth/providers/nodemailer";
+import Email from "next-auth/providers/email";
 import { prisma } from "@/lib/prisma";
 
 function parseAdminEmails() {
