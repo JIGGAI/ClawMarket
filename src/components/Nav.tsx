@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const docsUrl = "https://docs.openclaw.ai";
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
@@ -55,6 +56,7 @@ function CloseIcon({ className }: { className?: string }) {
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur">
@@ -78,6 +80,19 @@ export function Nav() {
             Docs
           </a>
           <div className="flex items-center gap-3">
+            {session ? (
+              <>
+                <span className="hidden text-sm text-[var(--muted)] lg:inline">{session.user?.email}</span>
+                <button className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50" onClick={() => signOut({ callbackUrl: "/" })}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50" onClick={() => signIn()}>
+                Login
+              </button>
+            )}
+
             <a
               className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black"
               href={githubUrl}
@@ -150,6 +165,29 @@ export function Nav() {
                   Docs
                 </a>
                 <div className="my-2 h-px w-full bg-slate-100" />
+
+                {session ? (
+                  <button
+                    className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
+                    onClick={() => {
+                      setOpen(false);
+                      signOut({ callbackUrl: "/" });
+                    }}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <button
+                    className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
+                    onClick={() => {
+                      setOpen(false);
+                      signIn();
+                    }}
+                  >
+                    Login
+                  </button>
+                )}
+
                 <a
                   className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
                   href={githubUrl}

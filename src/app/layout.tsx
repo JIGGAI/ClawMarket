@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SessionProvider } from "@/components/SessionProvider";
 
 function getSiteUrl(): string {
   // Prefer an explicit canonical URL in production.
@@ -37,9 +38,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-dvh antialiased">
-        <Nav />
-        {children}
-        <SiteFooter />
+        <SessionProvider>
+          <Nav />
+          {children}
+          <SiteFooter />
+        </SessionProvider>
       </body>
     </html>
   );
