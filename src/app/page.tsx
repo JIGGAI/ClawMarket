@@ -147,7 +147,7 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                <div className="mt-6 mb-4 text-slate-500"># Scaffold a dev team with shared workspace + agile lanes</div>
+                <div className="mt-6 mb-4 text-slate-500"># Scaffold a dev team with shared workspace</div>
 
                 <div className="flex items-start justify-between gap-3">
                   <div className="text-slate-100">
