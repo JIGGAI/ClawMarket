@@ -149,12 +149,6 @@ export default function HomePage() {
 
                 <div className="mt-6 mb-4 text-slate-500"># Scaffold a dev team with shared workspace</div>
 
-                <div className="mt-2 text-slate-600">
-                  <span className="mr-3 text-slate-500">#</span>
-                  <span>
-                    New: scaffold-team also writes a workspace recipe file at <code>~/.openclaw/workspace/recipes/&lt;teamId&gt;.md</code>
-                  </span>
-                </div>
 
                 <div className="flex items-start justify-between gap-3">
                   <div className="text-slate-100">
