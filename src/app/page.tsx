@@ -130,10 +130,10 @@ export default function HomePage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="text-slate-100">
                     <span className="mr-3 text-emerald-400">$</span>
-                    <span>openclaw plugins install @clawcipes/recipes</span>
+                    <span>openclaw plugins install @jiggai/recipes</span>
                   </div>
                   <span className="shrink-0">
-                    <CopyLineButton text="openclaw plugins install @clawcipes/recipes" />
+                    <CopyLineButton text="openclaw plugins install @jiggai/recipes" />
                   </span>
                 </div>
 
