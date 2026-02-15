@@ -7,6 +7,14 @@ const docsUrl = "https://docs.openclaw.ai";
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
 const xUrl = "https://x.com/clawrecipes";
 
+function GitHubIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M12 .5C5.73.5.75 5.64.75 12c0 5.1 3.29 9.43 7.86 10.96.58.11.79-.26.79-.57v-2.02c-3.2.71-3.87-1.39-3.87-1.39-.52-1.36-1.28-1.72-1.28-1.72-1.05-.74.08-.73.08-.73 1.16.08 1.78 1.22 1.78 1.22 1.03 1.81 2.7 1.29 3.36.99.1-.77.4-1.29.72-1.59-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.35 1.19-3.18-.12-.3-.52-1.52.11-3.17 0 0 .97-.32 3.18 1.21a10.7 10.7 0 0 1 2.9-.4c.98 0 1.97.14 2.9.4 2.21-1.53 3.18-1.21 3.18-1.21.63 1.65.23 2.87.11 3.17.74.83 1.19 1.89 1.19 3.18 0 4.53-2.69 5.53-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57A11.27 11.27 0 0 0 23.25 12C23.25 5.64 18.27.5 12 .5Z" />
+    </svg>
+  );
+}
+
 function XIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -48,23 +56,31 @@ export function Nav() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-base text-[var(--muted)] sm:flex">
+          <Link
+            className="bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
+            href="/get-started"
+          >
+            Get Started
+          </Link>
           <Link className="hover:text-[var(--text)]" href="/marketplace">
             Marketplace
           </Link>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <a
-              className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
+              className="inline-flex items-center justify-center bg-[color:var(--coral-bright)] px-3 py-2 text-white shadow-sm hover:brightness-95"
               href={githubUrl}
               target="_blank"
               rel="noreferrer"
+              aria-label="ClawRecipes on GitHub"
+              title="GitHub"
             >
-              GitHub
+              <GitHubIcon className="h-5 w-5" />
             </a>
             <a
-              className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-[var(--text)] shadow-sm hover:bg-slate-50"
+              className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black"
               href={xUrl}
               target="_blank"
               rel="noreferrer"
@@ -95,6 +111,13 @@ export function Nav() {
           <div className="mx-auto max-w-7xl px-6 pb-4 lg:px-16">
             <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
               <div className="flex flex-col gap-2 text-base text-[var(--muted)]">
+                <Link
+                  className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold text-white hover:brightness-95"
+                  href="/get-started"
+                  onClick={() => setOpen(false)}
+                >
+                  Get Started
+                </Link>
                 <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>
                   Marketplace
                 </Link>
