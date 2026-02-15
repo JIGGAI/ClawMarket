@@ -15,6 +15,10 @@ export const metadata: Metadata = {
   description:
     "ClawRecipes is an OpenClaw recipes plugin for scaffolding teams and running a file-first workflow (backlog → in-progress → testing → done).",
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-icon.png",
+  },
   openGraph: {
     title: "ClawRecipes — OpenClaw Recipes",
     description:
