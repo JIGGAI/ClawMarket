@@ -161,9 +161,14 @@ export default function HomePage() {
                 </div>
 
                 <div className="mt-6 text-slate-500"># Or scaffold a single agent (e.g., researcher)</div>
-                <div className="mt-2 text-slate-600">
-                  <span className="mr-3 text-slate-500">#</span>
-                  <span>openclaw recipes scaffold researcher --agent-id my-researcher --apply-config</span>
+                <div className="mt-2 flex items-start justify-between gap-3">
+                  <div className="text-slate-100">
+                    <span className="mr-3 text-emerald-400">$</span>
+                    <span>openclaw recipes scaffold researcher --agent-id my-researcher --apply-config</span>
+                  </div>
+                  <span className="shrink-0">
+                    <CopyLineButton text="openclaw recipes scaffold researcher --agent-id my-researcher --apply-config" />
+                  </span>
                 </div>
               </div>
             </div>
