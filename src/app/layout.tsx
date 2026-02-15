@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
+import { SiteFooter } from "@/components/SiteFooter";
 
 function getSiteUrl(): string {
   // Prefer an explicit canonical URL in production.
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body className="min-h-dvh antialiased">
         <Nav />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

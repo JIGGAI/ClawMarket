@@ -297,27 +297,6 @@ export default function HomePage() {
         </section>
       </FadeIn>
 
-      {/* FOOTER */}
-      <FadeIn>
-        <footer className="border-t border-slate-100 bg-white px-6 py-12 lg:px-16">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-            <p className="text-base text-[var(--muted)]">© {new Date().getFullYear()} ClawRecipes</p>
-            <div className="flex gap-6 text-base text-[var(--muted)]">
-              <a href="https://docs.openclaw.ai" target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">
-                Docs
-              </a>
-              <a
-                href="https://github.com/rjdjohnston/clawcipes"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-[var(--text)]"
-              >
-                GitHub
-              </a>
-            </div>
-          </div>
-        </footer>
-      </FadeIn>
     </main>
   );
 }
