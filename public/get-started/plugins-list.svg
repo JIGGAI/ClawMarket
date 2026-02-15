@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="2014" viewBox="0 0 1100 2014">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220" />
+      <stop offset="1" stop-color="#0a0f1a" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="2014" fill="#0f172a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="18" y="18" rx="18" ry="18" width="1064" height="1978" fill="url(#bg)" stroke="#1f2a44" stroke-width="1"/>
+
+    <!-- chrome -->
+    <g transform="translate(28, 28)">
+      <circle cx="12" cy="14" r="6" fill="#ef4444" />
+      <circle cx="32" cy="14" r="6" fill="#f59e0b" />
+      <circle cx="52" cy="14" r="6" fill="#22c55e" />
+      <text x="88" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="13" fill="#94a3b8">List installed plugins</text>
+    </g>
+
+    <!-- command line -->
+    <text x="28" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" fill="#34d399">$ openclaw plugins list</text>
+
+    <!-- output -->
+    <g transform="translate(28, 94)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" dominant-baseline="hanging">
+<text x="28" y="72" fill="#e2e8f0">Plugins (3/35 loaded)</text>
+<text x="28" y="94" fill="#e2e8f0">┌──────────────┬──────────┬──────────┬─────────────────────────────────────────────────────────────────────┬──────────┐</text>
+<text x="28" y="116" fill="#e2e8f0">│ Name         │ ID       │ Status   │ Source                                                              │ Version  │</text>
+<text x="28" y="138" fill="#e2e8f0">├──────────────┼──────────┼──────────┼─────────────────────────────────────────────────────────────────────┼──────────┤</text>
+<text x="28" y="160" fill="#e2e8f0">│ Recipes      │ recipes  │ loaded   │ ~/.openclaw/extensions/recipes/index.ts                             │ 0.2.17   │</text>
+<text x="28" y="182" fill="#e2e8f0">│              │          │          │ Markdown recipes that scaffold agents and teams.                    │          │</text>
+<text x="28" y="204" fill="#e2e8f0">│ @openclaw/   │ bluebubb │ disabled │ /usr/lib/node_modules/openclaw/extensions/bluebubbles/index.ts      │ 2026.2.9 │</text>
+<text x="28" y="226" fill="#e2e8f0">│ bluebubbles  │ les      │          │ OpenClaw BlueBubbles channel plugin                                 │          │</text>
+<text x="28" y="248" fill="#e2e8f0">│ @openclaw/   │ copilot- │ disabled │ /usr/lib/node_modules/openclaw/extensions/copilot-proxy/index.ts    │ 2026.2.9 │</text>
+<text x="28" y="270" fill="#e2e8f0">│ copilot-     │ proxy    │          │ OpenClaw Copilot Proxy provider plugin                              │          │</text>
+<text x="28" y="292" fill="#e2e8f0">│ proxy        │          │          │                                                                     │          │</text>
+<text x="28" y="314" fill="#e2e8f0">│ Device       │ device-  │ disabled │ /usr/lib/node_modules/openclaw/extensions/device-pair/index.ts      │          │</text>
+<text x="28" y="336" fill="#e2e8f0">│ Pairing      │ pair     │          │ Generate setup codes and approve device pairing requests.           │          │</text>
+<text x="28" y="358" fill="#e2e8f0">│ @openclaw/   │ diagnost │ disabled │ /usr/lib/node_modules/openclaw/extensions/diagnostics-otel/index.ts │ 2026.2.9 │</text>
+<text x="28" y="380" fill="#e2e8f0">│ diagnostics- │ ics-otel │          │ OpenClaw diagnostics OpenTelemetry exporter                         │          │</text>
+<text x="28" y="402" fill="#e2e8f0">│ otel         │          │          │                                                                     │          │</text>
+<text x="28" y="424" fill="#e2e8f0">│ @openclaw/   │ discord  │ disabled │ /usr/lib/node_modules/openclaw/extensions/discord/index.ts          │ 2026.2.9 │</text>
+<text x="28" y="446" fill="#e2e8f0">│ discord      │          │          │ OpenClaw Discord channel plugin                                     │          │</text>
+<text x="28" y="468" fill="#e2e8f0">│ @openclaw/   │ feishu   │ disabled │ /usr/lib/node_modules/openclaw/extensions/feishu/index.ts           │ 2026.2.9 │</text>
+<text x="28" y="490" fill="#e2e8f0">│ feishu       │          │          │ OpenClaw Feishu/Lark channel plugin (community maintained by        │          │</text>
+<text x="28" y="512" fill="#e2e8f0">│              │          │          │ @m1heng)                                                            │          │</text>
+<text x="28" y="534" fill="#e2e8f0">│ @openclaw/   │ google-  │ disabled │ /usr/lib/node_modules/openclaw/extensions/google-antigravity-auth/  │ 2026.2.9 │</text>
+<text x="28" y="556" fill="#e2e8f0">│ google-      │ antigrav │          │ index.ts                                                            │          │</text>
+<text x="28" y="578" fill="#e2e8f0">│ antigravity- │ ity-auth │          │ OpenClaw Google Antigravity OAuth provider plugin                   │          │</text>
+<text x="28" y="600" fill="#e2e8f0">│ auth         │          │          │                                                                     │          │</text>
+<text x="28" y="622" fill="#e2e8f0">│ @openclaw/   │ google-  │ disabled │ /usr/lib/node_modules/openclaw/extensions/google-gemini-cli-auth/   │ 2026.2.9 │</text>
+<text x="28" y="644" fill="#e2e8f0">│ google-      │ gemini-  │          │ index.ts                                                            │          │</text>
+<text x="28" y="666" fill="#e2e8f0">│ gemini-cli-  │ cli-auth │          │ OpenClaw Gemini CLI OAuth provider plugin                           │          │</text>
+<text x="28" y="688" fill="#e2e8f0">│ auth         │          │          │                                                                     │          │</text>
+<text x="28" y="710" fill="#e2e8f0">│ @openclaw/   │ googlech │ disabled │ /usr/lib/node_modules/openclaw/extensions/googlechat/index.ts       │ 2026.2.9 │</text>
+<text x="28" y="732" fill="#e2e8f0">│ googlechat   │ at       │          │ OpenClaw Google Chat channel plugin                                 │          │</text>
+<text x="28" y="754" fill="#e2e8f0">│ @openclaw/   │ imessage │ disabled │ /usr/lib/node_modules/openclaw/extensions/imessage/index.ts         │ 2026.2.9 │</text>
+<text x="28" y="776" fill="#e2e8f0">│ imessage     │          │          │ OpenClaw iMessage channel plugin                                    │          │</text>
+<text x="28" y="798" fill="#e2e8f0">│ @openclaw/   │ line     │ disabled │ /usr/lib/node_modules/openclaw/extensions/line/index.ts             │ 2026.2.9 │</text>
+<text x="28" y="820" fill="#e2e8f0">│ line         │          │          │ OpenClaw LINE channel plugin                                        │          │</text>
+<text x="28" y="842" fill="#e2e8f0">│ LLM Task     │ llm-task │ disabled │ /usr/lib/node_modules/openclaw/extensions/llm-task/index.ts         │ 2026.2.9 │</text>
+<text x="28" y="864" fill="#e2e8f0">│              │          │          │ Generic JSON-only LLM tool for structured tasks callable from       │          │</text>
+<text x="28" y="886" fill="#e2e8f0">│              │          │          │ workflows.                                                          │          │</text>
+<text x="28" y="908" fill="#e2e8f0">│ Lobster      │ lobster  │ disabled │ /usr/lib/node_modules/openclaw/extensions/lobster/index.ts          │ 2026.2.9 │</text>
+<text x="28" y="930" fill="#e2e8f0">│              │          │          │ Typed workflow tool with resumable approvals.                       │          │</text>
+<text x="28" y="952" fill="#e2e8f0">│ @openclaw/   │ matrix   │ disabled │ /usr/lib/node_modules/openclaw/extensions/matrix/index.ts           │ 2026.2.9 │</text>
+<text x="28" y="974" fill="#e2e8f0">│ matrix       │          │          │ OpenClaw Matrix channel plugin                                      │          │</text>
+<text x="28" y="996" fill="#e2e8f0">│ @openclaw/   │ mattermo │ disabled │ /usr/lib/node_modules/openclaw/extensions/mattermost/index.ts       │ 2026.2.9 │</text>
+<text x="28" y="1018" fill="#e2e8f0">│ mattermost   │ st       │          │ OpenClaw Mattermost channel plugin                                  │          │</text>
+<text x="28" y="1040" fill="#e2e8f0">│ Memory       │ memory-  │ loaded   │ /usr/lib/node_modules/openclaw/extensions/memory-core/index.ts      │ 2026.2.9 │</text>
+<text x="28" y="1062" fill="#e2e8f0">│ (Core)       │ core     │          │ File-backed memory search tools and CLI                             │          │</text>
+<text x="28" y="1084" fill="#e2e8f0">│ @openclaw/   │ memory-  │ disabled │ /usr/lib/node_modules/openclaw/extensions/memory-lancedb/index.ts   │ 2026.2.9 │</text>
+<text x="28" y="1106" fill="#e2e8f0">│ memory-      │ lancedb  │          │ OpenClaw LanceDB-backed long-term memory plugin with auto-recall/   │          │</text>
+<text x="28" y="1128" fill="#e2e8f0">│ lancedb      │          │          │ capture                                                             │          │</text>
+<text x="28" y="1150" fill="#e2e8f0">│ @openclaw/   │ minimax- │ disabled │ /usr/lib/node_modules/openclaw/extensions/minimax-portal-auth/      │ 2026.2.9 │</text>
+<text x="28" y="1172" fill="#e2e8f0">│ minimax-     │ portal-  │          │ index.ts                                                            │          │</text>
+<text x="28" y="1194" fill="#e2e8f0">│ portal-auth  │ auth     │          │ OpenClaw MiniMax Portal OAuth provider plugin                       │          │</text>
+<text x="28" y="1216" fill="#e2e8f0">│ @openclaw/   │ msteams  │ disabled │ /usr/lib/node_modules/openclaw/extensions/msteams/index.ts          │ 2026.2.9 │</text>
+<text x="28" y="1238" fill="#e2e8f0">│ msteams      │          │          │ OpenClaw Microsoft Teams channel plugin                             │          │</text>
+<text x="28" y="1260" fill="#e2e8f0">│ @openclaw/   │ nextclou │ disabled │ /usr/lib/node_modules/openclaw/extensions/nextcloud-talk/index.ts   │ 2026.2.9 │</text>
+<text x="28" y="1282" fill="#e2e8f0">│ nextcloud-   │ d-talk   │          │ OpenClaw Nextcloud Talk channel plugin                              │          │</text>
+<text x="28" y="1304" fill="#e2e8f0">│ talk         │          │          │                                                                     │          │</text>
+<text x="28" y="1326" fill="#e2e8f0">│ @openclaw/   │ nostr    │ disabled │ /usr/lib/node_modules/openclaw/extensions/nostr/index.ts            │ 2026.2.9 │</text>
+<text x="28" y="1348" fill="#e2e8f0">│ nostr        │          │          │ OpenClaw Nostr channel plugin for NIP-04 encrypted DMs              │          │</text>
+<text x="28" y="1370" fill="#e2e8f0">│ OpenProse    │ open-    │ disabled │ /usr/lib/node_modules/openclaw/extensions/open-prose/index.ts       │ 2026.2.9 │</text>
+<text x="28" y="1392" fill="#e2e8f0">│              │ prose    │          │ OpenProse VM skill pack with a /prose slash command.                │          │</text>
+<text x="28" y="1414" fill="#e2e8f0">│ Phone        │ phone-   │ disabled │ /usr/lib/node_modules/openclaw/extensions/phone-control/index.ts    │          │</text>
+<text x="28" y="1436" fill="#e2e8f0">│ Control      │ control  │          │ Arm/disarm high-risk phone node commands (camera/screen/writes)     │          │</text>
+<text x="28" y="1458" fill="#e2e8f0">│              │          │          │ with an optional auto-expiry.                                       │          │</text>
+<text x="28" y="1480" fill="#e2e8f0">│ qwen-portal- │          │ disabled │ /usr/lib/node_modules/openclaw/extensions/qwen-portal-auth/index.ts │          │</text>
+<text x="28" y="1502" fill="#e2e8f0">│ auth         │          │          │                                                                     │          │</text>
+<text x="28" y="1524" fill="#e2e8f0">│ @openclaw/   │ signal   │ disabled │ /usr/lib/node_modules/openclaw/extensions/signal/index.ts           │ 2026.2.9 │</text>
+<text x="28" y="1546" fill="#e2e8f0">│ signal       │          │          │ OpenClaw Signal channel plugin                                      │          │</text>
+<text x="28" y="1568" fill="#e2e8f0">│ @openclaw/   │ slack    │ disabled │ /usr/lib/node_modules/openclaw/extensions/slack/index.ts            │ 2026.2.9 │</text>
+<text x="28" y="1590" fill="#e2e8f0">│ slack        │          │          │ OpenClaw Slack channel plugin                                       │          │</text>
+<text x="28" y="1612" fill="#e2e8f0">│ Talk Voice   │ talk-    │ disabled │ /usr/lib/node_modules/openclaw/extensions/talk-voice/index.ts       │          │</text>
+<text x="28" y="1634" fill="#e2e8f0">│              │ voice    │          │ Manage Talk voice selection (list/set).                             │          │</text>
+<text x="28" y="1656" fill="#e2e8f0">│ Telegram     │ telegram │ loaded   │ /usr/lib/node_modules/openclaw/extensions/telegram/index.ts         │ 2026.2.9 │</text>
+<text x="28" y="1678" fill="#e2e8f0">│              │          │          │ Telegram channel plugin                                             │          │</text>
+<text x="28" y="1700" fill="#e2e8f0">│ @openclaw/   │ tlon     │ disabled │ /usr/lib/node_modules/openclaw/extensions/tlon/index.ts             │ 2026.2.9 │</text>
+<text x="28" y="1722" fill="#e2e8f0">│ tlon         │          │          │ OpenClaw Tlon/Urbit channel plugin                                  │          │</text>
+<text x="28" y="1744" fill="#e2e8f0">│ @openclaw/   │ twitch   │ disabled │ /usr/lib/node_modules/openclaw/extensions/twitch/index.ts           │ 2026.2.9 │</text>
+<text x="28" y="1766" fill="#e2e8f0">│ twitch       │          │          │ OpenClaw Twitch channel plugin                                      │          │</text>
+<text x="28" y="1788" fill="#e2e8f0">│ @openclaw/   │ voice-   │ disabled │ /usr/lib/node_modules/openclaw/extensions/voice-call/index.ts       │ 2026.2.9 │</text>
+<text x="28" y="1810" fill="#e2e8f0">│ voice-call   │ call     │          │ OpenClaw voice-call plugin                                          │          │</text>
+<text x="28" y="1832" fill="#e2e8f0">│ @openclaw/   │ whatsapp │ disabled │ /usr/lib/node_modules/openclaw/extensions/whatsapp/index.ts         │ 2026.2.9 │</text>
+<text x="28" y="1854" fill="#e2e8f0">│ whatsapp     │          │          │ OpenClaw WhatsApp channel plugin                                    │          │</text>
+<text x="28" y="1876" fill="#e2e8f0">│ @openclaw/   │ zalo     │ disabled │ /usr/lib/node_modules/openclaw/extensions/zalo/index.ts             │ 2026.2.9 │</text>
+<text x="28" y="1898" fill="#e2e8f0">│ zalo         │          │          │ OpenClaw Zalo channel plugin                                        │          │</text>
+<text x="28" y="1920" fill="#e2e8f0">│ @openclaw/   │ zalouser │ disabled │ /usr/lib/node_modules/openclaw/extensions/zalouser/index.ts         │ 2026.2.9 │</text>
+<text x="28" y="1942" fill="#e2e8f0">│ zalouser     │          │          │ OpenClaw Zalo Personal Account plugin via zca-cli                   │          │</text>
+<text x="28" y="1964" fill="#e2e8f0">└──────────────┴──────────┴──────────┴─────────────────────────────────────────────────────────────────────┴──────────┘</text>
+    </g>
+  </g>
+</svg>

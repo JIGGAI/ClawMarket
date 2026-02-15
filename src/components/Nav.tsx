@@ -74,6 +74,9 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/marketplace">
             Marketplace
           </Link>
+          <Link className="hover:text-[var(--text)]" href="/get-started">
+            Get started
+          </Link>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
@@ -139,6 +142,9 @@ export function Nav() {
                 </Link>
                 <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>
                   Marketplace
+                </Link>
+                <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/get-started" onClick={() => setOpen(false)}>
+                  Get started
                 </Link>
                 <a
                   className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]"

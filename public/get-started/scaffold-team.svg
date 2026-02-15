@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="826" viewBox="0 0 1100 826">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220" />
+      <stop offset="1" stop-color="#0a0f1a" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="826" fill="#0f172a"/>
+
+  <g filter="url(#shadow)">
+    <rect x="18" y="18" rx="18" ry="18" width="1064" height="790" fill="url(#bg)" stroke="#1f2a44" stroke-width="1"/>
+
+    <!-- chrome -->
+    <g transform="translate(28, 28)">
+      <circle cx="12" cy="14" r="6" fill="#ef4444" />
+      <circle cx="32" cy="14" r="6" fill="#f59e0b" />
+      <circle cx="52" cy="14" r="6" fill="#22c55e" />
+      <text x="88" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="13" fill="#94a3b8">Scaffold a team</text>
+    </g>
+
+    <!-- command line -->
+    <text x="28" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" fill="#34d399">$ openclaw recipes scaffold-team development-team -t docs-screenshot-team --overwrite</text>
+
+    <!-- output -->
+    <g transform="translate(28, 94)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" dominant-baseline="hanging">
+<text x="28" y="72" fill="#e2e8f0">{</text>
+<text x="28" y="94" fill="#e2e8f0">  &quot;teamId&quot;: &quot;docs-screenshot-team&quot;,</text>
+<text x="28" y="116" fill="#e2e8f0">  &quot;teamDir&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team&quot;,</text>
+<text x="28" y="138" fill="#e2e8f0">  &quot;agents&quot;: [</text>
+<text x="28" y="160" fill="#e2e8f0">    {</text>
+<text x="28" y="182" fill="#e2e8f0">      &quot;role&quot;: &quot;lead&quot;,</text>
+<text x="28" y="204" fill="#e2e8f0">      &quot;agentId&quot;: &quot;docs-screenshot-team-lead&quot;,</text>
+<text x="28" y="226" fill="#e2e8f0">      &quot;filesRootDir&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team/roles/lead&quot;,</text>
+<text x="28" y="248" fill="#e2e8f0">      &quot;workspaceRootDir&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team&quot;,</text>
+<text x="28" y="270" fill="#e2e8f0">      &quot;fileResults&quot;: [</text>
+<text x="28" y="292" fill="#e2e8f0">        {</text>
+<text x="28" y="314" fill="#e2e8f0">          &quot;path&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team/roles/lead/SOUL.md&quot;,</text>
+<text x="28" y="336" fill="#e2e8f0">          &quot;wrote&quot;: false,</text>
+<text x="28" y="358" fill="#e2e8f0">          &quot;reason&quot;: &quot;exists&quot;</text>
+<text x="28" y="380" fill="#e2e8f0">        },</text>
+<text x="28" y="402" fill="#e2e8f0">        {</text>
+<text x="28" y="424" fill="#e2e8f0">          &quot;path&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team/roles/lead/AGENTS.md&quot;,</text>
+<text x="28" y="446" fill="#e2e8f0">          &quot;wrote&quot;: false,</text>
+<text x="28" y="468" fill="#e2e8f0">          &quot;reason&quot;: &quot;exists&quot;</text>
+<text x="28" y="490" fill="#e2e8f0">        },</text>
+<text x="28" y="512" fill="#e2e8f0">        {</text>
+<text x="28" y="534" fill="#e2e8f0">          &quot;path&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team/roles/lead/TOOLS.md&quot;,</text>
+<text x="28" y="556" fill="#e2e8f0">          &quot;wrote&quot;: false,</text>
+<text x="28" y="578" fill="#e2e8f0">          &quot;reason&quot;: &quot;exists&quot;</text>
+<text x="28" y="600" fill="#e2e8f0">        },</text>
+<text x="28" y="622" fill="#e2e8f0">        {</text>
+<text x="28" y="644" fill="#e2e8f0">          &quot;path&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team/roles/lead/STATUS.md&quot;,</text>
+<text x="28" y="666" fill="#e2e8f0">          &quot;wrote&quot;: false,</text>
+<text x="28" y="688" fill="#e2e8f0">          &quot;reason&quot;: &quot;exists&quot;</text>
+<text x="28" y="710" fill="#e2e8f0">        },</text>
+<text x="28" y="732" fill="#e2e8f0">        {</text>
+<text x="28" y="754" fill="#e2e8f0">          &quot;path&quot;: &quot;/home/you/.openclaw/workspace-docs-screenshot-team/roles/lead/NOTES.md&quot;,</text>
+<text x="28" y="776" fill="#e2e8f0">…</text>
+    </g>
+  </g>
+</svg>
