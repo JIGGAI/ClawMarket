@@ -1,20 +1,26 @@
-import { auth } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default auth((req) => {
-  const isLoggedIn = Boolean(req.auth);
+export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   // Protect future submission/admin flows.
-  if (path.startsWith("/submit") || path.startsWith("/admin")) {
-    if (!isLoggedIn) {
-      const url = new URL("/login", req.nextUrl.origin);
-      url.searchParams.set("callbackUrl", req.nextUrl.pathname);
-      return Response.redirect(url);
-    }
+  const isProtected = path.startsWith("/submit") || path.startsWith("/admin");
+  if (!isProtected) return NextResponse.next();
+
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const isLoggedIn = Boolean(token);
+
+  if (!isLoggedIn) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("callbackUrl", path);
+    return NextResponse.redirect(url);
   }
 
-  return undefined;
-});
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/submit/:path*", "/admin/:path*"],

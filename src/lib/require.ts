@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function requireAuth() {
-  const session = await auth();
+  const session = await getServerSession(authOptions);
   if (!session) {
     return { ok: false as const, res: NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 }) };
   }

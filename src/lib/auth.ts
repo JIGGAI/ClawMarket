@@ -1,11 +1,12 @@
-import NextAuth, { type NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import Google from "next-auth/providers/google";
-import GitHub from "next-auth/providers/github";
-import Discord from "next-auth/providers/discord";
-import Twitter from "next-auth/providers/twitter";
-import Email from "next-auth/providers/email";
 import { prisma } from "@/lib/prisma";
+import type { NextAuthOptions, Session } from "next-auth";
+
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+import DiscordProvider from "next-auth/providers/discord";
+import TwitterProvider from "next-auth/providers/twitter";
+import EmailProvider from "next-auth/providers/email";
 
 function parseAdminEmails() {
   return String(process.env.ADMIN_EMAILS ?? "")
@@ -17,7 +18,6 @@ function parseAdminEmails() {
 function isConfigured(name: string, keys: string[]) {
   const missing = keys.filter((k) => !process.env[k]);
   if (missing.length) {
-    // Avoid noisy logs in production builds; only warn at runtime.
     if (process.env.NODE_ENV !== "production") {
       console.warn(`[auth] ${name} disabled; missing env: ${missing.join(", ")}`);
     }
@@ -26,49 +26,37 @@ function isConfigured(name: string, keys: string[]) {
   return true;
 }
 
-const providers: NextAuthConfig["providers"] = [];
-
-if (isConfigured("Google", ["AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"])) {
-  providers.push(Google({ clientId: process.env.AUTH_GOOGLE_ID!, clientSecret: process.env.AUTH_GOOGLE_SECRET! }));
-}
-
-if (isConfigured("GitHub", ["AUTH_GITHUB_ID", "AUTH_GITHUB_SECRET"])) {
-  providers.push(GitHub({ clientId: process.env.AUTH_GITHUB_ID!, clientSecret: process.env.AUTH_GITHUB_SECRET! }));
-}
-
-if (isConfigured("Discord", ["AUTH_DISCORD_ID", "AUTH_DISCORD_SECRET"])) {
-  providers.push(Discord({ clientId: process.env.AUTH_DISCORD_ID!, clientSecret: process.env.AUTH_DISCORD_SECRET! }));
-}
-
-// X/Twitter OAuth — no extra verification required beyond social login.
-if (isConfigured("X", ["AUTH_TWITTER_ID", "AUTH_TWITTER_SECRET"])) {
-  providers.push(Twitter({ clientId: process.env.AUTH_TWITTER_ID!, clientSecret: process.env.AUTH_TWITTER_SECRET! }));
-}
-
-// Email magic link (passwordless).
-if (isConfigured("Email", ["AUTH_EMAIL_SERVER", "AUTH_EMAIL_FROM"])) {
-  providers.push(
-    Email({
-      server: process.env.AUTH_EMAIL_SERVER,
-      from: process.env.AUTH_EMAIL_FROM,
-    }),
-  );
-}
-
-export const authConfig: NextAuthConfig = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "database" },
-  providers,
+  providers: [
+    isConfigured("Google", ["AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"])
+      ? GoogleProvider({ clientId: process.env.AUTH_GOOGLE_ID!, clientSecret: process.env.AUTH_GOOGLE_SECRET! })
+      : null,
+    isConfigured("GitHub", ["AUTH_GITHUB_ID", "AUTH_GITHUB_SECRET"])
+      ? GitHubProvider({ clientId: process.env.AUTH_GITHUB_ID!, clientSecret: process.env.AUTH_GITHUB_SECRET! })
+      : null,
+    isConfigured("Discord", ["AUTH_DISCORD_ID", "AUTH_DISCORD_SECRET"])
+      ? DiscordProvider({ clientId: process.env.AUTH_DISCORD_ID!, clientSecret: process.env.AUTH_DISCORD_SECRET! })
+      : null,
+    // X/Twitter OAuth — no extra verification required beyond social login.
+    isConfigured("X", ["AUTH_TWITTER_ID", "AUTH_TWITTER_SECRET"])
+      ? TwitterProvider({ clientId: process.env.AUTH_TWITTER_ID!, clientSecret: process.env.AUTH_TWITTER_SECRET! })
+      : null,
+    // Email magic link (passwordless).
+    isConfigured("Email", ["AUTH_EMAIL_SERVER", "AUTH_EMAIL_FROM"])
+      ? EmailProvider({ server: process.env.AUTH_EMAIL_SERVER!, from: process.env.AUTH_EMAIL_FROM! })
+      : null,
+  ].filter(Boolean) as NonNullable<NextAuthOptions["providers"]>,
   pages: {
     signIn: "/login",
   },
   callbacks: {
     session: async ({ session, user }) => {
-      // Add stable identity and role for server-side enforcement.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (session as any).userId = user.id;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (session as any).role = (user as any).role;
+      // Stable identity and role for server-side enforcement.
+      const s = session as Session & { userId?: string; role?: "user" | "moderator" | "admin" };
+      s.userId = user.id;
+      s.role = (user as unknown as { role?: "user" | "moderator" | "admin" }).role;
       return session;
     },
   },
@@ -83,5 +71,3 @@ export const authConfig: NextAuthConfig = {
     },
   },
 };
-
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
