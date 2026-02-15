@@ -1,151 +1,84 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FadeIn } from "@/components/FadeIn";
-
 export const metadata = {
   title: "Get Started – ClawRecipes",
-  description: "Install the ClawRecipes plugin and scaffold your first OpenClaw team.",
+  description: "Step-by-step instructions for installing and upgrading the ClawRecipes plugin in OpenClaw.",
 };
 
-function Shot({ src, alt, caption }: { src: string; alt: string; caption: string }) {
+function CodeBlock({ children }: { children: React.ReactNode }) {
   return (
-    <figure className="mt-6">
-      {/* SVG terminal renders crisply; Next/Image keeps layout stable. */}
-      <Image
-        src={src}
-        alt={alt}
-        width={1100}
-        height={640}
-        unoptimized
-        className="h-auto w-full rounded-2xl border border-slate-200 bg-slate-900 shadow-xl"
-      />
-      <figcaption className="mt-2 text-sm text-[var(--muted)]">{caption}</figcaption>
-    </figure>
+    <pre className="mt-3 overflow-x-auto rounded-2xl bg-slate-900 p-5 text-sm leading-6 text-slate-100 shadow-sm">
+      <code>{children}</code>
+    </pre>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-10">
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--text)]">{title}</h2>
+      <div className="mt-3 space-y-3 text-[var(--muted)]">{children}</div>
+    </section>
   );
 }
 
 export default function GetStartedPage() {
   return (
-    <main className="w-full">
-      <FadeIn>
-        <section className="px-6 py-16 lg:px-16 lg:py-20">
-          <div className="mx-auto max-w-4xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Get Started</p>
-            <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              Install the plugin. Scaffold a team.
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-[var(--muted)]">
-              These screenshots are generated from real <code>openclaw</code> commands (sanitized for privacy). Follow
-              along to install the recipes plugin, verify it loaded, and scaffold your first team workspace.
-            </p>
+    <main className="px-6 py-16 lg:px-16">
+      <div className="mx-auto max-w-4xl">
+        <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Get Started</h1>
+        <p className="mt-4 text-lg text-[var(--muted)]">
+          Install the ClawRecipes plugin into OpenClaw, scaffold a team or agent, and learn how to upgrade safely.
+        </p>
 
-            <div className="mt-10">
-              <h2 className="text-2xl font-bold text-[var(--text)]">1) Install ClawRecipes</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                Install the recipes plugin into OpenClaw. If you already have it installed, you may see an “already
-                exists” message.
-              </p>
-              <Shot
-                src="/get-started/plugins-install.svg"
-                alt="Terminal screenshot showing openclaw plugins install @jiggai/recipes"
-                caption="Install the recipes plugin via the OpenClaw plugin manager."
-              />
+        <Section title="1) Install the plugin">
+          <p>Install the plugin package, then restart the OpenClaw gateway so it loads the new extension.</p>
+          <CodeBlock>{`openclaw plugins install @jiggai/recipes
+openclaw gateway restart`}</CodeBlock>
+        </Section>
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">2) Restart the gateway</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">Restarting the gateway reloads installed plugins.</p>
-              <Shot
-                src="/get-started/gateway-restart.svg"
-                alt="Terminal screenshot showing openclaw gateway restart"
-                caption="Restart the OpenClaw gateway to load newly installed plugins."
-              />
+        <Section title="2) Verify it loaded">
+          <p>Confirm the Recipes plugin is loaded.</p>
+          <CodeBlock>{`openclaw plugins list`}</CodeBlock>
+        </Section>
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">3) Verify installation</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                List plugins and confirm <code>recipes</code> is present.
-              </p>
-              <Shot
-                src="/get-started/plugins-list.svg"
-                alt="Terminal screenshot showing openclaw plugins list"
-                caption="Confirm the recipes plugin appears in the installed plugin list."
-              />
+        <Section title="3) List recipes">
+          <p>List available recipes (builtin + workspace).</p>
+          <CodeBlock>{`openclaw recipes list`}</CodeBlock>
+        </Section>
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">4) List recipes</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                The plugin ships with built-in recipes (and can also load workspace recipes from your local workspace).
-              </p>
-              <Shot
-                src="/get-started/recipes-list.svg"
-                alt="Terminal screenshot showing openclaw recipes list"
-                caption="List available recipes (builtin + workspace)."
-              />
+        <Section title="4) Scaffold a team (shared workspace)">
+          <p>
+            Scaffold a team from a built-in team recipe. This creates <code>workspace-&lt;teamId&gt;/</code> plus role agents.
+          </p>
+          <CodeBlock>{`openclaw recipes scaffold-team development-team -t my-dev-team --apply-config`}</CodeBlock>
+        </Section>
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">5) Scaffold a team workspace</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                Scaffold a shared workspace (tickets, lanes, roles) from a team recipe.
-              </p>
-              <Shot
-                src="/get-started/scaffold-team.svg"
-                alt="Terminal screenshot showing openclaw recipes scaffold-team development-team -t docs-screenshot-team --overwrite"
-                caption="Scaffold a team from a team recipe. Output is JSON describing created files and agents."
-              />
+        <Section title="5) Scaffold a single agent">
+          <p>Scaffold a single agent from a recipe.</p>
+          <CodeBlock>{`openclaw recipes scaffold researcher --agent-id my-researcher --apply-config`}</CodeBlock>
+        </Section>
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">If skills are missing</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                Some recipes require additional skills. The CLI will print exactly what is missing and what to install.
-              </p>
-              <Shot
-                src="/get-started/missing-skills.svg"
-                alt="Terminal screenshot showing missing skills error and suggested install commands"
-                caption="If required skills are missing, install them (workspace-local) and re-run scaffold."
-              />
+        <Section title="Commands (examples)">
+          <p>Common commands you’ll use:</p>
+          <CodeBlock>{`# Help
+openclaw recipes --help
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">Remove a team</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                When you’re done with a sandbox team, you can remove its workspace.
-              </p>
-              <Shot
-                src="/get-started/remove-team.svg"
-                alt="Terminal screenshot showing openclaw recipes remove-team help"
-                caption="Use remove-team to clean up a scaffolded team workspace."
-              />
+# Re-run scaffold on an existing team (update files)
+openclaw recipes scaffold-team development-team -t my-dev-team --overwrite --apply-config
 
-              <h2 className="mt-14 text-2xl font-bold text-[var(--text)]">Upgrade from older installs</h2>
-              <p className="mt-2 text-base text-[var(--muted)]">
-                If you installed via npm previously, you can update with the plugin manager.
-              </p>
-              <Shot
-                src="/get-started/upgrade.svg"
-                alt="Terminal screenshot showing openclaw plugins update recipes"
-                caption="Update the recipes plugin. Restart the gateway afterward if prompted."
-              />
+# Remove a team safely
+openclaw recipes remove-team --team-id my-dev-team --yes`}</CodeBlock>
+        </Section>
 
-              <div className="mt-16 rounded-2xl bg-slate-50 p-6">
-                <h3 className="text-lg font-semibold text-[var(--text)]">Next</h3>
-                <p className="mt-2 text-base text-[var(--muted)]">
-                  Once you have a team scaffolded, you can browse recipes in the marketplace and manage teams in
-                  ClawKitchen.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <Link
-                    href="/marketplace"
-                    className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
-                  >
-                    Browse Marketplace
-                  </Link>
-                  <a
-                    href="https://docs.openclaw.ai"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-base font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50"
-                  >
-                    OpenClaw Docs
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </FadeIn>
+        <Section title="Upgrade from older versions">
+          <p>
+            If you previously installed older packages (e.g. <code>@clawcipes/recipes</code>), upgrade by installing the
+            new package and restarting.
+          </p>
+          <CodeBlock>{`openclaw plugins install @jiggai/recipes
+openclaw gateway restart
+openclaw plugins list`}</CodeBlock>
+        </Section>
+      </div>
     </main>
   );
 }
