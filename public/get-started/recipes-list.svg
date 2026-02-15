@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="3312" viewBox="0 0 1100 3312">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="232" viewBox="0 0 1100 232">
   <defs>
     <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0" stop-color="#0b1220" />
@@ -10,10 +10,10 @@
     </filter>
   </defs>
 
-  <rect x="0" y="0" width="1100" height="3312" fill="#0f172a"/>
+  <rect x="0" y="0" width="1100" height="232" fill="#0f172a"/>
 
   <g filter="url(#shadow)">
-    <rect x="18" y="18" rx="18" ry="18" width="1064" height="3276" fill="url(#bg)" stroke="#1f2a44" stroke-width="1"/>
+    <rect x="18" y="18" rx="18" ry="18" width="1064" height="196" fill="url(#bg)" stroke="#1f2a44" stroke-width="1"/>
 
     <!-- chrome -->
     <g transform="translate(28, 28)">
@@ -28,152 +28,12 @@
 
     <!-- output -->
     <g transform="translate(28, 94)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" dominant-baseline="hanging">
-<text x="28" y="72" fill="#e2e8f0">[</text>
-<text x="28" y="94" fill="#e2e8f0">  {</text>
-<text x="28" y="116" fill="#e2e8f0">    &quot;id&quot;: &quot;customer-support-team&quot;,</text>
-<text x="28" y="138" fill="#e2e8f0">    &quot;name&quot;: &quot;Customer Support Team&quot;,</text>
-<text x="28" y="160" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="182" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="204" fill="#e2e8f0">  },</text>
-<text x="28" y="226" fill="#e2e8f0">  {</text>
-<text x="28" y="248" fill="#e2e8f0">    &quot;id&quot;: &quot;developer&quot;,</text>
-<text x="28" y="270" fill="#e2e8f0">    &quot;name&quot;: &quot;Developer&quot;,</text>
-<text x="28" y="292" fill="#e2e8f0">    &quot;kind&quot;: &quot;agent&quot;,</text>
-<text x="28" y="314" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="336" fill="#e2e8f0">  },</text>
-<text x="28" y="358" fill="#e2e8f0">  {</text>
-<text x="28" y="380" fill="#e2e8f0">    &quot;id&quot;: &quot;development-team&quot;,</text>
-<text x="28" y="402" fill="#e2e8f0">    &quot;name&quot;: &quot;Development Team&quot;,</text>
-<text x="28" y="424" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="446" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="468" fill="#e2e8f0">  },</text>
-<text x="28" y="490" fill="#e2e8f0">  {</text>
-<text x="28" y="512" fill="#e2e8f0">    &quot;id&quot;: &quot;editor&quot;,</text>
-<text x="28" y="534" fill="#e2e8f0">    &quot;name&quot;: &quot;Editor&quot;,</text>
-<text x="28" y="556" fill="#e2e8f0">    &quot;kind&quot;: &quot;agent&quot;,</text>
-<text x="28" y="578" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="600" fill="#e2e8f0">  },</text>
-<text x="28" y="622" fill="#e2e8f0">  {</text>
-<text x="28" y="644" fill="#e2e8f0">    &quot;id&quot;: &quot;product-team&quot;,</text>
-<text x="28" y="666" fill="#e2e8f0">    &quot;name&quot;: &quot;Product Team&quot;,</text>
-<text x="28" y="688" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="710" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="732" fill="#e2e8f0">  },</text>
-<text x="28" y="754" fill="#e2e8f0">  {</text>
-<text x="28" y="776" fill="#e2e8f0">    &quot;id&quot;: &quot;project-manager&quot;,</text>
-<text x="28" y="798" fill="#e2e8f0">    &quot;name&quot;: &quot;Project Manager&quot;,</text>
-<text x="28" y="820" fill="#e2e8f0">    &quot;kind&quot;: &quot;agent&quot;,</text>
-<text x="28" y="842" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="864" fill="#e2e8f0">  },</text>
-<text x="28" y="886" fill="#e2e8f0">  {</text>
-<text x="28" y="908" fill="#e2e8f0">    &quot;id&quot;: &quot;research-team&quot;,</text>
-<text x="28" y="930" fill="#e2e8f0">    &quot;name&quot;: &quot;Research Team&quot;,</text>
-<text x="28" y="952" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="974" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="996" fill="#e2e8f0">  },</text>
-<text x="28" y="1018" fill="#e2e8f0">  {</text>
-<text x="28" y="1040" fill="#e2e8f0">    &quot;id&quot;: &quot;researcher&quot;,</text>
-<text x="28" y="1062" fill="#e2e8f0">    &quot;name&quot;: &quot;Researcher&quot;,</text>
-<text x="28" y="1084" fill="#e2e8f0">    &quot;kind&quot;: &quot;agent&quot;,</text>
-<text x="28" y="1106" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="1128" fill="#e2e8f0">  },</text>
-<text x="28" y="1150" fill="#e2e8f0">  {</text>
-<text x="28" y="1172" fill="#e2e8f0">    &quot;id&quot;: &quot;social-team&quot;,</text>
-<text x="28" y="1194" fill="#e2e8f0">    &quot;name&quot;: &quot;Social Media Team&quot;,</text>
-<text x="28" y="1216" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="1238" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="1260" fill="#e2e8f0">  },</text>
-<text x="28" y="1282" fill="#e2e8f0">  {</text>
-<text x="28" y="1304" fill="#e2e8f0">    &quot;id&quot;: &quot;writing-team&quot;,</text>
-<text x="28" y="1326" fill="#e2e8f0">    &quot;name&quot;: &quot;Writing Team&quot;,</text>
-<text x="28" y="1348" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="1370" fill="#e2e8f0">    &quot;source&quot;: &quot;builtin&quot;</text>
-<text x="28" y="1392" fill="#e2e8f0">  },</text>
-<text x="28" y="1414" fill="#e2e8f0">  {</text>
-<text x="28" y="1436" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-development-team-0036-1771070855&quot;,</text>
-<text x="28" y="1458" fill="#e2e8f0">    &quot;name&quot;: &quot;Custom DevTeam 0036 Overwrite&quot;,</text>
-<text x="28" y="1480" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="1502" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="1524" fill="#e2e8f0">  },</text>
-<text x="28" y="1546" fill="#e2e8f0">  {</text>
-<text x="28" y="1568" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-development-team-0037-1771072571&quot;,</text>
-<text x="28" y="1590" fill="#e2e8f0">    &quot;name&quot;: &quot;Custom DevTeam 0037&quot;,</text>
-<text x="28" y="1612" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="1634" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="1656" fill="#e2e8f0">  },</text>
-<text x="28" y="1678" fill="#e2e8f0">  {</text>
-<text x="28" y="1700" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-development-team-0037-retest-1771079494&quot;,</text>
-<text x="28" y="1722" fill="#e2e8f0">    &quot;name&quot;: &quot;Custom DevTeam 0037 Retest&quot;,</text>
-<text x="28" y="1744" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="1766" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="1788" fill="#e2e8f0">  },</text>
-<text x="28" y="1810" fill="#e2e8f0">  {</text>
-<text x="28" y="1832" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-development-team&quot;,</text>
-<text x="28" y="1854" fill="#e2e8f0">    &quot;name&quot;: &quot;RJ development-team&quot;,</text>
-<text x="28" y="1876" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="1898" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="1920" fill="#e2e8f0">  },</text>
-<text x="28" y="1942" fill="#e2e8f0">  {</text>
-<text x="28" y="1964" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-devteam&quot;,</text>
-<text x="28" y="1986" fill="#e2e8f0">    &quot;name&quot;: &quot;Custom DevTeam&quot;,</text>
-<text x="28" y="2008" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2030" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2052" fill="#e2e8f0">  },</text>
-<text x="28" y="2074" fill="#e2e8f0">  {</text>
-<text x="28" y="2096" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-qa-0041-team-1771092169&quot;,</text>
-<text x="28" y="2118" fill="#e2e8f0">    &quot;name&quot;: &quot;QA 0041 Custom Team&quot;,</text>
-<text x="28" y="2140" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2162" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2184" fill="#e2e8f0">  },</text>
-<text x="28" y="2206" fill="#e2e8f0">  {</text>
-<text x="28" y="2228" fill="#e2e8f0">    &quot;id&quot;: &quot;custom-smoke-product-team&quot;,</text>
-<text x="28" y="2250" fill="#e2e8f0">    &quot;name&quot;: &quot;Product Team&quot;,</text>
-<text x="28" y="2272" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2294" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2316" fill="#e2e8f0">  },</text>
-<text x="28" y="2338" fill="#e2e8f0">  {</text>
-<text x="28" y="2360" fill="#e2e8f0">    &quot;id&quot;: &quot;docs-screenshot-team&quot;,</text>
-<text x="28" y="2382" fill="#e2e8f0">    &quot;name&quot;: &quot;Development Team&quot;,</text>
-<text x="28" y="2404" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2426" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2448" fill="#e2e8f0">  },</text>
-<text x="28" y="2470" fill="#e2e8f0">  {</text>
-<text x="28" y="2492" fill="#e2e8f0">    &quot;id&quot;: &quot;my-team-0044-team-2&quot;,</text>
-<text x="28" y="2514" fill="#e2e8f0">    &quot;name&quot;: &quot;Development Team&quot;,</text>
-<text x="28" y="2536" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2558" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2580" fill="#e2e8f0">  },</text>
-<text x="28" y="2602" fill="#e2e8f0">  {</text>
-<text x="28" y="2624" fill="#e2e8f0">    &quot;id&quot;: &quot;my-team-0044-team&quot;,</text>
-<text x="28" y="2646" fill="#e2e8f0">    &quot;name&quot;: &quot;My Team 0044&quot;,</text>
-<text x="28" y="2668" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2690" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2712" fill="#e2e8f0">  },</text>
-<text x="28" y="2734" fill="#e2e8f0">  {</text>
-<text x="28" y="2756" fill="#e2e8f0">    &quot;id&quot;: &quot;screenshot-skill-team&quot;,</text>
-<text x="28" y="2778" fill="#e2e8f0">    &quot;name&quot;: &quot;Development Team&quot;,</text>
-<text x="28" y="2800" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2822" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2844" fill="#e2e8f0">  },</text>
-<text x="28" y="2866" fill="#e2e8f0">  {</text>
-<text x="28" y="2888" fill="#e2e8f0">    &quot;id&quot;: &quot;smoke-product-team&quot;,</text>
-<text x="28" y="2910" fill="#e2e8f0">    &quot;name&quot;: &quot;smoke-product-team&quot;,</text>
-<text x="28" y="2932" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="2954" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="2976" fill="#e2e8f0">  },</text>
-<text x="28" y="2998" fill="#e2e8f0">  {</text>
-<text x="28" y="3020" fill="#e2e8f0">    &quot;id&quot;: &quot;smoke-provenance-1771120963562-team&quot;,</text>
-<text x="28" y="3042" fill="#e2e8f0">    &quot;name&quot;: &quot;Product Team&quot;,</text>
-<text x="28" y="3064" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="3086" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="3108" fill="#e2e8f0">  },</text>
-<text x="28" y="3130" fill="#e2e8f0">  {</text>
-<text x="28" y="3152" fill="#e2e8f0">    &quot;id&quot;: &quot;smoke-provenance-1771121053234-team&quot;,</text>
-<text x="28" y="3174" fill="#e2e8f0">    &quot;name&quot;: &quot;Product Team&quot;,</text>
-<text x="28" y="3196" fill="#e2e8f0">    &quot;kind&quot;: &quot;team&quot;,</text>
-<text x="28" y="3218" fill="#e2e8f0">    &quot;source&quot;: &quot;workspace&quot;</text>
-<text x="28" y="3240" fill="#e2e8f0">  }</text>
-<text x="28" y="3262" fill="#e2e8f0">]</text>
+<text x="28" y="72" fill="#e2e8f0">Config warnings:\n- plugins.entries.recipes: plugin recipes: duplicate plugin id detected; later plugin may be overridden (/home/you/.openclaw/extensions/recipes.backup-1771128378787/index.ts)</text>
+<text x="28" y="94" fill="#e2e8f0">[plugins] recipes failed to load from /home/you/.openclaw/extensions/recipes/index.ts: Error: Cannot find module &#39;json5&#39;</text>
+<text x="28" y="116" fill="#e2e8f0">Require stack:</text>
+<text x="28" y="138" fill="#e2e8f0">- /home/you/.openclaw/extensions/recipes/index.ts</text>
+<text x="28" y="160" fill="#e2e8f0">error: unknown command &#39;recipes&#39;</text>
+<text x="28" y="182" fill="#e2e8f0">(Did you mean devices?)</text>
     </g>
   </g>
 </svg>

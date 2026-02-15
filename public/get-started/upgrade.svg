@@ -29,7 +29,7 @@
     <!-- output -->
     <g transform="translate(28, 94)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" dominant-baseline="hanging">
 <text x="28" y="72" fill="#e2e8f0">Downloading @jiggai/recipes@0.2.17…</text>
-<text x="28" y="94" fill="#e2e8f0">Extracting /tmp/openclaw-npm-pack-Ld8iA9/jiggai-recipes-0.2.17.tgz…</text>
+<text x="28" y="94" fill="#e2e8f0">Extracting /tmp/openclaw-npm-pack-4UUFiK/jiggai-recipes-0.2.17.tgz…</text>
 <text x="28" y="116" fill="#e2e8f0">Installing to /home/you/.openclaw/extensions/recipes…</text>
 <text x="28" y="138" fill="#e2e8f0">Installing plugin dependencies…</text>
 <text x="28" y="160" fill="#e2e8f0">recipes already at 0.2.17.</text>

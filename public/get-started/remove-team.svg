@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="430" viewBox="0 0 1100 430">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="408" viewBox="0 0 1100 408">
   <defs>
     <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0" stop-color="#0b1220" />
@@ -10,10 +10,10 @@
     </filter>
   </defs>
 
-  <rect x="0" y="0" width="1100" height="430" fill="#0f172a"/>
+  <rect x="0" y="0" width="1100" height="408" fill="#0f172a"/>
 
   <g filter="url(#shadow)">
-    <rect x="18" y="18" rx="18" ry="18" width="1064" height="394" fill="url(#bg)" stroke="#1f2a44" stroke-width="1"/>
+    <rect x="18" y="18" rx="18" ry="18" width="1064" height="372" fill="url(#bg)" stroke="#1f2a44" stroke-width="1"/>
 
     <!-- chrome -->
     <g transform="translate(28, 28)">
@@ -28,21 +28,20 @@
 
     <!-- output -->
     <g transform="translate(28, 94)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="16" dominant-baseline="hanging">
-<text x="28" y="72" fill="#e2e8f0">🦞 OpenClaw &lt;version&gt;</text>
-<text x="28" y="94" fill="#e2e8f0">   I don&#39;t just autocomplete—I auto-commit (emotionally), then ask you to review (logically).</text>
-<text x="28" y="116" fill="#e2e8f0"></text>
-<text x="28" y="138" fill="#e2e8f0">Usage: openclaw recipes remove-team [options]</text>
-<text x="28" y="160" fill="#e2e8f0"></text>
-<text x="28" y="182" fill="#e2e8f0">Safe uninstall: remove a scaffolded team workspace + agents + stamped cron jobs</text>
-<text x="28" y="204" fill="#e2e8f0"></text>
-<text x="28" y="226" fill="#e2e8f0">Options:</text>
-<text x="28" y="248" fill="#e2e8f0">  -h, --help           display help for command</text>
-<text x="28" y="270" fill="#e2e8f0">  --include-ambiguous  Also remove cron jobs that only loosely match the team</text>
-<text x="28" y="292" fill="#e2e8f0">                       (dangerous)</text>
-<text x="28" y="314" fill="#e2e8f0">  --json               Output JSON</text>
-<text x="28" y="336" fill="#e2e8f0">  --plan               Print plan and exit</text>
-<text x="28" y="358" fill="#e2e8f0">  --team-id &lt;teamId&gt;   Team id</text>
-<text x="28" y="380" fill="#e2e8f0">  --yes                Skip confirmation (apply destructive changes)</text>
+<text x="28" y="72" fill="#e2e8f0">🦞 OpenClaw &lt;version&gt; — Your AI assistant, now without the $3,499 headset.</text>
+<text x="28" y="94" fill="#e2e8f0"></text>
+<text x="28" y="116" fill="#e2e8f0">Usage: openclaw recipes remove-team [options]</text>
+<text x="28" y="138" fill="#e2e8f0"></text>
+<text x="28" y="160" fill="#e2e8f0">Safe uninstall: remove a scaffolded team workspace + agents + stamped cron jobs</text>
+<text x="28" y="182" fill="#e2e8f0"></text>
+<text x="28" y="204" fill="#e2e8f0">Options:</text>
+<text x="28" y="226" fill="#e2e8f0">  -h, --help           display help for command</text>
+<text x="28" y="248" fill="#e2e8f0">  --include-ambiguous  Also remove cron jobs that only loosely match the team</text>
+<text x="28" y="270" fill="#e2e8f0">                       (dangerous)</text>
+<text x="28" y="292" fill="#e2e8f0">  --json               Output JSON</text>
+<text x="28" y="314" fill="#e2e8f0">  --plan               Print plan and exit</text>
+<text x="28" y="336" fill="#e2e8f0">  --team-id &lt;teamId&gt;   Team id</text>
+<text x="28" y="358" fill="#e2e8f0">  --yes                Skip confirmation (apply destructive changes)</text>
     </g>
   </g>
 </svg>
