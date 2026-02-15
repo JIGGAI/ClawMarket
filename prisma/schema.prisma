@@ -13,6 +13,12 @@ enum Role {
   admin
 }
 
+enum SubmissionStatus {
+  pending
+  approved
+  rejected
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -24,9 +30,25 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
+  submissions   Submission[]
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+model Submission {
+  id        String           @id @default(cuid())
+  createdBy String
+  status    SubmissionStatus @default(pending)
+
+  title     String
+  sourceUrl String
+  notes     String?
+
+  user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {

@@ -28,6 +28,8 @@ function isConfigured(name: string, keys: string[]) {
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  // Accept either AUTH_* or NEXTAUTH_* env names.
+  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   session: { strategy: "database" },
   providers: [
     isConfigured("Google", ["AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"])

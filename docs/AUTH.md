@@ -9,8 +9,8 @@ cp .env.example .env
 ```
 2) Set at least:
 - `DATABASE_URL="file:./dev.db"`
-- `AUTH_SECRET` (random)
-- `AUTH_URL="http://localhost:3000"`
+- `NEXTAUTH_SECRET` (random) (or `AUTH_SECRET`)
+- `NEXTAUTH_URL="http://localhost:3000"` (or `AUTH_URL`)
 
 3) Run migrations:
 ```bash
@@ -49,3 +49,12 @@ Use helpers in `src/lib/require.ts`:
 Example routes:
 - `GET /api/me`
 - `GET /api/admin/ping` (admin only)
+- `GET|POST /api/marketplace/submissions` (auth + verified for submissions)
+- `GET|POST /api/admin/submissions` (moderator/admin)
+
+## Callback URLs
+When configuring OAuth apps, use:
+- Google: `http(s)://<host>/api/auth/callback/google`
+- GitHub: `http(s)://<host>/api/auth/callback/github`
+- Discord: `http(s)://<host>/api/auth/callback/discord`
+- X/Twitter: `http(s)://<host>/api/auth/callback/twitter`
