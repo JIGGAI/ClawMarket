@@ -17,6 +17,7 @@ const fallbackTeamRecipes = [
       "A small engineering team with lead, dev, devops, and QA roles. Includes agile lanes, shared context, and cron-powered triage/execution loops.",
   },
   { id: "product-team", name: "Product Team", icon: "📦", description: "Product-focused team with lead, PM, designer, dev, and QA." },
+  { id: "marketing-team", name: "Marketing Team", icon: "📣", description: "Full marketing execution loop: SEO + copy + ads + design + analytics + video + compliance." },
   { id: "research-team", name: "Research Team", icon: "🔬", description: "Citations-first research pipeline: sources → notes → briefs." },
   { id: "writing-team", name: "Writing Team", icon: "✍️", description: "Briefs → outlines → drafts → review/edit (testing) → done." },
   { id: "social-team", name: "Social Team", icon: "📱", description: "Platform-specialist social execution: listening + editorial + distributor + platform roles; reports learnings back to marketing." },
