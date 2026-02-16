@@ -65,9 +65,29 @@ export async function fetchMarketplaceRecipes(): Promise<MarketplaceRecipe[] | n
   if (!base) return null;
 
   const url = base + "/api/marketplace/recipes";
-  const res = await fetch(url, { next: { revalidate: 60 } });
+
+  let res: Response;
+  try {
+    res = await fetch(url, { next: { revalidate: 60 } });
+  } catch {
+    return null;
+  }
+
   if (!res.ok) return null;
-  const data = (await res.json()) as unknown;
+
+  // Be defensive: on some hosts/proxies a 200 HTML error page can leak through here.
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.toLowerCase().includes("application/json")) {
+    return null;
+  }
+
+  let data: unknown;
+  try {
+    data = (await res.json()) as unknown;
+  } catch {
+    return null;
+  }
+
   const obj = data as { ok?: boolean; recipes?: unknown };
   if (!obj?.ok || !Array.isArray(obj.recipes)) return null;
   return obj.recipes as MarketplaceRecipe[];
