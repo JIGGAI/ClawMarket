@@ -14,9 +14,17 @@ enum Role {
 }
 
 enum SubmissionStatus {
-  pending
+  submitted
+  needs_changes
   approved
   rejected
+  published
+  unpublished
+}
+
+enum SubmissionSourceType {
+  url
+  upload
 }
 
 model User {
@@ -37,13 +45,42 @@ model User {
 }
 
 model Submission {
-  id        String           @id @default(cuid())
+  id        String                @id @default(cuid())
   createdBy String
-  status    SubmissionStatus @default(pending)
 
-  title     String
-  sourceUrl String
-  notes     String?
+  status    SubmissionStatus      @default(submitted)
+  sourceType SubmissionSourceType @default(url)
+
+  title       String
+  description String
+  tagsCsv     String             @default("")
+
+  // Attribution
+  authorDisplayName String
+  contactEmail      String
+  license           String?
+
+  // Sources (MVP)
+  sourceUrl String?
+  zipUrl    String?
+
+  // Upload placeholders (future)
+  uploadPath   String?
+  uploadSize   Int?
+  uploadSha256 String?
+
+  // Audit
+  submitIp      String?
+  submitUserAgent String?
+
+  // Moderation
+  moderatedAt        DateTime?
+  moderatedByUserId  String?
+  moderationReason   String?
+
+  // Publish
+  publishedAt       DateTime?
+  publishedByUserId String?
 
   user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 
