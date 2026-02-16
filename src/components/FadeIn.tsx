@@ -18,12 +18,14 @@ export function FadeIn({
 
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) {
+        // Use a very low threshold so above-the-fold hero sections don't get stuck invisible
+        // on small/mobile viewports (where intersectionRatio can be low at load).
+        if (entry && (entry.isIntersecting || entry.intersectionRatio > 0)) {
           setVisible(true);
           obs.disconnect();
         }
       },
-      { root: null, threshold: 0.18, rootMargin: "0px 0px -10% 0px" }
+      { root: null, threshold: 0.01, rootMargin: "0px" }
     );
 
     obs.observe(el);
