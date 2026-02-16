@@ -1,13 +1,22 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import SignInOptions from "./SignInOptions";
 
 export const metadata = {
   title: "Login – ClawMarket",
 };
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: { callbackUrl?: string };
+}) {
   const session = await getServerSession(authOptions);
+
+  const callbackUrl = typeof searchParams?.callbackUrl === "string" && searchParams.callbackUrl.trim()
+    ? searchParams.callbackUrl
+    : "/";
 
   if (session) {
     return (
@@ -25,24 +34,18 @@ export default async function LoginPage() {
     );
   }
 
-  // NextAuth uses /api/auth/signin for provider list; our UI just links there.
   return (
     <main className="px-6 py-16 lg:px-16">
       <div className="mx-auto max-w-xl rounded-2xl bg-white p-8 shadow">
         <h1 className="text-3xl font-bold text-[var(--text)]">Sign in</h1>
         <p className="mt-3 text-[var(--muted)]">
-          Use a social login (Google/GitHub/X/Discord) or email magic link. Available options depend on environment
-          variables.
+          Available options depend on environment variables.
         </p>
 
-        <div className="mt-8 flex flex-col gap-3">
-          <Link
-            className="rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110"
-            href="/api/auth/signin"
-          >
-            Continue to sign-in options
-          </Link>
-          <Link className="text-center text-sm text-[var(--muted)] underline" href="/marketplace">
+        <SignInOptions callbackUrl={callbackUrl} />
+
+        <div className="mt-6">
+          <Link className="block text-center text-sm text-[var(--muted)] underline" href="/marketplace">
             Back to marketplace
           </Link>
         </div>
