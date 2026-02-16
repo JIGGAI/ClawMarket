@@ -89,13 +89,24 @@ function RecipeCard({
 export default async function MarketplacePage() {
   const live = await fetchMarketplaceRecipes();
 
-  const teamRecipes = live
-    ? live.filter((r) => r.kind === "team").map((r) => ({ id: r.slug, name: r.name, icon: "🍳", description: r.description }))
-    : fallbackTeamRecipes;
+  const liveTeam = (live ?? []).filter((r) => r.kind === "team");
+  const liveAgent = (live ?? []).filter((r) => r.kind === "agent");
 
-  const agentRecipes = live
-    ? live.filter((r) => r.kind === "agent").map((r) => ({ id: r.slug, name: r.name, icon: "🤖", description: r.description }))
-    : fallbackAgentRecipes;
+  // Merge strategy:
+  // - Always include our bundled fallback cards (so the marketplace never "loses" recipes due to a stale registry.json)
+  // - If the live registry includes a recipe with the same slug, prefer the live name/description.
+  // - Include any extra live-only recipes too.
+  const teamById = new Map(fallbackTeamRecipes.map((r) => [r.id, r] as const));
+  for (const r of liveTeam) {
+    teamById.set(r.slug, { id: r.slug, name: r.name, icon: "🍳", description: r.description });
+  }
+  const teamRecipes = Array.from(teamById.values());
+
+  const agentById = new Map(fallbackAgentRecipes.map((r) => [r.id, r] as const));
+  for (const r of liveAgent) {
+    agentById.set(r.slug, { id: r.slug, name: r.name, icon: "🤖", description: r.description });
+  }
+  const agentRecipes = Array.from(agentById.values());
 
   return (
     <main className="w-full">
