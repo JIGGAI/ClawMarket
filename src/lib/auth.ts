@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
       const s = session as Session & { userId?: string; role?: "user" | "moderator" | "admin" };
       s.userId = user.id;
       s.role = (user as unknown as { role?: "user" | "moderator" | "admin" }).role;
-      return session;
+      return s;
     },
   },
   events: {
