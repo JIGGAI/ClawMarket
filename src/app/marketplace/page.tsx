@@ -6,7 +6,7 @@ export const metadata = {
   description: "Browse available ClawRecipes recipes for OpenClaw.",
 };
 
-const repoBase = "https://github.com/rjdjohnston/clawcipes/blob/main/recipes/default";
+const repoBase = "https://github.com/JIGGAI/ClawRecipes/blob/main/recipes/default";
 
 const fallbackTeamRecipes = [
   {
@@ -21,6 +21,15 @@ const fallbackTeamRecipes = [
   { id: "writing-team", name: "Writing Team", icon: "✍️", description: "Briefs → outlines → drafts → review/edit (testing) → done." },
   { id: "social-team", name: "Social Team", icon: "📱", description: "Draft → approval/review (testing) → schedule/publish." },
   { id: "customer-support-team", name: "Customer Support Team", icon: "🎧", description: "Triage → resolve → verification (testing) → done/outbox." },
+
+  // Vertical packs (bundled defaults)
+  { id: "business-team", name: "Business Team", icon: "💼", description: "Generalist business execution team: ops, sales, marketing, finance, analyst." },
+  { id: "law-firm-team", name: "Law Firm Team", icon: "⚖️", description: "Legal workflow: intake → research → drafting → compliance/ops." },
+  { id: "clinic-team", name: "Clinic Team", icon: "🩺", description: "Clinic operations: intake, scheduling, billing, compliance, patient education." },
+  { id: "construction-team", name: "Construction Team", icon: "🏗️", description: "Project delivery: PM, estimator, scheduler, safety, procurement." },
+  { id: "financial-planner-team", name: "Financial Planner Team", icon: "📈", description: "Planning practice: advisor, analyst, tax, insurance, client ops." },
+  { id: "stock-trader-team", name: "Stock Trader Team", icon: "📊", description: "Trading support: research, signals, risk, journaling, ops." },
+  { id: "crypto-trader-team", name: "Crypto Trader Team", icon: "🪙", description: "Crypto workflow with onchain research + catalysts + risk + journaling." },
 ];
 
 const fallbackAgentRecipes = [
@@ -149,7 +158,7 @@ export default async function MarketplacePage() {
             </p>
             <div className="mt-8">
               <a
-                href="https://github.com/rjdjohnston/clawcipes/tree/main/recipes/default"
+                href="https://github.com/JIGGAI/ClawRecipes/tree/main/recipes/default"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
