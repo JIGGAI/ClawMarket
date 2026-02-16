@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const docsUrl = "https://docs.openclaw.ai";
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
@@ -87,11 +87,7 @@ export function Nav() {
                   Logout
                 </button>
               </>
-            ) : (
-              <button className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50" onClick={() => signIn()}>
-                Login
-              </button>
-            )}
+            ) : null}
 
             <a
               className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black"
@@ -176,17 +172,7 @@ export function Nav() {
                   >
                     Logout
                   </button>
-                ) : (
-                  <button
-                    className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
-                    onClick={() => {
-                      setOpen(false);
-                      signIn();
-                    }}
-                  >
-                    Login
-                  </button>
-                )}
+                ) : null}
 
                 <a
                   className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
