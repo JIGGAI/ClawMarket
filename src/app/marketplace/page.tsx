@@ -19,6 +19,7 @@ const fallbackTeamRecipes = [
   { id: "product-team", name: "Product Team", icon: "📦", description: "Product-focused team with lead, PM, designer, dev, and QA." },
   { id: "research-team", name: "Research Team", icon: "🔬", description: "Citations-first research pipeline: sources → notes → briefs." },
   { id: "writing-team", name: "Writing Team", icon: "✍️", description: "Briefs → outlines → drafts → review/edit (testing) → done." },
+  { id: "marketing-team", name: "Marketing Team", icon: "📣", description: "Full marketing execution loop: classic web SEO + copy + ads + creative + analytics + video + compliance." },
   { id: "social-team", name: "Social Team", icon: "📱", description: "Platform-specialist social execution: listening + editorial + distributor + platform roles; reports learnings back to marketing." },
   { id: "customer-support-team", name: "Customer Support Team", icon: "🎧", description: "Triage → resolve → verification (testing) → done/outbox." },
 

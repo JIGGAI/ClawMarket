@@ -33,7 +33,7 @@ export default function DocsPage() {
               </a>
               <a
                 className="rounded-lg bg-white px-6 py-3 text-base font-semibold text-[var(--text)] shadow-md transition hover:bg-slate-50"
-                href="https://github.com/rjdjohnston/clawcipes"
+                href="https://github.com/JIGGAI/ClawRecipes/tree/main/docs"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -47,7 +47,7 @@ export default function DocsPage() {
                 <li>
                   📖 Check out the{" "}
                   <a
-                    href="https://github.com/rjdjohnston/clawcipes/blob/main/README.md"
+                    href="https://github.com/JIGGAI/ClawRecipes/tree/main/docs"
                     target="_blank"
                     rel="noreferrer"
                     className="text-[color:var(--coral-bright)] underline"
