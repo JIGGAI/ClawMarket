@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
+import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
 
 async function canSubmit(userId: string) {
   // Social logins can submit immediately.
@@ -11,56 +12,6 @@ async function canSubmit(userId: string) {
   const accounts = await prisma.account.findMany({ where: { userId }, select: { provider: true } });
   const hasSocial = accounts.some((a) => a.provider !== "email");
   return hasSocial;
-}
-
-function isPrivateIpv4(ip: string) {
-  const parts = ip.split(".").map((x) => Number(x));
-  if (parts.length !== 4 || parts.some((n) => Number.isNaN(n) || n < 0 || n > 255)) return false;
-  const [a, b] = parts;
-  if (a === 10) return true;
-  if (a === 127) return true;
-  if (a === 0) return true;
-  if (a === 169 && b === 254) return true;
-  if (a === 192 && b === 168) return true;
-  if (a === 172 && b >= 16 && b <= 31) return true;
-  return false;
-}
-
-function isPrivateIpv6(host: string) {
-  const h = host.toLowerCase();
-  return h === "::1" || h.startsWith("fc") || h.startsWith("fd") || h.startsWith("fe80");
-}
-
-function validateSourceUrl(raw: string) {
-  let u: URL;
-  try {
-    u = new URL(raw);
-  } catch {
-    return { ok: false as const, error: "Invalid URL" };
-  }
-
-  if (u.protocol !== "http:" && u.protocol !== "https:") {
-    return { ok: false as const, error: "URL must be http(s)" };
-  }
-
-  const host = u.hostname.toLowerCase();
-  if (!host) return { ok: false as const, error: "URL host is required" };
-
-  // Block obvious localhost-ish hostnames.
-  if (host === "localhost" || host.endsWith(".local") || host.endsWith(".localhost")) {
-    return { ok: false as const, error: "URL host must not be localhost" };
-  }
-
-  // Block IP literals that are private/link-local/loopback.
-  if (/^\d+\.\d+\.\d+\.\d+$/.test(host) && isPrivateIpv4(host)) {
-    return { ok: false as const, error: "URL host must not be a private IP" };
-  }
-  if (host.includes(":")) {
-    // IPv6 literal (URL() strips brackets)
-    if (isPrivateIpv6(host)) return { ok: false as const, error: "URL host must not be a private IP" };
-  }
-
-  return { ok: true as const, url: u };
 }
 
 function getClientIp(req: Request) {
@@ -121,17 +72,14 @@ export async function POST(req: Request) {
   let validatedZipUrl: string | null = null;
 
   if (sourceUrl) {
-    const v = validateSourceUrl(sourceUrl);
+    const v = await validateHttpUrlNoPrivateIps(sourceUrl);
     if (!v.ok) return NextResponse.json({ ok: false, error: `sourceUrl: ${v.error}` }, { status: 400 });
     validatedSourceUrl = v.url.toString();
   }
 
   if (zipUrl) {
-    const v = validateSourceUrl(zipUrl);
+    const v = await validateHttpUrlNoPrivateIps(zipUrl, { requireZip: true });
     if (!v.ok) return NextResponse.json({ ok: false, error: `zipUrl: ${v.error}` }, { status: 400 });
-    if (!v.url.pathname.toLowerCase().endsWith(".zip")) {
-      return NextResponse.json({ ok: false, error: "zipUrl must end with .zip" }, { status: 400 });
-    }
     validatedZipUrl = v.url.toString();
     sourceType = "upload"; // placeholder classification; currently URL to zip
   }
