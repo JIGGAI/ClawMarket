@@ -30,6 +30,9 @@ export default async function AdminPage() {
             <p className="mt-2 text-[var(--muted)]">Latest recipe submissions (most recent 50).</p>
           </div>
           <div className="flex items-center gap-3">
+            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/admin/submissions">
+              Submissions queue
+            </Link>
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/user">
               User
             </Link>
