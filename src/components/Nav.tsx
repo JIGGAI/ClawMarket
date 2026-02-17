@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 
-const docsUrl = "https://docs.openclaw.ai";
+const docsUrl = "https://github.com/JIGGAI/ClawRecipes/tree/main/docs";
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
 const xUrl = "https://x.com/clawrecipes";
 const discordUrl = "https://discord.gg/BKGUkGTR";
