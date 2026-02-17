@@ -120,6 +120,21 @@ export default async function MarketplacePage() {
             <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
               Pre-built recipes for teams and agents. Click any card to view full details, install commands, and source.
             </p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="/marketplace/submit"
+                className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+              >
+                Submit a recipe
+              </a>
+              <a
+                href="/marketplace/submissions"
+                className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+              >
+                Your submissions
+              </a>
+            </div>
           </div>
         </section>
       </FadeIn>
