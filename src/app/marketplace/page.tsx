@@ -6,7 +6,6 @@ export const metadata = {
   description: "Browse available ClawRecipes recipes for OpenClaw.",
 };
 
-const repoBase = "https://github.com/JIGGAI/ClawRecipes/blob/main/recipes/default";
 
 const fallbackTeamRecipes = [
   {
@@ -53,17 +52,15 @@ function RecipeCard({
   description: string;
   kind: "team" | "agent";
 }) {
-  const url = `${repoBase}/${id}.md`;
+  const detailUrl = `/marketplace/recipes/${id}`;
   const command =
     kind === "team"
       ? `openclaw recipes scaffold-team ${id} -t my-${id} --apply-config`
-      : `openclaw recipes scaffold ${id} --agent-id my-${id.replace("-", "")} --apply-config`;
+      : `openclaw recipes scaffold ${id} --agent-id my-${id.replace(/-/g, "")} --apply-config`;
 
   return (
     <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
+      href={detailUrl}
       className="group block rounded-2xl bg-white/70 p-6 transition hover:bg-white"
     >
       <div className="flex items-start gap-4">
@@ -121,7 +118,7 @@ export default async function MarketplacePage() {
               Browse Recipes
             </h1>
             <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
-              Pre-built recipes for teams and agents. Click any card to view the recipe source on GitHub.
+              Pre-built recipes for teams and agents. Click any card to view full details, install commands, and source.
             </p>
           </div>
         </section>
