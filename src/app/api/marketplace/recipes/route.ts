@@ -1,5 +1,37 @@
 import { NextResponse } from "next/server";
-import { loadRegistry, search } from "@/lib/marketplace";
+import { loadRegistry, search, type MarketplaceRecipe } from "@/lib/marketplace";
+import { prisma } from "@/lib/prisma";
+
+function tagsFromCsv(tagsCsv: string | null | undefined): string[] {
+  return (tagsCsv ?? "")
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+function submissionToRecipe(sub: {
+  id: string;
+  title: string;
+  description: string;
+  tagsCsv: string;
+  sourceUrl: string | null;
+  zipUrl: string | null;
+}): MarketplaceRecipe | null {
+  const sourceUrl = sub.sourceUrl ?? sub.zipUrl;
+  if (!sourceUrl) return null;
+
+  // NOTE: UGC submissions currently have no dedicated slug field.
+  // For MVP, we use the submission id as the marketplace recipe slug.
+  return {
+    slug: sub.id,
+    kind: "agent",
+    name: sub.title,
+    description: sub.description,
+    version: "ugc",
+    tags: tagsFromCsv(sub.tagsCsv),
+    sourceUrl,
+  };
+}
 
 export async function GET(req: Request) {
   try {
@@ -7,7 +39,32 @@ export async function GET(req: Request) {
     const q = url.searchParams.get("q");
 
     const registry = await loadRegistry();
-    const recipes = search(registry.recipes, q);
+
+    // Published UGC lives in the DB (avoid server-side writes to registry.json).
+    const publishedSubs = await prisma.submission.findMany({
+      where: { status: "published" },
+      orderBy: { publishedAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        tagsCsv: true,
+        sourceUrl: true,
+        zipUrl: true,
+      },
+    });
+
+    const ugcRecipes = publishedSubs
+      .map(submissionToRecipe)
+      .filter((r): r is MarketplaceRecipe => Boolean(r));
+
+    // De-dupe by slug, preferring UGC (so it can override bundled entries if needed).
+    const bySlug = new Map<string, MarketplaceRecipe>();
+    for (const r of registry.recipes) bySlug.set(r.slug.toLowerCase(), r);
+    for (const r of ugcRecipes) bySlug.set(r.slug.toLowerCase(), r);
+
+    const merged = Array.from(bySlug.values());
+    const recipes = search(merged, q);
 
     return NextResponse.json({
       ok: true,

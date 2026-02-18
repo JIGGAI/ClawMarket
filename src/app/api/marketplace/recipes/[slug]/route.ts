@@ -1,5 +1,35 @@
 import { NextResponse } from "next/server";
-import { getBySlug, loadRegistry } from "@/lib/marketplace";
+import { getBySlug, loadRegistry, type MarketplaceRecipe } from "@/lib/marketplace";
+import { prisma } from "@/lib/prisma";
+
+function tagsFromCsv(tagsCsv: string | null | undefined): string[] {
+  return (tagsCsv ?? "")
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+function submissionToRecipe(sub: {
+  id: string;
+  title: string;
+  description: string;
+  tagsCsv: string;
+  sourceUrl: string | null;
+  zipUrl: string | null;
+}): MarketplaceRecipe | null {
+  const sourceUrl = sub.sourceUrl ?? sub.zipUrl;
+  if (!sourceUrl) return null;
+
+  return {
+    slug: sub.id,
+    kind: "agent",
+    name: sub.title,
+    description: sub.description,
+    version: "ugc",
+    tags: tagsFromCsv(sub.tagsCsv),
+    sourceUrl,
+  };
+}
 
 export async function GET(
   _req: Request,
@@ -7,9 +37,31 @@ export async function GET(
 ) {
   try {
     const { slug } = await ctx.params;
+    const s = slug.trim();
 
+    // Prefer DB-backed published submissions first.
+    const sub = await prisma.submission.findFirst({
+      where: { id: s, status: "published" },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        tagsCsv: true,
+        sourceUrl: true,
+        zipUrl: true,
+      },
+    });
+
+    if (sub) {
+      const recipe = submissionToRecipe(sub);
+      if (recipe) {
+        return NextResponse.json({ ok: true, recipe });
+      }
+    }
+
+    // Fallback to bundled/file-backed registry.
     const registry = await loadRegistry();
-    const recipe = getBySlug(registry.recipes, slug);
+    const recipe = getBySlug(registry.recipes, s);
 
     if (!recipe) {
       return NextResponse.json(
@@ -18,10 +70,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      ok: true,
-      recipe,
-    });
+    return NextResponse.json({ ok: true, recipe });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
