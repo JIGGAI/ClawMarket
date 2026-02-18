@@ -143,7 +143,17 @@ export const authOptions: NextAuthOptions = {
     },
   },
   events: {
-    signIn: async ({ user }) => {
+    signIn: async ({ user, account }) => {
+      // Treat social/OAuth logins as verified (provider already verified email ownership).
+      // Keep credentials signups gated by explicit email verification link.
+      if (account?.type === "oauth") {
+        try {
+          await prisma.user.update({ where: { id: user.id }, data: { emailVerified: new Date() } });
+        } catch {
+          // best-effort
+        }
+      }
+
       const admins = parseAdminEmails();
       const email = String(user.email ?? "").toLowerCase();
       if (!email) return;
