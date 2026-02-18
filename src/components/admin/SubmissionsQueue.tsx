@@ -44,6 +44,7 @@ export function SubmissionsQueue() {
   const [draftStatus, setDraftStatus] = useState<Record<string, SubmissionStatus>>({});
   const [draftReason, setDraftReason] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState<Record<string, boolean>>({});
+  const [noticeById, setNoticeById] = useState<Record<string, string>>({});
 
   const byId = useMemo(() => new Map(submissions.map((s) => [s.id, s])), [submissions]);
 
@@ -132,6 +133,26 @@ export function SubmissionsQueue() {
         await refresh();
       }
 
+      // toast-ish confirmation
+      setNoticeById((p) => ({ ...p, [id]: `Saved (${status})` }));
+      setTimeout(() => {
+        setNoticeById((p) => {
+          const next = { ...p };
+          delete next[id];
+          return next;
+        });
+      }, 2500);
+
+      // toast-ish confirmation
+      setNoticeById((p) => ({ ...p, [id]: `Saved (${status})` }));
+      setTimeout(() => {
+        setNoticeById((p) => {
+          const next = { ...p };
+          delete next[id];
+          return next;
+        });
+      }, 2500);
+
       setDraftReason((p) => ({ ...p, [id]: "" }));
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -189,7 +210,6 @@ export function SubmissionsQueue() {
                         >
                           <option value="submitted">submitted</option>
                           <option value="needs_changes">needs_changes</option>
-                          <option value="approved">approved</option>
                           <option value="rejected">rejected</option>
                           <option value="published">published</option>
                           <option value="unpublished">unpublished</option>
@@ -226,6 +246,10 @@ export function SubmissionsQueue() {
                       value={draftReason[s.id] ?? ""}
                       onChange={(e) => setDraftReason((p) => ({ ...p, [s.id]: e.target.value }))}
                     />
+
+                    {noticeById[s.id] ? (
+                      <div className="text-xs text-emerald-700">{noticeById[s.id]}</div>
+                    ) : null}
 
                     {s.moderatedAt ? (
                       <div className="text-xs">
