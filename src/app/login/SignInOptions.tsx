@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { signIn } from "next-auth/react";
-import { ReCaptchaV2 } from "@/components/ReCaptchaV2";
 
 type Provider = {
   id: string;
@@ -13,9 +12,6 @@ type Provider = {
 export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) {
   const [providers, setProviders] = useState<Record<string, Provider> | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const siteKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY || "";
 
   const [email, setEmail] = useState("");
   const [emailSending, setEmailSending] = useState(false);
@@ -67,39 +63,14 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
     );
   }
 
-  async function ensureCaptcha() {
-    if (!siteKey) throw new Error("Captcha is not configured (missing NEXT_PUBLIC_CAPTCHA_SITE_KEY)");
-    if (!captchaToken) throw new Error("Please complete the captcha challenge");
-
-    const res = await fetch("/api/captcha/verify", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ token: captchaToken }),
-    });
-    const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-    if (!res.ok || !json.ok) throw new Error(json.error || `Captcha verify failed (${res.status})`);
-  }
-
   const emailProvider = providerList.find((p) => p.type === "email");
   const oauthProviders = providerList.filter((p) => p.type === "oauth");
 
   return (
     <div className="mt-8">
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <div className="text-sm font-semibold text-[var(--text)]">Human check</div>
-        <p className="mt-1 text-sm text-[var(--muted)]">Complete the captcha before signing in.</p>
-        <div className="mt-3">
-          {siteKey ? (
-            <ReCaptchaV2 siteKey={siteKey} onToken={setCaptchaToken} />
-          ) : (
-            <div className="text-sm text-red-700">Missing NEXT_PUBLIC_CAPTCHA_SITE_KEY</div>
-          )}
-        </div>
-      </div>
-
       {/* Email magic-link (passwordless). */}
       {emailProvider ? (
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <div className="text-lg font-semibold text-[var(--text)]">Sign in with email</div>
           <p className="mt-1 text-sm text-[var(--muted)]">We’ll send you a magic link.</p>
 
@@ -119,7 +90,6 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
                 setError(null);
                 setEmailSending(true);
                 try {
-                  await ensureCaptcha();
                   await signIn(emailProvider.id, { callbackUrl, email });
                 } catch (e) {
                   setError(e instanceof Error ? e.message : String(e));
@@ -136,7 +106,7 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
 
       {/* OAuth providers */}
       {oauthProviders.length ? (
-        <div className="mt-6">
+        <div className={emailProvider ? "mt-6" : ""}>
           <div className="text-sm font-semibold text-[var(--text)]">Or continue with</div>
           <div className="mt-3 flex flex-col gap-3">
             {oauthProviders.map((p) => (
@@ -146,7 +116,6 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
                 onClick={async () => {
                   setError(null);
                   try {
-                    await ensureCaptcha();
                     await signIn(p.id, { callbackUrl });
                   } catch (e) {
                     setError(e instanceof Error ? e.message : String(e));

@@ -67,7 +67,14 @@ export async function POST(req: Request) {
     zipUrl?: string;
     body?: string; // recipe markdown
     draft?: boolean;
+    captchaToken?: string;
   };
+
+  // CAPTCHA (abuse protection)
+  const { verifyCaptchaV2 } = await import("@/lib/captcha");
+  const captchaToken = typeof body.captchaToken === "string" ? body.captchaToken : "";
+  const captcha = await verifyCaptchaV2({ token: captchaToken, remoteIp: getClientIp(req) });
+  if (!captcha.ok) return NextResponse.json({ ok: false, error: captcha.error }, { status: 400 });
 
   const title = sanitizePlainText(body.title, { maxLen: 160 });
   const description = sanitizePlainText(body.description, { maxLen: 2000 });
