@@ -41,7 +41,7 @@ async function sendViaMailgunApi({ to, subject, text }: SendEmailInput) {
 
 export async function sendEmail({ to, subject, text }: SendEmailInput) {
   // Prefer Mailgun API when configured (more predictable on serverless).
-  if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
+  if ((process.env.MAILGUN_API_KEY || process.env.MAILGUN_SENDING_KEY) && process.env.MAILGUN_DOMAIN) {
     const r = await sendViaMailgunApi({ to, subject, text });
     if (r.ok) return r;
     // fall through to SMTP if present

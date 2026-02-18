@@ -52,11 +52,16 @@ export async function POST(req: Request) {
       await prisma.verificationToken.create({ data: { identifier: email, token, expires } });
 
       const url = `${baseUrl(req)}/api/auth/verify?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
-      await sendEmail({
+      const emailResult = await sendEmail({
         to: email,
         subject: "Verify your email",
         text: `Verify your email to finish setting up your account:\n\n${url}\n\nThis link expires in 24 hours.`,
       });
+
+      // In preview env, return mailer status to make debugging deploy/env issues fast.
+      if (process.env.VERCEL_ENV === "preview") {
+        return NextResponse.json({ ok: true, user, verificationEmail: emailResult });
+      }
     } catch (e) {
       console.error("/api/auth/signup verification email failed", e);
       // do not fail signup
