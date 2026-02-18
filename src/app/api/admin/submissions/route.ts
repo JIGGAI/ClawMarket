@@ -6,7 +6,10 @@ export async function GET() {
   const r = await requireRole("moderator");
   if (!r.ok) return r.res;
 
-  const rows = await prisma.submission.findMany({ orderBy: { createdAt: "desc" } });
+  const rows = await prisma.submission.findMany({
+    where: { status: { not: "draft" } },
+    orderBy: { createdAt: "desc" },
+  });
   return NextResponse.json({ ok: true, count: rows.length, submissions: rows });
 }
 
