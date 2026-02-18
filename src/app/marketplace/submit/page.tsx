@@ -5,9 +5,12 @@ import { ReCaptchaV2 } from "@/components/ReCaptchaV2";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Modal } from "@/components/Modal";
+import SignInOptions from "@/app/login/SignInOptions";
 
 type ApiOk = { ok: true; submission: { id: string } };
 type ApiErr = { ok?: false; error?: string };
+
+type PendingAction = { draft?: boolean };
 
 function parseTags(input: string): string[] {
   return input
@@ -28,6 +31,7 @@ export default function MarketplaceSubmitPage() {
   const [sourceUrl, setSourceUrl] = useState("");
   const [body, setBody] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
 
   const siteKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY || "";
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -37,11 +41,11 @@ export default function MarketplaceSubmitPage() {
 
   const tags = useMemo(() => parseTags(tagsCsv), [tagsCsv]);
 
-  async function onSubmit(e: React.FormEvent, opts?: { draft?: boolean }) {
-    e.preventDefault();
+  async function submit(opts?: PendingAction) {
     setError(null);
 
     if (!session) {
+      setPendingAction(opts ?? {});
       setShowLoginModal(true);
       return;
     }
@@ -80,7 +84,9 @@ export default function MarketplaceSubmitPage() {
       });
 
       if (res.status === 401) {
-        window.location.href = "/login?callbackUrl=/marketplace/submit";
+        // Session may have expired; fall back to interactive sign-in.
+        setPendingAction(opts ?? {});
+        setShowLoginModal(true);
         return;
       }
 
@@ -101,27 +107,46 @@ export default function MarketplaceSubmitPage() {
     }
   }
 
+  async function onSubmit(e: React.FormEvent, opts?: PendingAction) {
+    e.preventDefault();
+    await submit(opts);
+  }
+
   return (
     <main className="px-6 py-16 lg:px-16">
       <div className="mx-auto max-w-3xl rounded-2xl bg-white p-8 shadow">
-        <Modal open={showLoginModal} title="Sign in required" onClose={() => setShowLoginModal(false)}>
+        <Modal
+          open={showLoginModal}
+          title="Sign in required"
+          onClose={() => {
+            setShowLoginModal(false);
+            setPendingAction(null);
+          }}
+        >
           <p className="text-sm text-[var(--muted)]">You need to sign in to save drafts or submit recipes.</p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-white hover:brightness-95"
-              href={`/login?callbackUrl=${encodeURIComponent("/marketplace/submit")}`}
-            >
-              Go to login
-            </Link>
-            <button
-              type="button"
-              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              onClick={() => setShowLoginModal(false)}
-            >
-              Cancel
-            </button>
+
+          <SignInOptions
+            mode="modal"
+            callbackUrl="/marketplace/submit"
+            onSignedIn={async () => {
+              setShowLoginModal(false);
+              const action = pendingAction;
+              setPendingAction(null);
+              // Auto-retry the original Save/Submit.
+              await submit(action ?? {});
+            }}
+          />
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <a className="text-sm text-[var(--muted)] underline" href="/signup">
+              Create account
+            </a>
+            <a className="text-sm text-[var(--muted)] underline" href="/forgot">
+              Forgot password
+            </a>
           </div>
         </Modal>
+
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Submit a recipe</h1>
@@ -130,13 +155,22 @@ export default function MarketplaceSubmitPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace">
+            <Link
+              className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50"
+              href="/marketplace"
+            >
               Marketplace
             </Link>
-            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace/submissions">
+            <Link
+              className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50"
+              href="/marketplace/submissions"
+            >
               Your submissions
             </Link>
-            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace/recipes">
+            <Link
+              className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50"
+              href="/marketplace/recipes"
+            >
               Browse all recipes
             </Link>
           </div>
@@ -154,9 +188,7 @@ export default function MarketplaceSubmitPage() {
               )}
             </div>
           </div>
-          {error ? (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div>
-          ) : null}
+          {error ? <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div> : null}
 
           <div>
             <label className="block text-sm font-semibold text-[var(--text)]">Title</label>
@@ -192,7 +224,10 @@ export default function MarketplaceSubmitPage() {
             {tags.length ? (
               <div className="mt-2 flex flex-wrap gap-2">
                 {tags.map((t) => (
-                  <span key={t} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-[var(--muted)]">
+                  <span
+                    key={t}
+                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-[var(--muted)]"
+                  >
                     {t}
                   </span>
                 ))}
@@ -236,9 +271,7 @@ export default function MarketplaceSubmitPage() {
 
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-sm font-semibold text-[var(--text)]">Source</div>
-            <p className="mt-1 text-sm text-[var(--muted)]">
-              Provide either a URL to the recipe source, or paste the full recipe body as Markdown.
-            </p>
+            <p className="mt-1 text-sm text-[var(--muted)]">Provide either a URL to the recipe source, or paste the full recipe body as Markdown.</p>
 
             <div className="mt-4 space-y-4">
               <div>

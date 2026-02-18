@@ -9,7 +9,15 @@ type Provider = {
   type: string;
 };
 
-export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) {
+export default function SignInOptions({
+  callbackUrl,
+  mode = "page",
+  onSignedIn,
+}: {
+  callbackUrl: string;
+  mode?: "page" | "modal";
+  onSignedIn?: () => void | Promise<void>;
+}) {
   const [providers, setProviders] = useState<Record<string, Provider> | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,8 +74,16 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
     );
   }
 
+  function setRememberCookie(value: boolean) {
+    // Used by the NextAuth route handler to choose session duration for this sign-in.
+    // Keep it short-lived; it is cleared server-side after being read.
+    const secure = typeof window !== 'undefined' && window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `rememberMe=${value ? '1' : '0'}; Path=/; Max-Age=300; SameSite=Lax${secure}`;
+  }
+
   const credentialsProvider = providerList.find((p) => p.type === "credentials");
   const oauthProviders = providerList.filter((p) => p.type === "oauth");
+  const showOauth = mode !== "modal";
 
   return (
     <div className="mt-8">
@@ -112,7 +128,22 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
                 setError(null);
                 setSigningIn(true);
                 try {
-                  await signIn(credentialsProvider.id, { callbackUrl, email, password, rememberMe });
+                  setRememberCookie(rememberMe);
+                  const res = await signIn(credentialsProvider.id, {
+                    redirect: mode !== "modal",
+                    callbackUrl,
+                    email,
+                    password,
+                    rememberMe,
+                  });
+
+                  if (mode === "modal") {
+                    if (!res?.ok) {
+                      setError(res?.error || "Sign-in failed");
+                      return;
+                    }
+                    await onSignedIn?.();
+                  }
                 } catch (e) {
                   setError(e instanceof Error ? e.message : String(e));
                 } finally {
@@ -136,7 +167,7 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
       ) : null}
 
       {/* OAuth providers */}
-      {oauthProviders.length ? (
+      {showOauth && oauthProviders.length ? (
         <div className={credentialsProvider ? "mt-6" : ""}>
           <div className="text-sm font-semibold text-[var(--text)]">Or continue with</div>
           <div className="mt-3 flex flex-col gap-3">
