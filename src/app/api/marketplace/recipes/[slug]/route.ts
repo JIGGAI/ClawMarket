@@ -91,6 +91,33 @@ export async function GET(
       }
     }
 
+    // Admin/moderator view: allow viewing unpublished submissions by id/slug.
+    const mod = await requireRole("moderator");
+    if (mod.ok) {
+      const anySub = await prisma.submission.findFirst({
+        where: { OR: [{ slug: s }, { id: s }] },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          description: true,
+          tagsCsv: true,
+          sourceUrl: true,
+          zipUrl: true,
+          bodyMd: true,
+          authorDisplayName: true,
+          contactEmail: true,
+          license: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      if (anySub) {
+        const recipe = submissionToRecipe(anySub);
+        if (recipe) return NextResponse.json({ ok: true, recipe });
+      }
+    }
+
     // If not published, allow moderators/admins to view submission details by id/slug.
     const mod = await requireRole("moderator");
     if (mod.ok) {
