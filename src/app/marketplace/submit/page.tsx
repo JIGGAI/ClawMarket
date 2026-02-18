@@ -218,7 +218,7 @@ export default function MarketplaceSubmitPage() {
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-sm font-semibold text-[var(--text)]">Source</div>
             <p className="mt-1 text-sm text-[var(--muted)]">
-              Provide either a URL to the recipe source, or paste the recipe body as JSON.
+              Provide either a URL to the recipe source, or paste the full recipe body as Markdown.
             </p>
 
             <div className="mt-4 space-y-4">
