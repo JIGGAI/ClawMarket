@@ -157,9 +157,19 @@ async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
   return data.recipe;
 }
 
+function absoluteUrl(url: string): string {
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  if (!url.startsWith("/")) return url;
+
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+  return site ? `${site}${url}` : url;
+}
+
 async function fetchMarkdown(url: string): Promise<string | null> {
   try {
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(absoluteUrl(url), { next: { revalidate: 300 } });
     if (!res.ok) return null;
     const text = await res.text();
     // Basic defense: avoid accidentally rendering HTML if a proxy returns an error page.
