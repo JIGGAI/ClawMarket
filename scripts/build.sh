@@ -3,12 +3,12 @@ set -euo pipefail
 
 u="${DATABASE_URL:-}"
 if [[ "$u" =~ ^postgres(ql)?:// ]]; then
-  echo "[build] running prisma migrate deploy"
-  npx prisma migrate deploy
+  echo "[build] running prisma db push (sync schema to postgres)"
+  npx prisma db push
   echo "[build] running prisma generate"
   npx prisma generate
 else
-  echo "[build] DATABASE_URL not postgres; skipping prisma migrate/generate"
+  echo "[build] DATABASE_URL not postgres; skipping prisma db push/generate"
 fi
 
 echo "[build] running next build"
