@@ -27,7 +27,10 @@ export default function SignUpForm() {
           if (!res.ok) throw new Error(data.error || `Signup failed (${res.status})`);
 
           // Auto-sign-in after successful signup.
-          await signIn("credentials", { email, password, callbackUrl: "/marketplace" });
+          const r = await signIn("credentials", { email, password, redirect: false });
+          if (r?.error) throw new Error(r.error);
+          // Show marketplace with verification notice (banner checks session.emailVerified).
+          window.location.href = "/marketplace";
         } catch (e) {
           setError(e instanceof Error ? e.message : String(e));
         } finally {
