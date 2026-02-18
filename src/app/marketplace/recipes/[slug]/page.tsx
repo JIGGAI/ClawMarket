@@ -403,60 +403,52 @@ export default async function MarketplaceRecipeDetailPage({
                 </dl>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
-                <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
+              {role === "admin" ? (
+                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
+                  <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
 
-                {!canModerate ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    Moderation details are visible to moderators/admins.
-                  </p>
-                ) : recipe.origin !== "ugc" ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    This is a bundled recipe (no submission moderation state).
-                  </p>
-                ) : !moderation ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    No moderation record found for this submission.
-                  </p>
-                ) : (
-                  <dl className="mt-4 space-y-3 text-sm">
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Status</dt>
-                      <dd className="font-mono text-[var(--text)]">{moderation.status}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Moderated</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.moderatedAt ? moderation.moderatedAt.toISOString() : "—"}
-                      </dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Moderated by</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.moderatedByUserId ?? "—"}
-                      </dd>
-                    </div>
-                    {moderation.moderationReason ? (
+                  {recipe.origin !== "ugc" ? (
+                    <p className="mt-2 text-sm text-[var(--muted)]">
+                      This is a bundled recipe (no submission moderation state).
+                    </p>
+                  ) : !moderation ? (
+                    <p className="mt-2 text-sm text-[var(--muted)]">No moderation record found for this submission.</p>
+                  ) : (
+                    <dl className="mt-4 space-y-3 text-sm">
                       <div className="flex items-center justify-between gap-4">
-                        <dt className="text-[var(--muted)]">Reason</dt>
-                        <dd className="text-[var(--text)]">{moderation.moderationReason}</dd>
+                        <dt className="text-[var(--muted)]">Status</dt>
+                        <dd className="font-mono text-[var(--text)]">{moderation.status}</dd>
                       </div>
-                    ) : null}
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Published</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.publishedAt ? moderation.publishedAt.toISOString() : "—"}
-                      </dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Published by</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.publishedByUserId ?? "—"}
-                      </dd>
-                    </div>
-                  </dl>
-                )}
-              </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Moderated</dt>
+                        <dd className="font-mono text-[var(--text)]">
+                          {moderation.moderatedAt ? moderation.moderatedAt.toISOString() : "—"}
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Moderated by</dt>
+                        <dd className="font-mono text-[var(--text)]">{moderation.moderatedByUserId ?? "—"}</dd>
+                      </div>
+                      {moderation.moderationReason ? (
+                        <div className="flex items-center justify-between gap-4">
+                          <dt className="text-[var(--muted)]">Reason</dt>
+                          <dd className="text-[var(--text)]">{moderation.moderationReason}</dd>
+                        </div>
+                      ) : null}
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Published</dt>
+                        <dd className="font-mono text-[var(--text)]">
+                          {moderation.publishedAt ? moderation.publishedAt.toISOString() : "—"}
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Published by</dt>
+                        <dd className="font-mono text-[var(--text)]">{moderation.publishedByUserId ?? "—"}</dd>
+                      </div>
+                    </dl>
+                  )}
+                </div>
+              ) : null}
             </aside>
           </div>
         </section>
