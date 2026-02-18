@@ -186,6 +186,11 @@ export function SubmissionsQueue() {
                   ) : (
                     <span className="text-[var(--muted)]">(none)</span>
                   )}
+                  <div className="mt-2">
+                    <a className="text-xs text-[color:var(--coral-bright)] underline" href={viewLink(s)}>
+                      View recipe detail
+                    </a>
+                  </div>
                 </td>
                 <td className="py-3 pr-4 min-w-[420px] text-[var(--muted)]">
                   <div className="flex flex-col gap-2">
