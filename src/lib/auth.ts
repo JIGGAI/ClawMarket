@@ -48,10 +48,21 @@ export const authOptions: NextAuthOptions = {
         if (!email || !password) return null;
 
         const user = await prisma.user.findUnique({ where: { email } });
-        if (!user?.passwordHash) return null;
+        if (!user) {
+          if (process.env.NODE_ENV !== "production") console.warn("[auth][credentials] no user for email", email);
+          return null;
+        }
+        if (!user.passwordHash) {
+          // Likely an OAuth-created account or legacy row.
+          if (process.env.NODE_ENV !== "production") console.warn("[auth][credentials] missing passwordHash for", email);
+          return null;
+        }
 
         const ok = await bcrypt.compare(password, user.passwordHash);
-        if (!ok) return null;
+        if (!ok) {
+          if (process.env.NODE_ENV !== "production") console.warn("[auth][credentials] bad password for", email);
+          return null;
+        }
 
         return { id: user.id, email: user.email, name: user.name, image: user.image };
       },
