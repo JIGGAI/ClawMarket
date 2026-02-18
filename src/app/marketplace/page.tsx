@@ -1,12 +1,13 @@
+import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchMarketplaceRecipes } from "@/lib/marketplace";
+// auth handled via /login page; marketplace landing is public
 
 export const metadata = {
   title: "Marketplace – ClawRecipes",
   description: "Browse available ClawRecipes recipes for OpenClaw.",
 };
 
-const repoBase = "https://github.com/JIGGAI/ClawRecipes/blob/main/recipes/default";
 
 const fallbackTeamRecipes = [
   {
@@ -17,9 +18,9 @@ const fallbackTeamRecipes = [
       "A small engineering team with lead, dev, devops, and QA roles. Includes agile lanes, shared context, and cron-powered triage/execution loops.",
   },
   { id: "product-team", name: "Product Team", icon: "📦", description: "Product-focused team with lead, PM, designer, dev, and QA." },
+  { id: "marketing-team", name: "Marketing Team", icon: "📣", description: "Full marketing execution loop: SEO + copy + ads + design + analytics + video + compliance." },
   { id: "research-team", name: "Research Team", icon: "🔬", description: "Citations-first research pipeline: sources → notes → briefs." },
   { id: "writing-team", name: "Writing Team", icon: "✍️", description: "Briefs → outlines → drafts → review/edit (testing) → done." },
-  { id: "marketing-team", name: "Marketing Team", icon: "📣", description: "Full marketing execution loop: classic web SEO + copy + ads + creative + analytics + video + compliance." },
   { id: "social-team", name: "Social Team", icon: "📱", description: "Platform-specialist social execution: listening + editorial + distributor + platform roles; reports learnings back to marketing." },
   { id: "customer-support-team", name: "Customer Support Team", icon: "🎧", description: "Triage → resolve → verification (testing) → done/outbox." },
 
@@ -53,17 +54,15 @@ function RecipeCard({
   description: string;
   kind: "team" | "agent";
 }) {
-  const url = `${repoBase}/${id}.md`;
+  const detailUrl = `/marketplace/recipes/${id}`;
   const command =
     kind === "team"
       ? `openclaw recipes scaffold-team ${id} -t my-${id} --apply-config`
-      : `openclaw recipes scaffold ${id} --agent-id my-${id.replace("-", "")} --apply-config`;
+      : `openclaw recipes scaffold ${id} --agent-id my-${id.replace(/-/g, "")} --apply-config`;
 
   return (
     <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
+      href={detailUrl}
       className="group block rounded-2xl bg-white/70 p-6 transition hover:bg-white"
     >
       <div className="flex items-start gap-4">
@@ -86,6 +85,7 @@ function RecipeCard({
     </a>
   );
 }
+
 
 export default async function MarketplacePage() {
   const live = await fetchMarketplaceRecipes();
@@ -121,8 +121,23 @@ export default async function MarketplacePage() {
               Browse Recipes
             </h1>
             <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
-              Pre-built recipes for teams and agents. Click any card to view the recipe source on GitHub.
+              Pre-built recipes for teams and agents. Click any card to view full details, install commands, and source.
             </p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="/marketplace/submit"
+                className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+              >
+                Submit a recipe
+              </a>
+              <Link
+                href="/marketplace/recipes"
+                className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+              >
+                Community recipes
+              </Link>
+            </div>
           </div>
         </section>
       </FadeIn>

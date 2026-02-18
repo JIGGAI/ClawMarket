@@ -14,6 +14,7 @@ enum Role {
 }
 
 enum SubmissionStatus {
+  draft
   submitted
   needs_changes
   approved
@@ -34,11 +35,15 @@ model User {
   emailVerified DateTime?
   image         String?
 
+  // Email+password auth (no reversible storage)
+  passwordHash  String?
+
   role          Role      @default(user)
 
   accounts      Account[]
   sessions      Session[]
   submissions   Submission[]
+  passwordResetTokens PasswordResetToken[]
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -46,6 +51,7 @@ model User {
 
 model Submission {
   id        String                @id @default(cuid())
+  slug      String?               @unique
   createdBy String
 
   status    SubmissionStatus      @default(submitted)
@@ -62,7 +68,11 @@ model Submission {
 
   // Sources (MVP)
   sourceUrl String?
+  // NOTE: zipUrl submission is deprecated (kept for backward compat / old rows).
   zipUrl    String?
+
+  // Direct recipe body submission (Markdown)
+  bodyMd   String?
 
   // Upload placeholders (future)
   uploadPath   String?
@@ -122,4 +132,16 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
 }

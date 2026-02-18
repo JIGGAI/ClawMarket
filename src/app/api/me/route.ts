@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/require";
 
+export const runtime = "nodejs";
+
 export async function GET() {
   const r = await requireAuth();
   if (!r.ok) return r.res;
