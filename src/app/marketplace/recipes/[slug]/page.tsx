@@ -1,5 +1,6 @@
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
+import { BackButton } from "@/components/BackButton";
 import type { MarketplaceRecipe } from "@/lib/marketplace";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -286,12 +287,12 @@ export default async function MarketplaceRecipeDetailPage({
               </div>
 
               <div className="flex-none self-start">
-                <a
-                  href="/marketplace"
+                <BackButton
+                  fallbackHref="/marketplace"
                   className="inline-block whitespace-nowrap rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                 >
                   ← Back
-                </a>
+                </BackButton>
               </div>
             </div>
           </div>
