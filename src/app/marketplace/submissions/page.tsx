@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { badgeClass, uiStatusLabel } from "@/lib/submission-ui";
 
 export const metadata = {
   title: "Your Submissions – ClawRecipes",
@@ -47,7 +48,15 @@ export default async function MarketplaceSubmissionsPage() {
                   {new Date(s.createdAt).toISOString().replace("T", " ").slice(0, 16)}
                 </div>
               </div>
-              <div className="mt-2 text-sm text-[var(--muted)]">Status: {s.status}</div>
+              <div className="mt-2 flex items-center gap-2 text-sm">
+                <span className="text-[var(--muted)]">Status:</span>
+                {(() => {
+                  const u = uiStatusLabel(String(s.status));
+                  return (
+                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold ${badgeClass(u.tone)}`}>{u.label}</span>
+                  );
+                })()}
+              </div>
               <div className="mt-3 text-[var(--muted)]">{s.description}</div>
               <div className="mt-3 flex flex-wrap gap-3 text-sm">
                 {s.sourceUrl ? (
@@ -55,9 +64,9 @@ export default async function MarketplaceSubmissionsPage() {
                     sourceUrl
                   </a>
                 ) : null}
-                {s.zipUrl ? (
-                  <a className="text-[color:var(--coral-bright)] underline break-all" href={s.zipUrl} target="_blank" rel="noreferrer">
-                    zipUrl
+                {s.bodyMd ? (
+                  <a className="text-[color:var(--coral-bright)] underline" href={`/api/marketplace/recipes/${encodeURIComponent(s.slug ?? s.id)}/body`} target="_blank" rel="noreferrer">
+                    body
                   </a>
                 ) : null}
               </div>

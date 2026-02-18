@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
+// (no prisma types needed here)
 import { requireAuth } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
 import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
 import { randomSuffix, slugify } from "@/lib/slug";
-import { sanitizePlainText, sanitizeTag, safeJsonParse, validateRecipeJson } from "@/lib/sanitize";
+import { sanitizePlainText, sanitizeTag } from "@/lib/sanitize";
 
 async function canSubmit(userId: string) {
   // Social logins can submit immediately.
@@ -65,7 +65,8 @@ export async function POST(req: Request) {
     sourceUrl?: string;
     // zipUrl deprecated
     zipUrl?: string;
-    body?: string; // recipe JSON text
+    body?: string; // recipe markdown
+    draft?: boolean;
   };
 
   const title = sanitizePlainText(body.title, { maxLen: 160 });
@@ -77,24 +78,34 @@ export async function POST(req: Request) {
 
   const sourceUrl = typeof body.sourceUrl === "string" ? sanitizePlainText(body.sourceUrl, { maxLen: 2000 }) : "";
   const recipeBodyText = typeof body.body === "string" ? sanitizePlainText(body.body, { maxLen: 200_000 }) : "";
+  const isDraft = body.draft === true;
 
   // zipUrl no longer accepted.
 
-  if (!title) return NextResponse.json({ ok: false, error: "title is required" }, { status: 400 });
-  if (!description) return NextResponse.json({ ok: false, error: "description is required" }, { status: 400 });
-  if (!authorDisplayName) return NextResponse.json({ ok: false, error: "authorDisplayName is required" }, { status: 400 });
-  if (!contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+  if (!isDraft) {
+    if (!title) return NextResponse.json({ ok: false, error: "title is required" }, { status: 400 });
+    if (!description) return NextResponse.json({ ok: false, error: "description is required" }, { status: 400 });
+    if (!authorDisplayName) return NextResponse.json({ ok: false, error: "authorDisplayName is required" }, { status: 400 });
+    if (!contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      return NextResponse.json({ ok: false, error: "contactEmail must be a valid email" }, { status: 400 });
+    }
+  } else {
+    // drafts: keep minimal requirements
+    if (!title) return NextResponse.json({ ok: false, error: "title is required for drafts" }, { status: 400 });
+  }
+
+  if (!isDraft && (!contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail))) {
     return NextResponse.json({ ok: false, error: "contactEmail must be a valid email" }, { status: 400 });
   }
 
-  if (!sourceUrl && !recipeBodyText) {
+  if (!sourceUrl && !recipeBodyText && !isDraft) {
     return NextResponse.json({ ok: false, error: "Provide either sourceUrl or body" }, { status: 400 });
   }
 
   const sourceType: "url" | "upload" = "url";
   let validatedSourceUrl: string | null = null;
   const validatedZipUrl: string | null = null;
-  let validatedBodyJson: unknown | null = null;
+  let validatedBodyMd: string | null = null;
 
   if (sourceUrl) {
     const v = await validateHttpUrlNoPrivateIps(sourceUrl);
@@ -105,13 +116,10 @@ export async function POST(req: Request) {
   // zipUrl submissions are deprecated.
 
   if (recipeBodyText) {
-    const parsed = safeJsonParse(recipeBodyText);
-    if (!parsed.ok) return NextResponse.json({ ok: false, error: `body: ${parsed.error}` }, { status: 400 });
-
-    const v = validateRecipeJson(parsed.value);
+    const { validateRecipeMarkdown } = await import("@/lib/recipe-validate");
+    const v = validateRecipeMarkdown(recipeBodyText);
     if (!v.ok) return NextResponse.json({ ok: false, error: `body: ${v.error}` }, { status: 400 });
-
-    validatedBodyJson = parsed.value;
+    validatedBodyMd = v.value;
   }
 
   const submitIp = getClientIp(req);
@@ -120,10 +128,10 @@ export async function POST(req: Request) {
   const sub = await prisma.submission.create({
     data: {
       createdBy: userId,
-      slug: await generateUniqueSlug(title),
-      status: "submitted",
+      slug: await generateUniqueSlug(title || "draft"),
+      status: isDraft ? "draft" : "submitted",
       sourceType,
-      title,
+      title: title || "(draft)",
       description,
       tagsCsv: tags.join(","),
       authorDisplayName,
@@ -131,7 +139,7 @@ export async function POST(req: Request) {
       license,
       sourceUrl: validatedSourceUrl,
       zipUrl: validatedZipUrl,
-      bodyJson: (validatedBodyJson as Prisma.InputJsonValue) ?? null,
+      bodyMd: validatedBodyMd,
       submitIp,
       submitUserAgent,
     },

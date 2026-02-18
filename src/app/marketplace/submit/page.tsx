@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { Modal } from "@/components/Modal";
 
 type ApiOk = { ok: true; submission: { id: string } };
 type ApiErr = { ok?: false; error?: string };
@@ -15,6 +17,7 @@ function parseTags(input: string): string[] {
 }
 
 export default function MarketplaceSubmitPage() {
+  const { data: session } = useSession();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tagsCsv, setTagsCsv] = useState("");
@@ -23,29 +26,31 @@ export default function MarketplaceSubmitPage() {
   const [license, setLicense] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
   const [body, setBody] = useState("");
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const tags = useMemo(() => parseTags(tagsCsv), [tagsCsv]);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent, opts?: { draft?: boolean }) {
     e.preventDefault();
     setError(null);
 
-    if (!title.trim()) return setError("Title is required");
-    if (!description.trim()) return setError("Description is required");
-    if (!authorDisplayName.trim()) return setError("Author display name is required");
-    if (!contactEmail.trim()) return setError("Contact email is required");
-    if (!sourceUrl.trim() && !body.trim()) return setError("Provide either a Source URL or a Recipe JSON body");
+    if (!session) {
+      setShowLoginModal(true);
+      return;
+    }
 
-    // Basic client-side JSON validation (server will re-validate).
-    if (body.trim()) {
-      try {
-        JSON.parse(body);
-      } catch {
-        return setError("Body must be valid JSON");
-      }
+    const isDraft = opts?.draft === true;
+
+    if (!title.trim()) return setError(isDraft ? "Title is required for drafts" : "Title is required");
+
+    if (!isDraft) {
+      if (!description.trim()) return setError("Description is required");
+      if (!authorDisplayName.trim()) return setError("Author display name is required");
+      if (!contactEmail.trim()) return setError("Contact email is required");
+      if (!sourceUrl.trim() && !body.trim()) return setError("Provide either a Source URL or a Recipe body");
     }
 
     setSubmitting(true);
@@ -62,6 +67,7 @@ export default function MarketplaceSubmitPage() {
           license: license.trim() ? license.trim() : undefined,
           sourceUrl: sourceUrl.trim() ? sourceUrl.trim() : undefined,
           body: body.trim() ? body.trim() : undefined,
+          draft: opts?.draft === true,
         }),
       });
 
@@ -90,6 +96,24 @@ export default function MarketplaceSubmitPage() {
   return (
     <main className="px-6 py-16 lg:px-16">
       <div className="mx-auto max-w-3xl rounded-2xl bg-white p-8 shadow">
+        <Modal open={showLoginModal} title="Sign in required" onClose={() => setShowLoginModal(false)}>
+          <p className="text-sm text-[var(--muted)]">You need to sign in to save drafts or submit recipes.</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-white hover:brightness-95"
+              href={`/login?callbackUrl=${encodeURIComponent("/marketplace/submit")}`}
+            >
+              Go to login
+            </Link>
+            <button
+              type="button"
+              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+              onClick={() => setShowLoginModal(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </Modal>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Submit a recipe</h1>
@@ -110,7 +134,7 @@ export default function MarketplaceSubmitPage() {
           </div>
         </div>
 
-        <form className="mt-8 space-y-5" onSubmit={onSubmit}>
+        <form className="mt-8 space-y-5" onSubmit={(e) => void onSubmit(e)}>
           {error ? (
             <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div>
           ) : null}
@@ -209,22 +233,30 @@ export default function MarketplaceSubmitPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[var(--text)]">Recipe body (JSON)</label>
+                <label className="block text-sm font-semibold text-[var(--text)]">Recipe body (Markdown)</label>
                 <textarea
                   className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-xs"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  placeholder='{"id":"my-recipe","name":"My Recipe",...}'
-                  rows={10}
+                  placeholder={'---\nid: my-recipe\nname: My Recipe\n---\n\n# Instructions\n...'}
+                  rows={12}
                 />
                 <div className="mt-1 text-xs text-[var(--muted)]">
-                  Must be valid JSON. We validate and sanitize on submit.
+                  Must include YAML frontmatter with an <code>id:</code>. We validate and sanitize on submit.
                 </div>
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={(e) => void onSubmit(e as unknown as React.FormEvent, { draft: true })}
+              className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50 disabled:opacity-60"
+            >
+              {submitting ? "Saving…" : "Save draft"}
+            </button>
             <button
               type="submit"
               disabled={submitting}
@@ -238,7 +270,7 @@ export default function MarketplaceSubmitPage() {
           </div>
 
           <div className="text-xs text-[var(--muted)]">
-            Note: URLs are validated server-side and private network targets are rejected (SSRF protection). JSON bodies are validated + sanitized.
+            Note: URLs are validated server-side and private network targets are rejected (SSRF protection). Markdown bodies are validated + sanitized.
           </div>
         </form>
       </div>

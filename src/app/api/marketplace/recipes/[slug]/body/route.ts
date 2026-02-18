@@ -10,13 +10,19 @@ export async function GET(_req: Request, ctx: { params: Promise<{ slug: string }
 
   const sub = await prisma.submission.findFirst({
     where: { status: "published", OR: [{ slug: s }, { id: s }] },
-    select: { id: true, slug: true, bodyJson: true },
+    select: { id: true, slug: true, bodyMd: true },
   });
 
-  if (!sub || sub.bodyJson == null) {
+  if (!sub || sub.bodyMd == null) {
     return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
   }
 
-  // Intentionally return as application/json.
-  return NextResponse.json({ ok: true, slug: sub.slug ?? sub.id, body: sub.bodyJson });
+  // Return as plain text markdown.
+  return new NextResponse(sub.bodyMd, {
+    status: 200,
+    headers: {
+      "content-type": "text/markdown; charset=utf-8",
+      "cache-control": "public, max-age=60",
+    },
+  });
 }

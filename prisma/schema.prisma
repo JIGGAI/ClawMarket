@@ -14,6 +14,7 @@ enum Role {
 }
 
 enum SubmissionStatus {
+  draft
   submitted
   needs_changes
   approved
@@ -66,8 +67,8 @@ model Submission {
   // NOTE: zipUrl submission is deprecated (kept for backward compat / old rows).
   zipUrl    String?
 
-  // Direct recipe body submission (JSON)
-  bodyJson  Json?
+  // Direct recipe body submission (Markdown)
+  bodyMd   String?
 
   // Upload placeholders (future)
   uploadPath   String?

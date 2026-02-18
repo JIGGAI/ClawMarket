@@ -17,12 +17,12 @@ function submissionToRecipe(sub: {
   tagsCsv: string;
   sourceUrl: string | null;
   zipUrl: string | null;
-  bodyJson: unknown | null;
+  bodyMd: string | null;
 }): MarketplaceRecipe | null {
   const slug = sub.slug ?? sub.id;
 
-  // Prefer explicit sourceUrl; otherwise, if bodyJson exists, expose it via same-origin API.
-  const sourceUrl = sub.sourceUrl ?? (sub.bodyJson != null ? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body` : null);
+  // Prefer explicit sourceUrl; otherwise, if bodyMd exists, expose it via same-origin API.
+  const sourceUrl = sub.sourceUrl ?? (sub.bodyMd != null ? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body` : null);
   if (!sourceUrl) return null;
 
   return {
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
         tagsCsv: true,
         sourceUrl: true,
         zipUrl: true,
-        bodyJson: true,
+        bodyMd: true,
       },
     });
 
