@@ -27,14 +27,6 @@ type Submission = {
   moderatedAt: string | null;
 };
 
-const ACTION_STATUSES: Array<SubmissionStatus> = [
-  "submitted",
-  "needs_changes",
-  "approved",
-  "rejected",
-  "published",
-  "unpublished",
-];
 
 function fmt(iso: string) {
   try {
@@ -50,20 +42,14 @@ export function SubmissionsQueue() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
 
   // draft per-row action state
-  const [draftStatus, setDraftStatus] = useState<Record<string, SubmissionStatus>>({});
   const [draftReason, setDraftReason] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState<Record<string, boolean>>({});
 
   const byId = useMemo(() => new Map(submissions.map((s) => [s.id, s])), [submissions]);
 
   function viewLink(s: Submission) {
-    // If published, prefer the public recipe detail route.
-    if (s.status === "published") {
-      const slug = s.slug || s.id;
-      return `/marketplace/recipes/${encodeURIComponent(slug)}`;
-    }
-    // Otherwise, use the admin item API.
-    return `/api/admin/submissions/${encodeURIComponent(s.id)}`;
+    const slug = s.slug || s.id;
+    return `/marketplace/recipes/${encodeURIComponent(slug)}`;
   }
 
   function editLink(s: Submission) {
@@ -91,12 +77,7 @@ export function SubmissionsQueue() {
       }
       setSubmissions(json.submissions || []);
 
-      // initialize drafts from current server state
-      setDraftStatus((prev) => {
-        const next = { ...prev };
-        for (const s of json.submissions || []) next[s.id] = (next[s.id] || s.status) as SubmissionStatus;
-        return next;
-      });
+      // initialize per-row fields
       setDraftReason((prev) => {
         const next = { ...prev };
         for (const s of json.submissions || []) if (next[s.id] == null) next[s.id] = "";
@@ -114,7 +95,7 @@ export function SubmissionsQueue() {
   }, []);
 
   async function applyAction(id: string, forceStatus?: SubmissionStatus) {
-    const status = forceStatus ?? draftStatus[id] ?? byId.get(id)?.status;
+    const status = forceStatus ?? byId.get(id)?.status;
     if (!status) return;
 
     const reasonRaw = draftReason[id] ?? "";
@@ -175,20 +156,17 @@ export function SubmissionsQueue() {
           <thead>
             <tr className="border-b border-slate-200 text-[var(--muted)]">
               <th className="py-3 pr-4">Created</th>
-              <th className="py-3 pr-4">Status</th>
               <th className="py-3 pr-4">Title</th>
               <th className="py-3 pr-4">Author</th>
               <th className="py-3 pr-4">Contact</th>
               <th className="py-3 pr-4">Source</th>
               <th className="py-3 pr-4">Moderation</th>
-              <th className="py-3 pr-4">Action</th>
             </tr>
           </thead>
           <tbody>
             {submissions.map((s) => (
               <tr key={s.id} className="border-b border-slate-100 align-top">
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{fmt(s.createdAt)}</td>
-                <td className="py-3 pr-4 whitespace-nowrap font-semibold">{s.status}</td>
                 <td className="py-3 pr-4 min-w-[240px]">
                   <div className="font-semibold text-[var(--text)]">{s.title}</div>
                   <div className="mt-1 text-[var(--muted)] line-clamp-2">{s.description}</div>
@@ -209,83 +187,69 @@ export function SubmissionsQueue() {
                     <span className="text-[var(--muted)]">(none)</span>
                   )}
                 </td>
-                <td className="py-3 pr-4 min-w-[260px] text-[var(--muted)]">
-                  {s.moderatedAt ? (
-                    <div>
-                      <div className="text-xs">last moderated: {fmt(s.moderatedAt)}</div>
-                      {s.moderationReason ? <div className="mt-1 text-xs">reason: {s.moderationReason}</div> : null}
-                    </div>
-                  ) : (
-                    <span className="text-xs">—</span>
-                  )}
-                </td>
-                <td className="py-3 pr-4 min-w-[360px]">
+                <td className="py-3 pr-4 min-w-[420px] text-[var(--muted)]">
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
-                        onClick={() => void applyAction(s.id, "approved")}
-                        disabled={!!saving[s.id]}
-                        type="button"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
-                        onClick={() => void applyAction(s.id, "rejected")}
-                        disabled={!!saving[s.id]}
-                        type="button"
-                      >
-                        Deny
-                      </button>
-                      <button
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
-                        onClick={() => void applyAction(s.id, "published")}
-                        disabled={!!saving[s.id]}
-                        type="button"
-                      >
-                        Publish
-                      </button>
-                      <a
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
-                        href={viewLink(s)}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        View
-                      </a>
-                      <a
-                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
-                        href={editLink(s)}
-                      >
-                        Edit
-                      </a>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs">status:</span>
+                      <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-semibold text-[var(--text)]">
+                        {s.status}
+                      </span>
+
+                      <div className="ml-auto flex flex-wrap gap-2">
+                        <button
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
+                          onClick={() => void applyAction(s.id, "approved")}
+                          disabled={!!saving[s.id]}
+                          type="button"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
+                          onClick={() => void applyAction(s.id, "rejected")}
+                          disabled={!!saving[s.id]}
+                          type="button"
+                        >
+                          Deny
+                        </button>
+                        <button
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
+                          onClick={() => void applyAction(s.id, "published")}
+                          disabled={!!saving[s.id]}
+                          type="button"
+                        >
+                          Publish
+                        </button>
+                        <a
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
+                          href={viewLink(s)}
+                        >
+                          View
+                        </a>
+                        <a
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
+                          href={editLink(s)}
+                        >
+                          Edit
+                        </a>
+                      </div>
                     </div>
-                    <select
-                      className="rounded-lg border border-slate-200 px-3 py-2"
-                      value={(draftStatus[s.id] || s.status) as string}
-                      onChange={(e) => setDraftStatus((p) => ({ ...p, [s.id]: e.target.value as SubmissionStatus }))}
-                    >
-                      {ACTION_STATUSES.map((st) => (
-                        <option key={st} value={st}>
-                          {st}
-                        </option>
-                      ))}
-                    </select>
+
                     <input
                       className="rounded-lg border border-slate-200 px-3 py-2"
-                      placeholder="Reason (optional)"
+                      placeholder="Moderation reason (optional)"
                       value={draftReason[s.id] ?? ""}
                       onChange={(e) => setDraftReason((p) => ({ ...p, [s.id]: e.target.value }))}
                     />
-                    <button
-                      className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 font-semibold text-white hover:opacity-90 disabled:opacity-50"
-                      onClick={() => void applyAction(s.id)}
-                      disabled={!!saving[s.id]}
-                      type="button"
-                    >
-                      {saving[s.id] ? "Saving…" : "Apply"}
-                    </button>
+
+                    {s.moderatedAt ? (
+                      <div className="text-xs">
+                        last moderated: {fmt(s.moderatedAt)}
+                        {s.moderationReason ? ` • reason: ${s.moderationReason}` : ""}
+                      </div>
+                    ) : (
+                      <span className="text-xs">—</span>
+                    )}
                   </div>
                 </td>
               </tr>
