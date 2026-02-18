@@ -61,7 +61,18 @@ export function SubmissionsQueue() {
     try {
       const res = await fetch("/api/admin/submissions", { method: "GET" });
       const json = (await res.json()) as { ok?: boolean; error?: string; submissions?: Submission[] };
-      if (!res.ok || !json.ok) throw new Error(json.error || `Request failed (${res.status})`);
+      if (!res.ok || !json.ok) {
+        const base = json.error || `Request failed (${res.status})`;
+        if (res.status === 401) {
+          throw new Error(`${base}. You must be signed in.`);
+        }
+        if (res.status === 403) {
+          throw new Error(
+            `${base}. Your account is not a moderator/admin. To seed an admin in prod/dev, set ADMIN_EMAILS to include your login email, then sign out/in (or re-auth) so your User.role updates.`
+          );
+        }
+        throw new Error(base);
+      }
       setSubmissions(json.submissions || []);
 
       // initialize drafts from current server state
@@ -102,7 +113,16 @@ export function SubmissionsQueue() {
         body: JSON.stringify({ id, status, reason }),
       });
       const json = (await res.json()) as { ok?: boolean; error?: string; submission?: Submission };
-      if (!res.ok || !json.ok) throw new Error(json.error || `Request failed (${res.status})`);
+      if (!res.ok || !json.ok) {
+        const base = json.error || `Request failed (${res.status})`;
+        if (res.status === 401) throw new Error(`${base}. You must be signed in.`);
+        if (res.status === 403) {
+          throw new Error(
+            `${base}. Your account is not a moderator/admin. Ensure ADMIN_EMAILS contains your email and re-auth so your role is updated.`
+          );
+        }
+        throw new Error(base);
+      }
 
       if (json.submission) {
         setSubmissions((prev) => prev.map((s) => (s.id === id ? json.submission! : s)));
