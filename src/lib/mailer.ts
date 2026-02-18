@@ -9,7 +9,7 @@ function getSmtpTransport() {
 }
 
 async function sendViaMailgunApi({ to, subject, text }: SendEmailInput) {
-  const apiKey = process.env.MAILGUN_API_KEY;
+  const apiKey = process.env.MAILGUN_API_KEY || process.env.MAILGUN_SENDING_KEY;
   const domain = process.env.MAILGUN_DOMAIN;
   const from = process.env.AUTH_EMAIL_FROM || process.env.MAILGUN_FROM;
   const url = process.env.MAILGUN_URL || "https://api.mailgun.net";

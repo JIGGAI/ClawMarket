@@ -86,7 +86,6 @@ function RecipeCard({
   );
 }
 
-import { EmailVerificationBanner } from "@/components/EmailVerificationBanner";
 
 export default async function MarketplacePage() {
   const live = await fetchMarketplaceRecipes();
@@ -114,9 +113,6 @@ export default async function MarketplacePage() {
     <main className="w-full">
       <FadeIn>
         <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <EmailVerificationBanner />
-          </div>
           <div className="mx-auto max-w-6xl text-center">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
               Marketplace
