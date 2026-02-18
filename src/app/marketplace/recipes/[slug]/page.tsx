@@ -414,6 +414,30 @@ export default async function MarketplaceRecipeDetailPage({
                 </dl>
               </div>
 
+              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
+                <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
+                <p className="mt-2 text-sm text-[var(--muted)]">
+                  Prefer the one-line scaffold command on this page. If you want to install manually, you can download
+                  the recipe Markdown and place it into your OpenClaw workspace.
+                </p>
+
+                <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
+                  <li>Click <span className="font-semibold">View raw</span> above to open the recipe Markdown.</li>
+                  <li>Save it locally as <span className="font-mono">{recipe.slug}.md</span>.</li>
+                  <li>Move it into your workspace recipes folder:</li>
+                </ol>
+
+                <pre className="mt-3 overflow-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200">
+                  <code>{`mkdir -p ~/.openclaw/workspace/recipes
+# then move/copy the file into that folder
+# e.g. mv ~/Downloads/${recipe.slug}.md ~/.openclaw/workspace/recipes/`}</code>
+                </pre>
+
+                <p className="mt-3 text-sm text-[var(--muted)]">
+                  After that, it should show up in your local OpenClaw recipes list.
+                </p>
+              </div>
+
               {role === "admin" ? (
                 <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
                   <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
