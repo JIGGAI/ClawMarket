@@ -165,7 +165,6 @@ export function SubmissionsQueue() {
               <th className="py-3 pr-4">Title</th>
               <th className="py-3 pr-4">Author</th>
               <th className="py-3 pr-4">Contact</th>
-              <th className="py-3 pr-4">Source</th>
               <th className="py-3 pr-4">Moderation</th>
             </tr>
           </thead>
@@ -180,29 +179,10 @@ export function SubmissionsQueue() {
                 </td>
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{s.authorDisplayName}</td>
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{s.contactEmail}</td>
-                <td className="py-3 pr-4 min-w-[280px]">
-                  {s.sourceUrl ? (
-                    <a className="text-[color:var(--coral-bright)] underline break-all" href={s.sourceUrl} target="_blank" rel="noreferrer">
-                      {s.sourceUrl}
-                    </a>
-                  ) : s.zipUrl ? (
-                    <a className="text-[color:var(--coral-bright)] underline break-all" href={s.zipUrl} target="_blank" rel="noreferrer">
-                      zipUrl
-                    </a>
-                  ) : (
-                    <span className="text-[var(--muted)]">(none)</span>
-                  )}
-                  <div className="mt-2">
-                    <a className="text-xs text-[color:var(--coral-bright)] underline" href={viewLink(s)}>
-                      View recipe detail
-                    </a>
-                  </div>
-                </td>
-                <td className="py-3 pr-4 min-w-[420px] text-[var(--muted)]">
+                <td className="py-3 pr-4 min-w-[520px] text-[var(--muted)]">
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs">Status</span>
                         <select
                           className="w-[220px] rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold"
                           value={(draftStatus[s.id] ?? s.status) as string}
