@@ -255,12 +255,12 @@ export default async function MarketplaceRecipeDetailPage({
       <FadeIn>
         <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
-            <div className="flex flex-wrap items-center justify-between gap-6">
-              <div className="min-w-0">
+            <div className="flex items-start justify-between gap-6">
+              <div className="min-w-0 flex-1 pr-4">
                 <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
                   Marketplace
                 </p>
-                <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+                <h1 className="mt-4 break-words text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
                   {recipe.name}
                 </h1>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">
@@ -285,10 +285,10 @@ export default async function MarketplaceRecipeDetailPage({
                 </div>
               </div>
 
-              <div className="shrink-0">
+              <div className="flex-none self-start">
                 <a
                   href="/marketplace"
-                  className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                  className="inline-block whitespace-nowrap rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                 >
                   ← Back
                 </a>
