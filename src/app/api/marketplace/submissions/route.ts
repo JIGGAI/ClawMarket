@@ -1,21 +1,9 @@
 import { NextResponse } from "next/server";
-// (no prisma types needed here)
-import { requireAuth } from "@/lib/require";
+import { requireVerified } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
 import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
 import { randomSuffix, slugify } from "@/lib/slug";
 import { sanitizePlainText, sanitizeTag } from "@/lib/sanitize";
-
-async function canSubmit(userId: string) {
-  // Social logins can submit immediately.
-  // Email magic link users are considered verified if emailVerified is set.
-  const user = await prisma.user.findUnique({ where: { id: userId }, select: { emailVerified: true } });
-  if (user?.emailVerified) return true;
-
-  const accounts = await prisma.account.findMany({ where: { userId }, select: { provider: true } });
-  const hasSocial = accounts.some((a) => a.provider !== "email");
-  return hasSocial;
-}
 
 function getClientIp(req: Request) {
   const xfwd = req.headers.get("x-forwarded-for");
@@ -41,19 +29,11 @@ async function generateUniqueSlug(title: string): Promise<string> {
 }
 
 export async function POST(req: Request) {
-  const r = await requireAuth();
+  const r = await requireVerified();
   if (!r.ok) return r.res;
 
   const userId = r.session.userId;
   if (!userId) return NextResponse.json({ ok: false, error: "Missing userId in session" }, { status: 500 });
-
-  const allowed = await canSubmit(userId);
-  if (!allowed) {
-    return NextResponse.json(
-      { ok: false, error: "Account not verified for submissions. Use a social login or sign in via email magic link." },
-      { status: 403 },
-    );
-  }
 
   const body = (await req.json()) as {
     title?: string;
@@ -67,14 +47,7 @@ export async function POST(req: Request) {
     zipUrl?: string;
     body?: string; // recipe markdown
     draft?: boolean;
-    captchaToken?: string;
   };
-
-  // CAPTCHA (abuse protection)
-  const { verifyCaptchaV2 } = await import("@/lib/captcha");
-  const captchaToken = typeof body.captchaToken === "string" ? body.captchaToken : "";
-  const captcha = await verifyCaptchaV2({ token: captchaToken, remoteIp: getClientIp(req) });
-  if (!captcha.ok) return NextResponse.json({ ok: false, error: captcha.error }, { status: 400 });
 
   const title = sanitizePlainText(body.title, { maxLen: 160 });
   const description = sanitizePlainText(body.description, { maxLen: 2000 });
@@ -87,8 +60,6 @@ export async function POST(req: Request) {
   const recipeBodyText = typeof body.body === "string" ? sanitizePlainText(body.body, { maxLen: 200_000 }) : "";
   const isDraft = body.draft === true;
 
-  // zipUrl no longer accepted.
-
   if (!isDraft) {
     if (!title) return NextResponse.json({ ok: false, error: "title is required" }, { status: 400 });
     if (!description) return NextResponse.json({ ok: false, error: "description is required" }, { status: 400 });
@@ -97,21 +68,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "contactEmail must be a valid email" }, { status: 400 });
     }
   } else {
-    // drafts: keep minimal requirements
     if (!title) return NextResponse.json({ ok: false, error: "title is required for drafts" }, { status: 400 });
-  }
-
-  if (!isDraft && (!contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail))) {
-    return NextResponse.json({ ok: false, error: "contactEmail must be a valid email" }, { status: 400 });
   }
 
   if (!sourceUrl && !recipeBodyText && !isDraft) {
     return NextResponse.json({ ok: false, error: "Provide either sourceUrl or body" }, { status: 400 });
   }
 
-  const sourceType: "url" | "upload" = "url";
   let validatedSourceUrl: string | null = null;
-  const validatedZipUrl: string | null = null;
   let validatedBodyMd: string | null = null;
 
   if (sourceUrl) {
@@ -120,48 +84,38 @@ export async function POST(req: Request) {
     validatedSourceUrl = v.url.toString();
   }
 
-  // zipUrl submissions are deprecated.
-
   if (recipeBodyText) {
-    const { validateRecipeMarkdown } = await import("@/lib/recipe-validate");
-    const v = validateRecipeMarkdown(recipeBodyText);
-    if (!v.ok) return NextResponse.json({ ok: false, error: `body: ${v.error}` }, { status: 400 });
-    validatedBodyMd = v.value;
+    // Very light validation: must include YAML frontmatter with an id
+    const hasFrontmatter = /^---\s*\n[\s\S]*?\n---\s*\n/m.test(recipeBodyText);
+    const hasId = /^---\s*\n[\s\S]*?\n---\s*\n/m.test(recipeBodyText) && /\n\s*id:\s*\S+/m.test(recipeBodyText);
+    if (!hasFrontmatter || !hasId) {
+      return NextResponse.json({ ok: false, error: "body must be a Markdown recipe with YAML frontmatter including id:" }, { status: 400 });
+    }
+    validatedBodyMd = recipeBodyText;
   }
 
-  const submitIp = getClientIp(req);
-  const submitUserAgent = req.headers.get("user-agent");
+  const slug = await generateUniqueSlug(title);
 
-  const sub = await prisma.submission.create({
+  const submission = await prisma.submission.create({
     data: {
       createdBy: userId,
-      slug: await generateUniqueSlug(title || "draft"),
       status: isDraft ? "draft" : "submitted",
-      sourceType,
-      title: title || "(draft)",
+      sourceType: "url",
+      slug,
+      title,
       description,
       tagsCsv: tags.join(","),
       authorDisplayName,
       contactEmail,
       license,
       sourceUrl: validatedSourceUrl,
-      zipUrl: validatedZipUrl,
+      zipUrl: null,
       bodyMd: validatedBodyMd,
-      submitIp,
-      submitUserAgent,
+      submitIp: getClientIp(req),
+      submitUserAgent: req.headers.get("user-agent"),
     },
+    select: { id: true, slug: true, status: true },
   });
 
-  return NextResponse.json({ ok: true, submission: sub });
-}
-
-export async function GET() {
-  const r = await requireAuth();
-  if (!r.ok) return r.res;
-
-  const userId = r.session.userId;
-  if (!userId) return NextResponse.json({ ok: false, error: "Missing userId in session" }, { status: 500 });
-
-  const rows = await prisma.submission.findMany({ where: { createdBy: userId }, orderBy: { createdAt: "desc" } });
-  return NextResponse.json({ ok: true, count: rows.length, submissions: rows });
+  return NextResponse.json({ ok: true, submission });
 }

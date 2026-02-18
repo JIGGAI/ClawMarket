@@ -81,8 +81,16 @@ export const authOptions: NextAuthOptions = {
       // Stable identity and role for server-side enforcement.
       // Also: "role seeding" via ADMIN_EMAILS should take effect without requiring
       // a forced sign-out/sign-in cycle (helps unblock admin testing in prod/dev).
-      const s = session as Session & { userId?: string; role?: "user" | "moderator" | "admin" };
-      s.userId = user.id;
+      const s = session as Session & {
+        userId?: string;
+        role?: "user" | "moderator" | "admin";
+        emailVerified?: string | null;
+      };
+       s.userId = user.id;
+
+      // Used by UI + API to gate privileged actions until verification.
+      const uv = user as unknown as { emailVerified?: Date | null };
+      s.emailVerified = uv.emailVerified ? uv.emailVerified.toISOString() : null;
 
       const u = user as unknown as { role?: "user" | "moderator" | "admin"; email?: string | null };
       const admins = parseAdminEmails();

@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ReCaptchaV2 } from "@/components/ReCaptchaV2";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Modal } from "@/components/Modal";
@@ -33,9 +32,6 @@ export default function MarketplaceSubmitPage() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
 
-  const siteKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY || "";
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,9 +57,6 @@ export default function MarketplaceSubmitPage() {
       if (!sourceUrl.trim() && !body.trim()) return setError("Provide either a Source URL or a Recipe body");
     }
 
-    if (!siteKey) return setError("Captcha is not configured (missing NEXT_PUBLIC_CAPTCHA_SITE_KEY)");
-    if (!captchaToken) return setError("Please complete the captcha challenge");
-
     setSubmitting(true);
     try {
       const res = await fetch("/api/marketplace/submissions", {
@@ -79,7 +72,6 @@ export default function MarketplaceSubmitPage() {
           sourceUrl: sourceUrl.trim() ? sourceUrl.trim() : undefined,
           body: body.trim() ? body.trim() : undefined,
           draft: opts?.draft === true,
-          captchaToken,
         }),
       });
 
@@ -177,17 +169,6 @@ export default function MarketplaceSubmitPage() {
         </div>
 
         <form className="mt-8 space-y-5" onSubmit={(e) => void onSubmit(e)}>
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="text-sm font-semibold text-[var(--text)]">Human check</div>
-            <p className="mt-1 text-sm text-[var(--muted)]">Complete the captcha before submitting.</p>
-            <div className="mt-3">
-              {siteKey ? (
-                <ReCaptchaV2 siteKey={siteKey} onToken={setCaptchaToken} />
-              ) : (
-                <div className="text-sm text-red-700">Missing NEXT_PUBLIC_CAPTCHA_SITE_KEY</div>
-              )}
-            </div>
-          </div>
           {error ? <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div> : null}
 
           <div>
