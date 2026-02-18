@@ -42,6 +42,7 @@ export function SubmissionsQueue() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
 
   // draft per-row action state
+  const [draftStatus, setDraftStatus] = useState<Record<string, SubmissionStatus>>({});
   const [draftReason, setDraftReason] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState<Record<string, boolean>>({});
 
@@ -78,6 +79,11 @@ export function SubmissionsQueue() {
       setSubmissions(json.submissions || []);
 
       // initialize per-row fields
+      setDraftStatus((prev) => {
+        const next = { ...prev };
+        for (const s of json.submissions || []) if (next[s.id] == null) next[s.id] = s.status;
+        return next;
+      });
       setDraftReason((prev) => {
         const next = { ...prev };
         for (const s of json.submissions || []) if (next[s.id] == null) next[s.id] = "";
@@ -95,7 +101,7 @@ export function SubmissionsQueue() {
   }, []);
 
   async function applyAction(id: string, forceStatus?: SubmissionStatus) {
-    const status = forceStatus ?? byId.get(id)?.status;
+    const status = forceStatus ?? draftStatus[id] ?? byId.get(id)?.status;
     if (!status) return;
 
     const reasonRaw = draftReason[id] ?? "";
@@ -197,33 +203,29 @@ export function SubmissionsQueue() {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs">status:</span>
                       <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-semibold text-[var(--text)]">
-                        {s.status}
+                        {draftStatus[s.id] ?? s.status}
                       </span>
 
-                      <div className="ml-auto flex flex-wrap gap-2">
+                      <div className="ml-auto flex flex-wrap items-center gap-2">
+                        <select
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold"
+                          value={(draftStatus[s.id] ?? s.status) as string}
+                          onChange={(e) => setDraftStatus((p) => ({ ...p, [s.id]: e.target.value as SubmissionStatus }))}
+                        >
+                          <option value="submitted">submitted</option>
+                          <option value="needs_changes">needs_changes</option>
+                          <option value="approved">approved</option>
+                          <option value="rejected">rejected</option>
+                          <option value="published">published</option>
+                          <option value="unpublished">unpublished</option>
+                        </select>
                         <button
-                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
-                          onClick={() => void applyAction(s.id, "approved")}
+                          className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                          onClick={() => void applyAction(s.id)}
                           disabled={!!saving[s.id]}
                           type="button"
                         >
-                          Approve
-                        </button>
-                        <button
-                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
-                          onClick={() => void applyAction(s.id, "rejected")}
-                          disabled={!!saving[s.id]}
-                          type="button"
-                        >
-                          Deny
-                        </button>
-                        <button
-                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
-                          onClick={() => void applyAction(s.id, "published")}
-                          disabled={!!saving[s.id]}
-                          type="button"
-                        >
-                          Publish
+                          Save
                         </button>
                         <a
                           className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
