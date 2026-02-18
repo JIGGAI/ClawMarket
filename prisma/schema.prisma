@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -46,6 +46,7 @@ model User {
 
 model Submission {
   id        String                @id @default(cuid())
+  slug      String?               @unique
   createdBy String
 
   status    SubmissionStatus      @default(submitted)

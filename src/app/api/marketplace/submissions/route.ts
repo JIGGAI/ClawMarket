@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
 import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
+import { randomSuffix, slugify } from "@/lib/slug";
 
 async function canSubmit(userId: string) {
   // Social logins can submit immediately.
@@ -18,6 +19,23 @@ function getClientIp(req: Request) {
   const xfwd = req.headers.get("x-forwarded-for");
   if (!xfwd) return null;
   return xfwd.split(",")[0]?.trim() || null;
+}
+
+async function generateUniqueSlug(title: string): Promise<string> {
+  const base = slugify(title) || "recipe";
+
+  // Keep it reasonably short for URLs.
+  const maxBaseLen = 48;
+  const trimmedBase = base.slice(0, maxBaseLen).replace(/-$/g, "");
+
+  for (let i = 0; i < 8; i++) {
+    const candidate = `${trimmedBase}-${randomSuffix(6)}`;
+    const exists = await prisma.submission.findUnique({ where: { slug: candidate }, select: { id: true } });
+    if (!exists) return candidate;
+  }
+
+  // Extremely unlikely; last-resort unique-ish slug.
+  return `${trimmedBase}-${Date.now().toString(36)}`;
 }
 
 export async function POST(req: Request) {
@@ -90,6 +108,7 @@ export async function POST(req: Request) {
   const sub = await prisma.submission.create({
     data: {
       createdBy: userId,
+      slug: await generateUniqueSlug(title),
       status: "submitted",
       sourceType,
       title,

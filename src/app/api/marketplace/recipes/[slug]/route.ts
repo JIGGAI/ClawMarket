@@ -11,6 +11,7 @@ function tagsFromCsv(tagsCsv: string | null | undefined): string[] {
 
 function submissionToRecipe(sub: {
   id: string;
+  slug: string | null;
   title: string;
   description: string;
   tagsCsv: string;
@@ -21,7 +22,7 @@ function submissionToRecipe(sub: {
   if (!sourceUrl) return null;
 
   return {
-    slug: sub.id,
+    slug: sub.slug ?? sub.id,
     kind: "agent",
     name: sub.title,
     description: sub.description,
@@ -41,9 +42,13 @@ export async function GET(
 
     // Prefer DB-backed published submissions first.
     const sub = await prisma.submission.findFirst({
-      where: { id: s, status: "published" },
+      where: {
+        status: "published",
+        OR: [{ slug: s }, { id: s }],
+      },
       select: {
         id: true,
+        slug: true,
         title: true,
         description: true,
         tagsCsv: true,

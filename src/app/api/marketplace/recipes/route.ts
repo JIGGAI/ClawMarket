@@ -11,6 +11,7 @@ function tagsFromCsv(tagsCsv: string | null | undefined): string[] {
 
 function submissionToRecipe(sub: {
   id: string;
+  slug: string | null;
   title: string;
   description: string;
   tagsCsv: string;
@@ -20,10 +21,8 @@ function submissionToRecipe(sub: {
   const sourceUrl = sub.sourceUrl ?? sub.zipUrl;
   if (!sourceUrl) return null;
 
-  // NOTE: UGC submissions currently have no dedicated slug field.
-  // For MVP, we use the submission id as the marketplace recipe slug.
   return {
-    slug: sub.id,
+    slug: sub.slug ?? sub.id,
     kind: "agent",
     name: sub.title,
     description: sub.description,
@@ -46,6 +45,7 @@ export async function GET(req: Request) {
       orderBy: { publishedAt: "desc" },
       select: {
         id: true,
+        slug: true,
         title: true,
         description: true,
         tagsCsv: true,
