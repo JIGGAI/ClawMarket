@@ -14,7 +14,9 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
   const [error, setError] = useState<string | null>(null);
 
   const [email, setEmail] = useState("");
-  const [emailSending, setEmailSending] = useState(false);
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -38,8 +40,8 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
   const providerList = useMemo(() => {
     if (!providers) return [];
     return Object.values(providers)
-      // Only show interactive providers we actually support in this UI.
-      .filter((p) => p.type === "oauth" || p.type === "email")
+      // Only show interactive providers we support in this UI.
+      .filter((p) => p.type === "oauth" || p.type === "credentials")
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [providers]);
 
@@ -64,50 +66,78 @@ export default function SignInOptions({ callbackUrl }: { callbackUrl: string }) 
     );
   }
 
-  const emailProvider = providerList.find((p) => p.type === "email");
+  const credentialsProvider = providerList.find((p) => p.type === "credentials");
   const oauthProviders = providerList.filter((p) => p.type === "oauth");
 
   return (
     <div className="mt-8">
-      {/* Email magic-link (passwordless). */}
-      {emailProvider ? (
+      {/* Email + password */}
+      {credentialsProvider ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <div className="text-lg font-semibold text-[var(--text)]">Sign in with email</div>
-          <p className="mt-1 text-sm text-[var(--muted)]">We’ll send you a magic link.</p>
+          <p className="mt-1 text-sm text-[var(--muted)]">Use your email + password.</p>
 
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="mt-4 flex flex-col gap-3">
             <input
               className="w-full rounded-lg border border-slate-200 px-3 py-2"
               placeholder="you@domain.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
+              autoComplete="email"
             />
+            <input
+              className="w-full rounded-lg border border-slate-200 px-3 py-2"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              autoComplete="current-password"
+            />
+
+            <label className="flex items-center gap-2 text-sm text-[var(--muted)]">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              Remember me
+            </label>
+
             <button
               type="button"
-              disabled={emailSending}
-              className="rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white hover:brightness-110 disabled:opacity-60"
+              disabled={signingIn}
+              className="rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
               onClick={async () => {
                 setError(null);
-                setEmailSending(true);
+                setSigningIn(true);
                 try {
-                  await signIn(emailProvider.id, { callbackUrl, email });
+                  await signIn(credentialsProvider.id, { callbackUrl, email, password, rememberMe });
                 } catch (e) {
                   setError(e instanceof Error ? e.message : String(e));
                 } finally {
-                  setEmailSending(false);
+                  setSigningIn(false);
                 }
               }}
             >
-              {emailSending ? "Sending…" : "Send magic link"}
+              {signingIn ? "Signing in…" : "Sign in"}
             </button>
+
+            <div className="flex items-center justify-between text-sm">
+              <a className="text-[color:var(--coral-bright)] underline" href="/signup">
+                Create account
+              </a>
+              <a className="text-[var(--muted)] underline" href="/forgot">
+                Forgot password
+              </a>
+            </div>
           </div>
         </div>
       ) : null}
 
       {/* OAuth providers */}
       {oauthProviders.length ? (
-        <div className={emailProvider ? "mt-6" : ""}>
+        <div className={credentialsProvider ? "mt-6" : ""}>
           <div className="text-sm font-semibold text-[var(--text)]">Or continue with</div>
           <div className="mt-3 flex flex-col gap-3">
             {oauthProviders.map((p) => (

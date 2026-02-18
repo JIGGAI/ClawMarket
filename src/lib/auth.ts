@@ -2,11 +2,12 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import type { NextAuthOptions, Session } from "next-auth";
 
+import bcrypt from "bcryptjs";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
 import TwitterProvider from "next-auth/providers/twitter";
-import EmailProvider from "next-auth/providers/email";
 
 function parseAdminEmails() {
   return String(process.env.ADMIN_EMAILS ?? "")
@@ -32,6 +33,29 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   session: { strategy: "database" },
   providers: [
+    // Email + password (Credentials)
+    CredentialsProvider({
+      name: "Email & Password",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        const email = String(credentials?.email ?? "").trim().toLowerCase();
+        const password = String(credentials?.password ?? "");
+        if (!email || !password) return null;
+
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user?.passwordHash) return null;
+
+        const ok = await bcrypt.compare(password, user.passwordHash);
+        if (!ok) return null;
+
+        return { id: user.id, email: user.email, name: user.name, image: user.image };
+      },
+    }),
+
+    // Optional social logins (still allowed; not passwordless magic-link)
     isConfigured("Google", ["AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"])
       ? GoogleProvider({ clientId: process.env.AUTH_GOOGLE_ID!, clientSecret: process.env.AUTH_GOOGLE_SECRET! })
       : null,
@@ -44,10 +68,6 @@ export const authOptions: NextAuthOptions = {
     // X/Twitter OAuth — no extra verification required beyond social login.
     isConfigured("X", ["AUTH_TWITTER_ID", "AUTH_TWITTER_SECRET"])
       ? TwitterProvider({ clientId: process.env.AUTH_TWITTER_ID!, clientSecret: process.env.AUTH_TWITTER_SECRET! })
-      : null,
-    // Email magic link (passwordless).
-    isConfigured("Email", ["AUTH_EMAIL_SERVER", "AUTH_EMAIL_FROM"])
-      ? EmailProvider({ server: process.env.AUTH_EMAIL_SERVER!, from: process.env.AUTH_EMAIL_FROM! })
       : null,
   ].filter(Boolean) as NonNullable<NextAuthOptions["providers"]>,
   pages: {

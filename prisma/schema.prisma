@@ -35,11 +35,15 @@ model User {
   emailVerified DateTime?
   image         String?
 
+  // Email+password auth (no reversible storage)
+  passwordHash  String?
+
   role          Role      @default(user)
 
   accounts      Account[]
   sessions      Session[]
   submissions   Submission[]
+  passwordResetTokens PasswordResetToken[]
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -128,4 +132,16 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
 }
