@@ -59,8 +59,19 @@ export default async function MarketplaceSubmissionsPage() {
                     </Link>
                   ) : null}
                 </div>
-                <div className="text-sm text-[var(--muted)]">
-                  {new Date(s.createdAt).toISOString().replace("T", " ").slice(0, 16)}
+
+                <div className="flex items-center gap-3">
+                  {s.status === "draft" || s.status === "submitted" || s.status === "needs_changes" ? (
+                    <Link
+                      className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-1 text-xs font-semibold text-white hover:opacity-90"
+                      href={`/marketplace/submit?edit=${encodeURIComponent(s.id)}`}
+                    >
+                      Edit
+                    </Link>
+                  ) : null}
+                  <div className="text-sm text-[var(--muted)]">
+                    {new Date(s.createdAt).toISOString().replace("T", " ").slice(0, 16)}
+                  </div>
                 </div>
               </div>
               <div className="mt-2 flex items-center gap-2 text-sm">
