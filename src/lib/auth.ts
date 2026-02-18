@@ -31,7 +31,9 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   // Accept either AUTH_* or NEXTAUTH_* env names.
   secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
-  session: { strategy: "database" },
+  // NOTE: dev/prod Vercel serverless was minting JWT-style session cookies.
+  // Using JWT strategy explicitly avoids DB-session adapter quirks and makes sessions robust.
+  session: { strategy: "jwt" },
   providers: [
     // Email + password (Credentials)
     CredentialsProvider({
@@ -77,35 +79,66 @@ export const authOptions: NextAuthOptions = {
     // Per policy: do not require CAPTCHA for normal returning-user login.
     // CAPTCHA is enforced only on explicitly gated, abusable actions (e.g. submissions, signup).
     signIn: async () => true,
-    session: async ({ session, user }) => {
-      // Stable identity and role for server-side enforcement.
-      // Also: "role seeding" via ADMIN_EMAILS should take effect without requiring
-      // a forced sign-out/sign-in cycle (helps unblock admin testing in prod/dev).
+
+    // Persist key user fields onto the JWT so session reads do not depend on DB sessions.
+    jwt: async ({ token, user }) => {
+      type TokenWithApp = typeof token & {
+        userId?: string;
+        role?: "user" | "moderator" | "admin";
+        emailVerified?: string | null;
+      };
+      const t = token as TokenWithApp;
+
+      if (user?.id) {
+        t.userId = user.id;
+      }
+
+      // Best-effort: hydrate role + emailVerified from DB (needed for server-side gating).
+      const userId = t.userId ?? t.sub;
+      if (userId) {
+        try {
+          const u = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { role: true, emailVerified: true, email: true },
+          });
+          if (u) {
+            t.role = u.role;
+            t.emailVerified = u.emailVerified ? u.emailVerified.toISOString() : null;
+
+            // Admin seeding (best-effort)
+            const admins = parseAdminEmails();
+            const email = String(u.email ?? "").toLowerCase();
+            if (email && admins.includes(email) && u.role !== "admin") {
+              await prisma.user.update({ where: { id: userId }, data: { role: "admin" } });
+              t.role = "admin";
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      return t;
+    },
+
+    session: async ({ session, token }) => {
+      type TokenWithApp = typeof token & {
+        userId?: string;
+        role?: "user" | "moderator" | "admin";
+        emailVerified?: string | null;
+      };
+      const t = token as TokenWithApp;
+
       const s = session as Session & {
         userId?: string;
         role?: "user" | "moderator" | "admin";
         emailVerified?: string | null;
       };
-       s.userId = user.id;
 
-      // Used by UI + API to gate privileged actions until verification.
-      const uv = user as unknown as { emailVerified?: Date | null };
-      s.emailVerified = uv.emailVerified ? uv.emailVerified.toISOString() : null;
+      s.userId = t.userId ?? t.sub ?? undefined;
+      s.role = t.role ?? undefined;
+      s.emailVerified = t.emailVerified ?? null;
 
-      const u = user as unknown as { role?: "user" | "moderator" | "admin"; email?: string | null };
-      const admins = parseAdminEmails();
-      const email = String(u.email ?? "").toLowerCase();
-
-      if (email && admins.includes(email) && u.role !== "admin") {
-        try {
-          await prisma.user.update({ where: { id: user.id }, data: { role: "admin" } });
-          s.role = "admin";
-        } catch {
-          // best-effort; fall back to existing role below
-        }
-      }
-
-      s.role = s.role ?? u.role;
       return s;
     },
   },
