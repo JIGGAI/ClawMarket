@@ -75,7 +75,7 @@ export default async function AdminPage() {
                   <td className="py-3 pr-4 min-w-[260px]">
                     {s.sourceUrl ? (
                       <a className="text-[color:var(--coral-bright)] underline break-all" href={s.sourceUrl} target="_blank" rel="noreferrer">
-                        sourceUrl
+                        {s.sourceUrl}
                       </a>
                     ) : s.zipUrl ? (
                       <a className="text-[color:var(--coral-bright)] underline break-all" href={s.zipUrl} target="_blank" rel="noreferrer">

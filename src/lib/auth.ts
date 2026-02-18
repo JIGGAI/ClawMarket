@@ -54,29 +54,9 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    signIn: async () => {
-      // reCAPTCHA gate (v2 checkbox) for all sign-in attempts.
-      // Client must call POST /api/auth/captcha to set a short-lived HttpOnly cookie.
-      const secret = process.env.CAPTCHA_SECRET;
-      const siteKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY;
-      if (!secret || !siteKey) {
-        // Not configured → do not block login.
-        return true;
-      }
-
-      // Note: next-auth callbacks run server-side.
-      const { cookies } = await import("next/headers");
-      const store = await cookies();
-      const proof = store.get("oc_captcha_ok")?.value;
-      if (!proof) return false;
-
-      // Optional freshness check (defense-in-depth).
-      const ms = Number(proof);
-      if (!Number.isFinite(ms)) return false;
-      if (Date.now() - ms > 5 * 60 * 1000) return false;
-
-      return true;
-    },
+    // Per policy: do not require CAPTCHA for normal returning-user login.
+    // CAPTCHA is enforced only on explicitly gated, abusable actions (e.g. submissions, signup).
+    signIn: async () => true,
     session: async ({ session, user }) => {
       // Stable identity and role for server-side enforcement.
       // Also: "role seeding" via ADMIN_EMAILS should take effect without requiring

@@ -54,6 +54,7 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
+  const role = (session as unknown as { role?: string } | null)?.role;
   const callbackUrl = useMemo(() => {
     if (!pathname || pathname.startsWith("/login")) return "/";
     return pathname;
@@ -112,6 +113,11 @@ export function Nav() {
                     <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/marketplace/submissions">
                       My recipes
                     </Link>
+                    {role === "admin" || role === "moderator" ? (
+                      <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/admin">
+                        Admin
+                      </Link>
+                    ) : null}
                     <button type="button" className="w-full px-4 py-2 text-left text-sm font-semibold text-[var(--text)] hover:bg-slate-50" role="menuitem" onClick={() => signOut({ callbackUrl: "/" })}>
                       Logout
                     </button>
@@ -166,6 +172,11 @@ export function Nav() {
                     <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace/submissions" onClick={() => setOpen(false)}>
                       My recipes
                     </Link>
+                    {role === "admin" || role === "moderator" ? (
+                      <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/admin" onClick={() => setOpen(false)}>
+                        Admin
+                      </Link>
+                    ) : null}
                     <button
                       className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
                       onClick={() => {
