@@ -14,9 +14,10 @@ export default async function LoginPage({
 }) {
   const session = await getServerSession(authOptions);
 
-  const callbackUrl = typeof searchParams?.callbackUrl === "string" && searchParams.callbackUrl.trim()
-    ? searchParams.callbackUrl
-    : "/";
+  const callbackUrl =
+    typeof searchParams?.callbackUrl === "string" && searchParams.callbackUrl.trim()
+      ? searchParams.callbackUrl
+      : "/";
 
   if (session) {
     return (
@@ -38,9 +39,7 @@ export default async function LoginPage({
     <main className="px-6 py-16 lg:px-16">
       <div className="mx-auto max-w-xl rounded-2xl bg-white p-8 shadow">
         <h1 className="text-3xl font-bold text-[var(--text)]">Sign in</h1>
-        <p className="mt-3 text-[var(--muted)]">
-          Available options depend on environment variables.
-        </p>
+        <p className="mt-3 text-[var(--muted)]">Available options depend on environment variables.</p>
 
         <SignInOptions callbackUrl={callbackUrl} />
 
@@ -48,13 +47,6 @@ export default async function LoginPage({
           <Link className="block text-center text-sm text-[var(--muted)] underline" href="/marketplace">
             Back to marketplace
           </Link>
-        </div>
-
-        <div className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-[var(--muted)]">
-          <div className="font-semibold text-[var(--text)]">Admin seeding</div>
-          <div className="mt-1">
-            Set <code>ADMIN_EMAILS</code> to a comma-separated list of emails to auto-promote on first sign-in.
-          </div>
         </div>
       </div>
     </main>
