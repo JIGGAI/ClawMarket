@@ -1,6 +1,9 @@
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
 import type { MarketplaceRecipe } from "@/lib/marketplace";
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const metadata = {
   title: "Recipe – Marketplace – ClawRecipes",
@@ -10,6 +13,51 @@ export const metadata = {
 function kindLabel(kind: MarketplaceRecipe["kind"]) {
   return kind === "team" ? "Team Recipe" : "Agent Recipe";
 }
+
+const markdownComponents: Components = {
+  a: ({ href, children, ...props }) => (
+    <a
+      href={href}
+      target={href?.startsWith("http") ? "_blank" : undefined}
+      rel={href?.startsWith("http") ? "noreferrer" : undefined}
+      {...props}
+    >
+      {children}
+    </a>
+  ),
+  pre: ({ children, ...props }) => (
+    <pre
+      className="codeblock mt-4 overflow-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200"
+      {...props}
+    >
+      <div className="mb-2 flex items-center gap-2">
+        <span className="code-dot h-3 w-3 rounded-full" />
+        <span className="code-dot h-3 w-3 rounded-full" />
+        <span className="code-dot h-3 w-3 rounded-full" />
+      </div>
+      {children}
+    </pre>
+  ),
+  code: ({ className, children, ...props }) => {
+    const isBlock = (className ?? "").includes("language-");
+    if (isBlock) {
+      return (
+        <code className="block whitespace-pre" {...props}>
+          {children}
+        </code>
+      );
+    }
+
+    return (
+      <code
+        className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[0.95em]"
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  },
+};
 
 function installCommand(r: MarketplaceRecipe) {
   return r.kind === "team"
@@ -191,9 +239,13 @@ export default async function MarketplaceRecipeDetailPage({
 
               <div className="mt-5 overflow-hidden rounded-2xl border border-[var(--border)] bg-white/70">
                 {markdown ? (
-                  <pre className="max-h-[70vh] overflow-auto whitespace-pre-wrap px-6 py-5 text-sm leading-6 text-[var(--text)]">
-                    {markdown}
-                  </pre>
+                  <div className="max-h-[70vh] overflow-auto px-6 py-5">
+                    <div className="markdown text-[var(--text)]">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                        {markdown}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
                 ) : (
                   <div className="px-6 py-5 text-[var(--muted)]">
                     Couldn’t load the recipe source right now. Use “View raw” to open it directly.
