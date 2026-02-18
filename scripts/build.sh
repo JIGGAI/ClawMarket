@@ -4,7 +4,7 @@ set -euo pipefail
 u="${DATABASE_URL:-}"
 if [[ "$u" =~ ^postgres(ql)?:// ]]; then
   echo "[build] running prisma db push (sync schema to postgres)"
-  npx prisma db push
+  npx prisma db push --accept-data-loss
   echo "[build] running prisma generate"
   npx prisma generate
 else
