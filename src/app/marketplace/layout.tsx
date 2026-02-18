@@ -14,7 +14,7 @@ export default function MarketplaceLayout({ children }: { children: React.ReactN
       {/* Only render the banner container when the banner is actually shown.
           Otherwise this leaves a thin colored bar at the top of marketplace pages. */}
       {showBanner ? (
-        <section className="bg-gradient-to-b from-slate-50 to-white px-6 pt-6 lg:px-16">
+        <section className="px-6 pt-6 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <EmailVerificationBanner />
           </div>
