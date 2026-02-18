@@ -21,6 +21,29 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   return NextResponse.json({ ok: true, submission: row });
 }
 
+export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  // Allow owner (verified) to delete regardless of status.
+  // Allow moderator/admin to delete any submission.
+  const owner = await requireVerified();
+  const mod = await requireRole("moderator");
+
+  const canModerate = mod.ok;
+  const r = owner.ok ? owner : mod;
+  if (!r.ok) return r.res;
+
+  const userId = r.session.userId;
+  const { id } = await ctx.params;
+
+  const existing = await prisma.submission.findFirst({
+    where: canModerate ? { id } : { id, createdBy: userId },
+    select: { id: true },
+  });
+  if (!existing) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
+
+  await prisma.submission.delete({ where: { id } });
+  return NextResponse.json({ ok: true });
+}
+
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   // Allow the submission owner (verified) to edit drafts/needs_changes.
   // Allow moderator/admin to edit any non-published submission.
@@ -45,7 +68,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       return NextResponse.json({ ok: false, error: "Published submissions are not editable" }, { status: 409 });
     }
   } else {
-    const editable = new Set(["draft", "needs_changes"]);
+    const editable = new Set(["draft", "submitted", "needs_changes"]);
     if (!editable.has(status)) {
       return NextResponse.json({ ok: false, error: `Submission is not editable in status ${existing.status}` }, { status: 409 });
     }
@@ -60,6 +83,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     license?: string;
     sourceUrl?: string;
     body?: string;
+    draft?: boolean;
   };
 
   const title = sanitizePlainText(body.title, { maxLen: 160 });
@@ -92,6 +116,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     validatedBodyMd = recipeBodyText;
   }
 
+  const wantsDraft = body.draft === true;
+  const nextStatus = wantsDraft ? "draft" : "submitted";
+
   const next = await prisma.submission.update({
     where: { id },
     data: {
@@ -103,8 +130,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       license,
       sourceUrl: validatedSourceUrl,
       bodyMd: validatedBodyMd,
-      // when user edits after a "needs_changes", send it back through review
-      status: existing.status === "needs_changes" ? "submitted" : existing.status,
+      // If user/admin edits a pending/submitted item, treat it as an updated submission.
+      // This also allows a user to keep work in draft by clicking "Save draft".
+      status: nextStatus,
       moderationReason: null,
       moderatedAt: null,
       moderatedByUserId: null,

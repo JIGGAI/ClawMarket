@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getBySlug, loadRegistry, type MarketplaceRecipe } from "@/lib/marketplace";
 import { prisma } from "@/lib/prisma";
+import { requireRole } from "@/lib/require";
 
 function tagsFromCsv(tagsCsv: string | null | undefined): string[] {
   return (tagsCsv ?? "")
@@ -63,7 +64,7 @@ export async function GET(
     // Prefer DB-backed published submissions first.
     const sub = await prisma.submission.findFirst({
       where: {
-        status: "published",
+        status: { in: ["published", "approved"] },
         OR: [{ slug: s }, { id: s }],
       },
       select: {
@@ -90,15 +91,39 @@ export async function GET(
       }
     }
 
+    // Admin/moderator view: allow viewing unpublished submissions by id/slug.
+    const mod = await requireRole("moderator");
+    if (mod.ok) {
+      const anySub = await prisma.submission.findFirst({
+        where: { OR: [{ slug: s }, { id: s }] },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          description: true,
+          tagsCsv: true,
+          sourceUrl: true,
+          zipUrl: true,
+          bodyMd: true,
+          authorDisplayName: true,
+          contactEmail: true,
+          license: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      if (anySub) {
+        const recipe = submissionToRecipe(anySub);
+        if (recipe) return NextResponse.json({ ok: true, recipe });
+      }
+    }
+
     // Fallback to bundled/file-backed registry.
     const registry = await loadRegistry();
     const recipe = getBySlug(registry.recipes, s);
 
     if (!recipe) {
-      return NextResponse.json(
-        { ok: false, error: "Not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
     }
 
     return NextResponse.json({ ok: true, recipe });

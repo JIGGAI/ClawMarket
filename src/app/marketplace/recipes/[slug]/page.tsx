@@ -1,5 +1,6 @@
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
+import { BackButton } from "@/components/BackButton";
 import type { MarketplaceRecipe } from "@/lib/marketplace";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -93,8 +94,49 @@ async function fetchModerationForRecipe(recipe: MarketplaceRecipe) {
       publishedByUserId: true,
       createdAt: true,
       updatedAt: true,
+      bodyMd: true,
+      sourceUrl: true,
     },
   });
+}
+
+function submissionToRecipe(sub: {
+  id: string;
+  slug: string | null;
+  title: string;
+  description: string;
+  tagsCsv: string;
+  sourceUrl: string | null;
+  bodyMd: string | null;
+  authorDisplayName: string;
+  contactEmail: string;
+  license: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}): MarketplaceRecipe {
+  const slug = sub.slug ?? sub.id;
+  const renderableSourceUrl = sub.sourceUrl ?? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body`;
+
+  return {
+    slug,
+    kind: "agent",
+    origin: "ugc",
+    name: sub.title,
+    description: sub.description,
+    version: "ugc",
+    tags: String(sub.tagsCsv ?? "")
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean),
+    sourceUrl: renderableSourceUrl,
+    submissionId: sub.id,
+    authorDisplayName: sub.authorDisplayName,
+    contactEmail: sub.contactEmail,
+    license: sub.license,
+    createdAt: sub.createdAt.toISOString(),
+    updatedAt: sub.updatedAt.toISOString(),
+    ugcSourceUrl: sub.sourceUrl,
+  };
 }
 
 async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
@@ -115,9 +157,19 @@ async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
   return data.recipe;
 }
 
+function absoluteUrl(url: string): string {
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  if (!url.startsWith("/")) return url;
+
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+  return site ? `${site}${url}` : url;
+}
+
 async function fetchMarkdown(url: string): Promise<string | null> {
   try {
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(absoluteUrl(url), { next: { revalidate: 300 } });
     if (!res.ok) return null;
     const text = await res.text();
     // Basic defense: avoid accidentally rendering HTML if a proxy returns an error page.
@@ -135,63 +187,91 @@ export default async function MarketplaceRecipeDetailPage({
 }) {
   const { slug } = await params;
 
+  const session = await getServerSession(authOptions);
+  const role = session?.role ?? "user";
+  const canModerate = role === "moderator" || role === "admin";
+
   let recipe: MarketplaceRecipe;
   try {
     recipe = await fetchRecipe(slug);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    if (msg === "NOT_FOUND") {
-      return (
-        <main className="w-full">
-          <FadeIn>
-            <section className="px-6 py-20 lg:px-16">
-              <div className="mx-auto max-w-3xl">
-                <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
-                  Marketplace
-                </p>
-                <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-                  Recipe not found
-                </h1>
-                <p className="mt-6 text-lg text-[var(--muted)]">
-                  We couldn’t find a recipe with slug <span className="font-mono">{slug}</span>.
-                </p>
-                <div className="mt-8">
-                  <a
-                    href="/marketplace"
-                    className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
-                  >
-                    Back to Marketplace
-                  </a>
-                </div>
-              </div>
-            </section>
-          </FadeIn>
-        </main>
-      );
+    if (msg === "NOT_FOUND" && canModerate) {
+      // Admin/moderator view: allow loading an unpublished submission directly.
+      const sub = await prisma.submission.findFirst({
+        where: { OR: [{ slug }, { id: slug }] },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          description: true,
+          tagsCsv: true,
+          sourceUrl: true,
+          bodyMd: true,
+          authorDisplayName: true,
+          contactEmail: true,
+          license: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      if (sub) {
+        recipe = submissionToRecipe(sub);
+      } else {
+        // fall through to not-found UI
+        recipe = null as unknown as MarketplaceRecipe;
+      }
+    } else if (msg === "NOT_FOUND") {
+      recipe = null as unknown as MarketplaceRecipe;
+    } else {
+      throw e;
     }
-
-    throw e;
   }
 
-  const session = await getServerSession(authOptions);
-  const role = session?.role ?? "user";
-  const canModerate = role === "moderator" || role === "admin";
+  if (!recipe) {
+    return (
+      <main className="w-full">
+        <FadeIn>
+          <section className="px-6 py-20 lg:px-16">
+            <div className="mx-auto max-w-3xl">
+              <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Marketplace</p>
+              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Recipe not found</h1>
+              <p className="mt-6 text-lg text-[var(--muted)]">
+                We couldn’t find a recipe with slug <span className="font-mono">{slug}</span>.
+              </p>
+              <div className="mt-8">
+                <a
+                  href="/marketplace"
+                  className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+                >
+                  Back to Marketplace
+                </a>
+              </div>
+            </div>
+          </section>
+        </FadeIn>
+      </main>
+    );
+  }
 
   const cmd = installCommand(recipe);
-  const markdown = await fetchMarkdown(recipe.sourceUrl);
   const moderation = canModerate ? await fetchModerationForRecipe(recipe) : null;
+
+  // For unpublished UGC, recipe.sourceUrl may point at a route that requires moderator cookies;
+  // fall back to DB body when present.
+  const markdown = (moderation?.bodyMd ?? null) || (await fetchMarkdown(recipe.sourceUrl));
 
   return (
     <main className="w-full">
       <FadeIn>
         <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
-            <div className="flex flex-wrap items-center justify-between gap-6">
-              <div className="min-w-0">
+            <div className="flex items-start justify-between gap-6">
+              <div className="min-w-0 flex-1 pr-4">
                 <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
                   Marketplace
                 </p>
-                <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+                <h1 className="mt-4 break-words text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
                   {recipe.name}
                 </h1>
                 <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">
@@ -216,13 +296,13 @@ export default async function MarketplaceRecipeDetailPage({
                 </div>
               </div>
 
-              <div className="shrink-0">
-                <a
-                  href="/marketplace"
-                  className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+              <div className="flex-none self-start">
+                <BackButton
+                  fallbackHref="/marketplace"
+                  className="inline-block whitespace-nowrap rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                 >
                   ← Back
-                </a>
+                </BackButton>
               </div>
             </div>
           </div>
@@ -334,60 +414,76 @@ export default async function MarketplaceRecipeDetailPage({
                 </dl>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
-                <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
+              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
+                <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
+                <p className="mt-2 text-sm text-[var(--muted)]">
+                  Prefer the one-line scaffold command on this page. If you want to install manually, you can download
+                  the recipe Markdown and place it into your OpenClaw workspace.
+                </p>
 
-                {!canModerate ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    Moderation details are visible to moderators/admins.
-                  </p>
-                ) : recipe.origin !== "ugc" ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    This is a bundled recipe (no submission moderation state).
-                  </p>
-                ) : !moderation ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    No moderation record found for this submission.
-                  </p>
-                ) : (
-                  <dl className="mt-4 space-y-3 text-sm">
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Status</dt>
-                      <dd className="font-mono text-[var(--text)]">{moderation.status}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Moderated</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.moderatedAt ? moderation.moderatedAt.toISOString() : "—"}
-                      </dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Moderated by</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.moderatedByUserId ?? "—"}
-                      </dd>
-                    </div>
-                    {moderation.moderationReason ? (
-                      <div className="flex items-center justify-between gap-4">
-                        <dt className="text-[var(--muted)]">Reason</dt>
-                        <dd className="text-[var(--text)]">{moderation.moderationReason}</dd>
-                      </div>
-                    ) : null}
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Published</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.publishedAt ? moderation.publishedAt.toISOString() : "—"}
-                      </dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Published by</dt>
-                      <dd className="font-mono text-[var(--text)]">
-                        {moderation.publishedByUserId ?? "—"}
-                      </dd>
-                    </div>
-                  </dl>
-                )}
+                <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
+                  <li>Click <span className="font-semibold">View raw</span> above to open the recipe Markdown.</li>
+                  <li>Save it locally as <span className="font-mono">{recipe.slug}.md</span>.</li>
+                  <li>Move it into your workspace recipes folder:</li>
+                </ol>
+
+                <pre className="mt-3 overflow-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200">
+                  <code>{`mkdir -p ~/.openclaw/workspace/recipes
+# then move/copy the file into that folder
+# e.g. mv ~/Downloads/${recipe.slug}.md ~/.openclaw/workspace/recipes/`}</code>
+                </pre>
+
+                <p className="mt-3 text-sm text-[var(--muted)]">
+                  After that, it should show up in your local OpenClaw recipes list.
+                </p>
               </div>
+
+              {role === "admin" ? (
+                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
+                  <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
+
+                  {recipe.origin !== "ugc" ? (
+                    <p className="mt-2 text-sm text-[var(--muted)]">
+                      This is a bundled recipe (no submission moderation state).
+                    </p>
+                  ) : !moderation ? (
+                    <p className="mt-2 text-sm text-[var(--muted)]">No moderation record found for this submission.</p>
+                  ) : (
+                    <dl className="mt-4 space-y-3 text-sm">
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Status</dt>
+                        <dd className="font-mono text-[var(--text)]">{moderation.status}</dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Moderated</dt>
+                        <dd className="font-mono text-[var(--text)]">
+                          {moderation.moderatedAt ? moderation.moderatedAt.toISOString() : "—"}
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Moderated by</dt>
+                        <dd className="font-mono text-[var(--text)]">{moderation.moderatedByUserId ?? "—"}</dd>
+                      </div>
+                      {moderation.moderationReason ? (
+                        <div className="flex items-center justify-between gap-4">
+                          <dt className="text-[var(--muted)]">Reason</dt>
+                          <dd className="text-[var(--text)]">{moderation.moderationReason}</dd>
+                        </div>
+                      ) : null}
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Published</dt>
+                        <dd className="font-mono text-[var(--text)]">
+                          {moderation.publishedAt ? moderation.publishedAt.toISOString() : "—"}
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Published by</dt>
+                        <dd className="font-mono text-[var(--text)]">{moderation.publishedByUserId ?? "—"}</dd>
+                      </div>
+                    </dl>
+                  )}
+                </div>
+              ) : null}
             </aside>
           </div>
         </section>

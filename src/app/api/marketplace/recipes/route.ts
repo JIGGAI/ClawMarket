@@ -63,7 +63,7 @@ export async function GET(req: Request) {
 
     // Published UGC lives in the DB (avoid server-side writes to registry.json).
     const publishedSubs = await prisma.submission.findMany({
-      where: { status: "published" },
+      where: { status: { in: ["published", "approved"] } },
       orderBy: { publishedAt: "desc" },
       select: {
         id: true,
