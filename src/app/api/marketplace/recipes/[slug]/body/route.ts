@@ -11,7 +11,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ slug: string }
 
   // Prefer published.
   let sub = await prisma.submission.findFirst({
-    where: { status: "published", OR: [{ slug: s }, { id: s }] },
+    where: { status: { in: ["published", "approved"] }, OR: [{ slug: s }, { id: s }] },
     select: { id: true, slug: true, bodyMd: true },
   });
 

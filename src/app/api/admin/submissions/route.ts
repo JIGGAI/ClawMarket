@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
   const body = (await req.json()) as {
     id?: string;
-    status?: "approved" | "rejected" | "needs_changes" | "published" | "unpublished";
+    status?: "rejected" | "needs_changes" | "published" | "unpublished";
     reason?: string;
   };
   const id = String(body.id ?? "").trim();
@@ -27,8 +27,7 @@ export async function POST(req: Request) {
   if (!id) return NextResponse.json({ ok: false, error: "id is required" }, { status: 400 });
   if (!status) return NextResponse.json({ ok: false, error: "status is required" }, { status: 400 });
 
-  const allowed: Array<"approved" | "rejected" | "needs_changes" | "published" | "unpublished"> = [
-    "approved",
+  const allowed: Array<"rejected" | "needs_changes" | "published" | "unpublished"> = [
     "rejected",
     "needs_changes",
     "published",

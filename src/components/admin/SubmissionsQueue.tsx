@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 type SubmissionStatus =
   | "submitted"
   | "needs_changes"
-  | "approved"
   | "rejected"
   | "published"
   | "unpublished";
