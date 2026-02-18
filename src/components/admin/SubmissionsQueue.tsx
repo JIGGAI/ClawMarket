@@ -58,12 +58,27 @@ export function SubmissionsQueue() {
     return `/marketplace/submit?edit=${encodeURIComponent(s.id)}`;
   }
 
+  async function readJson<T>(res: Response): Promise<T> {
+    const ct = res.headers.get("content-type") || "";
+    const text = await res.text();
+    if (!text.trim()) return {} as T;
+    if (!ct.includes("application/json")) {
+      // common when we get redirected to HTML/login or an upstream error page
+      throw new Error(`Unexpected response (status ${res.status}). Expected JSON, got: ${ct || "(no content-type)"}`);
+    }
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      throw new Error(`Failed to parse JSON (status ${res.status}).`);
+    }
+  }
+
   async function refresh() {
     setLoading(true);
     setError(null);
     try {
       const res = await fetch("/api/admin/submissions", { method: "GET" });
-      const json = (await res.json()) as { ok?: boolean; error?: string; submissions?: Submission[] };
+      const json = await readJson<{ ok?: boolean; error?: string; submissions?: Submission[] }>(res);
       if (!res.ok || !json.ok) {
         const base = json.error || `Request failed (${res.status})`;
         if (res.status === 401) {
@@ -115,7 +130,7 @@ export function SubmissionsQueue() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ id, status, reason }),
       });
-      const json = (await res.json()) as { ok?: boolean; error?: string; submission?: Submission };
+      const json = await readJson<{ ok?: boolean; error?: string; submission?: Submission }>(res);
       if (!res.ok || !json.ok) {
         const base = json.error || `Request failed (${res.status})`;
         if (res.status === 401) throw new Error(`${base}. You must be signed in.`);
