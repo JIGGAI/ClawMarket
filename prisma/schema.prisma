@@ -63,7 +63,11 @@ model Submission {
 
   // Sources (MVP)
   sourceUrl String?
+  // NOTE: zipUrl submission is deprecated (kept for backward compat / old rows).
   zipUrl    String?
+
+  // Direct recipe body submission (JSON)
+  bodyJson  Json?
 
   // Upload placeholders (future)
   uploadPath   String?

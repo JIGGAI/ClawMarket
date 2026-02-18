@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchMarketplaceRecipes } from "@/lib/marketplace";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export const metadata = {
   title: "Marketplace – ClawRecipes",
@@ -85,6 +88,7 @@ function RecipeCard({
 }
 
 export default async function MarketplacePage() {
+  const session = await getServerSession(authOptions);
   const live = await fetchMarketplaceRecipes();
 
   const liveTeam = (live ?? []).filter((r) => r.kind === "team");
@@ -128,12 +132,21 @@ export default async function MarketplacePage() {
               >
                 Submit a recipe
               </a>
-              <a
-                href="/marketplace/submissions"
-                className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
-              >
-                Your submissions
-              </a>
+              {session ? (
+                <Link
+                  href="/marketplace/submissions"
+                  className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                >
+                  Your submissions
+                </Link>
+              ) : (
+                <Link
+                  href="/marketplace/recipes"
+                  className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                >
+                  Browse all recipes
+                </Link>
+              )}
             </div>
           </div>
         </section>

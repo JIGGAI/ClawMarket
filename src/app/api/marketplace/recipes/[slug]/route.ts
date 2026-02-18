@@ -17,12 +17,14 @@ function submissionToRecipe(sub: {
   tagsCsv: string;
   sourceUrl: string | null;
   zipUrl: string | null;
+  bodyJson: unknown | null;
 }): MarketplaceRecipe | null {
-  const sourceUrl = sub.sourceUrl ?? sub.zipUrl;
+  const slug = sub.slug ?? sub.id;
+  const sourceUrl = sub.sourceUrl ?? (sub.bodyJson != null ? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body` : null);
   if (!sourceUrl) return null;
 
   return {
-    slug: sub.slug ?? sub.id,
+    slug,
     kind: "agent",
     name: sub.title,
     description: sub.description,
@@ -54,6 +56,7 @@ export async function GET(
         tagsCsv: true,
         sourceUrl: true,
         zipUrl: true,
+        bodyJson: true,
       },
     });
 

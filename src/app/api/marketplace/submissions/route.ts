@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { requireAuth } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
 import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
 import { randomSuffix, slugify } from "@/lib/slug";
+import { sanitizePlainText, sanitizeTag, safeJsonParse, validateRecipeJson } from "@/lib/sanitize";
 
 async function canSubmit(userId: string) {
   // Social logins can submit immediately.
@@ -61,18 +63,22 @@ export async function POST(req: Request) {
     contactEmail?: string;
     license?: string;
     sourceUrl?: string;
+    // zipUrl deprecated
     zipUrl?: string;
+    body?: string; // recipe JSON text
   };
 
-  const title = String(body.title ?? "").trim();
-  const description = String(body.description ?? "").trim();
-  const authorDisplayName = String(body.authorDisplayName ?? "").trim();
-  const contactEmail = String(body.contactEmail ?? "").trim();
-  const license = typeof body.license === "string" ? body.license.trim() : undefined;
-  const tags = Array.isArray(body.tags) ? body.tags.map((t) => String(t).trim()).filter(Boolean) : [];
+  const title = sanitizePlainText(body.title, { maxLen: 160 });
+  const description = sanitizePlainText(body.description, { maxLen: 2000 });
+  const authorDisplayName = sanitizePlainText(body.authorDisplayName, { maxLen: 120 });
+  const contactEmail = sanitizePlainText(body.contactEmail, { maxLen: 254 });
+  const license = typeof body.license === "string" ? sanitizePlainText(body.license, { maxLen: 120 }) : undefined;
+  const tags = Array.isArray(body.tags) ? body.tags.map(sanitizeTag).filter(Boolean).slice(0, 20) : [];
 
-  const sourceUrl = typeof body.sourceUrl === "string" ? body.sourceUrl.trim() : "";
-  const zipUrl = typeof body.zipUrl === "string" ? body.zipUrl.trim() : "";
+  const sourceUrl = typeof body.sourceUrl === "string" ? sanitizePlainText(body.sourceUrl, { maxLen: 2000 }) : "";
+  const recipeBodyText = typeof body.body === "string" ? sanitizePlainText(body.body, { maxLen: 200_000 }) : "";
+
+  // zipUrl no longer accepted.
 
   if (!title) return NextResponse.json({ ok: false, error: "title is required" }, { status: 400 });
   if (!description) return NextResponse.json({ ok: false, error: "description is required" }, { status: 400 });
@@ -81,13 +87,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "contactEmail must be a valid email" }, { status: 400 });
   }
 
-  if (!sourceUrl && !zipUrl) {
-    return NextResponse.json({ ok: false, error: "Provide either sourceUrl or zipUrl" }, { status: 400 });
+  if (!sourceUrl && !recipeBodyText) {
+    return NextResponse.json({ ok: false, error: "Provide either sourceUrl or body" }, { status: 400 });
   }
 
-  let sourceType: "url" | "upload" = "url";
+  const sourceType: "url" | "upload" = "url";
   let validatedSourceUrl: string | null = null;
-  let validatedZipUrl: string | null = null;
+  const validatedZipUrl: string | null = null;
+  let validatedBodyJson: unknown | null = null;
 
   if (sourceUrl) {
     const v = await validateHttpUrlNoPrivateIps(sourceUrl);
@@ -95,11 +102,16 @@ export async function POST(req: Request) {
     validatedSourceUrl = v.url.toString();
   }
 
-  if (zipUrl) {
-    const v = await validateHttpUrlNoPrivateIps(zipUrl, { requireZip: true });
-    if (!v.ok) return NextResponse.json({ ok: false, error: `zipUrl: ${v.error}` }, { status: 400 });
-    validatedZipUrl = v.url.toString();
-    sourceType = "upload"; // placeholder classification; currently URL to zip
+  // zipUrl submissions are deprecated.
+
+  if (recipeBodyText) {
+    const parsed = safeJsonParse(recipeBodyText);
+    if (!parsed.ok) return NextResponse.json({ ok: false, error: `body: ${parsed.error}` }, { status: 400 });
+
+    const v = validateRecipeJson(parsed.value);
+    if (!v.ok) return NextResponse.json({ ok: false, error: `body: ${v.error}` }, { status: 400 });
+
+    validatedBodyJson = parsed.value;
   }
 
   const submitIp = getClientIp(req);
@@ -119,6 +131,7 @@ export async function POST(req: Request) {
       license,
       sourceUrl: validatedSourceUrl,
       zipUrl: validatedZipUrl,
+      bodyJson: (validatedBodyJson as Prisma.InputJsonValue) ?? null,
       submitIp,
       submitUserAgent,
     },

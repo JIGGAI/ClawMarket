@@ -22,7 +22,7 @@ export default function MarketplaceSubmitPage() {
   const [contactEmail, setContactEmail] = useState("");
   const [license, setLicense] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
-  const [zipUrl, setZipUrl] = useState("");
+  const [body, setBody] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +37,16 @@ export default function MarketplaceSubmitPage() {
     if (!description.trim()) return setError("Description is required");
     if (!authorDisplayName.trim()) return setError("Author display name is required");
     if (!contactEmail.trim()) return setError("Contact email is required");
-    if (!sourceUrl.trim() && !zipUrl.trim()) return setError("Provide either a Source URL or a Zip URL");
+    if (!sourceUrl.trim() && !body.trim()) return setError("Provide either a Source URL or a Recipe JSON body");
+
+    // Basic client-side JSON validation (server will re-validate).
+    if (body.trim()) {
+      try {
+        JSON.parse(body);
+      } catch {
+        return setError("Body must be valid JSON");
+      }
+    }
 
     setSubmitting(true);
     try {
@@ -52,7 +61,7 @@ export default function MarketplaceSubmitPage() {
           contactEmail,
           license: license.trim() ? license.trim() : undefined,
           sourceUrl: sourceUrl.trim() ? sourceUrl.trim() : undefined,
-          zipUrl: zipUrl.trim() ? zipUrl.trim() : undefined,
+          body: body.trim() ? body.trim() : undefined,
         }),
       });
 
@@ -94,6 +103,9 @@ export default function MarketplaceSubmitPage() {
             </Link>
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace/submissions">
               Your submissions
+            </Link>
+            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace/recipes">
+              Browse all recipes
             </Link>
           </div>
         </div>
@@ -182,7 +194,7 @@ export default function MarketplaceSubmitPage() {
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <div className="text-sm font-semibold text-[var(--text)]">Source</div>
             <p className="mt-1 text-sm text-[var(--muted)]">
-              Provide either a URL to the recipe source, or a URL to a .zip file (upload flow coming soon).
+              Provide either a URL to the recipe source, or paste the recipe body as JSON.
             </p>
 
             <div className="mt-4 space-y-4">
@@ -197,13 +209,17 @@ export default function MarketplaceSubmitPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[var(--text)]">Zip URL (.zip)</label>
-                <input
-                  className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2"
-                  value={zipUrl}
-                  onChange={(e) => setZipUrl(e.target.value)}
-                  placeholder="https://example.com/recipe.zip"
+                <label className="block text-sm font-semibold text-[var(--text)]">Recipe body (JSON)</label>
+                <textarea
+                  className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-xs"
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder='{"id":"my-recipe","name":"My Recipe",...}'
+                  rows={10}
                 />
+                <div className="mt-1 text-xs text-[var(--muted)]">
+                  Must be valid JSON. We validate and sanitize on submit.
+                </div>
               </div>
             </div>
           </div>
@@ -222,7 +238,7 @@ export default function MarketplaceSubmitPage() {
           </div>
 
           <div className="text-xs text-[var(--muted)]">
-            Note: URLs are validated server-side and private network targets are rejected (SSRF protection).
+            Note: URLs are validated server-side and private network targets are rejected (SSRF protection). JSON bodies are validated + sanitized.
           </div>
         </form>
       </div>
