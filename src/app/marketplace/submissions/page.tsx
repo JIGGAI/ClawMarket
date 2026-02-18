@@ -59,6 +59,11 @@ export default async function MarketplaceSubmissionsPage() {
               </div>
               <div className="mt-3 text-[var(--muted)]">{s.description}</div>
               <div className="mt-3 flex flex-wrap gap-3 text-sm">
+                {s.status === "draft" || s.status === "needs_changes" ? (
+                  <Link className="text-[color:var(--coral-bright)] underline" href={`/marketplace/submit?edit=${encodeURIComponent(s.id)}`}>
+                    Edit
+                  </Link>
+                ) : null}
                 {s.sourceUrl ? (
                   <a className="text-[color:var(--coral-bright)] underline break-all" href={s.sourceUrl} target="_blank" rel="noreferrer">
                     sourceUrl
