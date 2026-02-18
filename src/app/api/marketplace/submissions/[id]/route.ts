@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireVerified } from "@/lib/require";
+import { requireRole, requireVerified } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
 import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
 import { sanitizePlainText, sanitizeTag } from "@/lib/sanitize";
@@ -9,10 +9,11 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   if (!r.ok) return r.res;
 
   const userId = r.session.userId;
+  const role = r.session.role;
   const { id } = await ctx.params;
 
   const row = await prisma.submission.findFirst({
-    where: { id, createdBy: userId },
+    where: role === "admin" || role === "moderator" ? { id } : { id, createdBy: userId },
   });
 
   if (!row) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
@@ -21,19 +22,33 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
 }
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const r = await requireVerified();
+  // Allow the submission owner (verified) to edit drafts/needs_changes.
+  // Allow moderator/admin to edit any non-published submission.
+  const owner = await requireVerified();
+  const mod = await requireRole("moderator");
+
+  const canModerate = mod.ok;
+  const r = owner.ok ? owner : mod;
   if (!r.ok) return r.res;
 
   const userId = r.session.userId;
   const { id } = await ctx.params;
 
-  const existing = await prisma.submission.findFirst({ where: { id, createdBy: userId } });
+  const existing = await prisma.submission.findFirst({
+    where: canModerate ? { id } : { id, createdBy: userId },
+  });
   if (!existing) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
 
-  // Only allow editing while still user-owned workflow states.
-  const editable = new Set(["draft", "needs_changes"]);
-  if (!editable.has(String(existing.status))) {
-    return NextResponse.json({ ok: false, error: `Submission is not editable in status ${existing.status}` }, { status: 409 });
+  const status = String(existing.status);
+  if (canModerate) {
+    if (status === "published") {
+      return NextResponse.json({ ok: false, error: "Published submissions are not editable" }, { status: 409 });
+    }
+  } else {
+    const editable = new Set(["draft", "needs_changes"]);
+    if (!editable.has(status)) {
+      return NextResponse.json({ ok: false, error: `Submission is not editable in status ${existing.status}` }, { status: 409 });
+    }
   }
 
   const body = (await req.json()) as {

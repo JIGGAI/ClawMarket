@@ -12,6 +12,7 @@ type SubmissionStatus =
 
 type Submission = {
   id: string;
+  slug?: string | null;
   createdAt: string;
   updatedAt: string;
   title: string;
@@ -55,6 +56,21 @@ export function SubmissionsQueue() {
 
   const byId = useMemo(() => new Map(submissions.map((s) => [s.id, s])), [submissions]);
 
+  function viewLink(s: Submission) {
+    // If published, prefer the public recipe detail route.
+    if (s.status === "published") {
+      const slug = s.slug || s.id;
+      return `/marketplace/recipes/${encodeURIComponent(slug)}`;
+    }
+    // Otherwise, use the admin item API.
+    return `/api/admin/submissions/${encodeURIComponent(s.id)}`;
+  }
+
+  function editLink(s: Submission) {
+    // Admin edit uses the same form; API allows moderator/admin to PATCH.
+    return `/marketplace/submit?edit=${encodeURIComponent(s.id)}`;
+  }
+
   async function refresh() {
     setLoading(true);
     setError(null);
@@ -97,8 +113,8 @@ export function SubmissionsQueue() {
     void refresh();
   }, []);
 
-  async function applyAction(id: string) {
-    const status = draftStatus[id] || byId.get(id)?.status;
+  async function applyAction(id: string, forceStatus?: SubmissionStatus) {
+    const status = forceStatus ?? draftStatus[id] ?? byId.get(id)?.status;
     if (!status) return;
 
     const reasonRaw = draftReason[id] ?? "";
@@ -203,8 +219,48 @@ export function SubmissionsQueue() {
                     <span className="text-xs">—</span>
                   )}
                 </td>
-                <td className="py-3 pr-4 min-w-[320px]">
+                <td className="py-3 pr-4 min-w-[360px]">
                   <div className="flex flex-col gap-2">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
+                        onClick={() => void applyAction(s.id, "approved")}
+                        disabled={!!saving[s.id]}
+                        type="button"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
+                        onClick={() => void applyAction(s.id, "rejected")}
+                        disabled={!!saving[s.id]}
+                        type="button"
+                      >
+                        Deny
+                      </button>
+                      <button
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 disabled:opacity-50"
+                        onClick={() => void applyAction(s.id, "published")}
+                        disabled={!!saving[s.id]}
+                        type="button"
+                      >
+                        Publish
+                      </button>
+                      <a
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
+                        href={viewLink(s)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View
+                      </a>
+                      <a
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold hover:bg-slate-50"
+                        href={editLink(s)}
+                      >
+                        Edit
+                      </a>
+                    </div>
                     <select
                       className="rounded-lg border border-slate-200 px-3 py-2"
                       value={(draftStatus[s.id] || s.status) as string}
