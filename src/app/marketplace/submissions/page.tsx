@@ -50,14 +50,6 @@ export default async function MarketplaceSubmissionsPage() {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="font-semibold text-[var(--text)]">{s.title}</div>
-                  {s.status === "draft" || s.status === "submitted" || s.status === "needs_changes" ? (
-                    <Link
-                      className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-semibold text-[var(--text)] hover:bg-slate-50"
-                      href={`/marketplace/submit?edit=${encodeURIComponent(s.id)}`}
-                    >
-                      Edit
-                    </Link>
-                  ) : null}
                 </div>
 
                 <div className="flex items-center gap-3">
