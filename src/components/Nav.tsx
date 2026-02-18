@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
 const docsUrl = "https://docs.openclaw.ai";
@@ -57,6 +58,12 @@ function CloseIcon({ className }: { className?: string }) {
 export function Nav() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const callbackUrl = useMemo(() => {
+    // Keep users on the current page after auth unless we're already on /login.
+    if (!pathname || pathname.startsWith("/login")) return "/";
+    return pathname;
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur">
@@ -81,13 +88,68 @@ export function Nav() {
           </a>
           <div className="flex items-center gap-3">
             {session ? (
-              <>
-                <span className="hidden text-sm text-[var(--muted)] lg:inline">{session.user?.email}</span>
-                <button className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50" onClick={() => signOut({ callbackUrl: "/" })}>
-                  Logout
-                </button>
-              </>
-            ) : null}
+              <div className="relative" role="navigation" aria-label="User menu">
+                <div className="group relative">
+                  <button
+                    type="button"
+                    className="h-9 w-9 overflow-hidden rounded-full bg-slate-200"
+                    aria-haspopup="menu"
+                    aria-label="Open user menu"
+                    title={session.user?.email ?? "Account"}
+                  >
+                    {session.user?.image ? (
+                      // Using <img> intentionally for a tiny avatar; Next/Image adds layout constraints we don't need here.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={session.user.image} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-slate-700">
+                        {(session.user?.email?.[0] ?? "U").toUpperCase()}
+                      </div>
+                    )}
+                  </button>
+
+                  {/* Hover dropdown */}
+                  <div
+                    className="invisible absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-lg opacity-0 transition group-hover:visible group-hover:opacity-100"
+                    role="menu"
+                  >
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm text-[var(--text)] hover:bg-slate-50"
+                      role="menuitem"
+                      onClick={() => {
+                        window.location.href = "/user";
+                      }}
+                    >
+                      <div className="truncate font-semibold">{session.user?.name ?? session.user?.email ?? "Account"}</div>
+                      <div className="truncate text-xs text-[var(--muted)]">{session.user?.email ?? ""}</div>
+                    </button>
+                    <div className="my-2 h-px w-full bg-slate-100" />
+                    <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/marketplace/submit">
+                      Submit recipe
+                    </Link>
+                    <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/marketplace/submissions">
+                      My recipes
+                    </Link>
+                    <button
+                      type="button"
+                      className="w-full px-4 py-2 text-left text-sm font-semibold text-[var(--text)] hover:bg-slate-50"
+                      role="menuitem"
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                className="rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:brightness-95"
+                href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+              >
+                Login
+              </Link>
+            )}
 
             <a
               className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black"
@@ -163,16 +225,47 @@ export function Nav() {
                 <div className="my-2 h-px w-full bg-slate-100" />
 
                 {session ? (
-                  <button
-                    className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
-                    onClick={() => {
-                      setOpen(false);
-                      signOut({ callbackUrl: "/" });
-                    }}
+                  <>
+                    <Link
+                      className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]"
+                      href="/user"
+                      onClick={() => setOpen(false)}
+                    >
+                      {session.user?.email ?? "Account"}
+                    </Link>
+                    <Link
+                      className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]"
+                      href="/marketplace/submit"
+                      onClick={() => setOpen(false)}
+                    >
+                      Submit recipe
+                    </Link>
+                    <Link
+                      className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]"
+                      href="/marketplace/submissions"
+                      onClick={() => setOpen(false)}
+                    >
+                      My recipes
+                    </Link>
+                    <button
+                      className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
+                      onClick={() => {
+                        setOpen(false);
+                        signOut({ callbackUrl: "/" });
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    className="rounded-lg px-3 py-2 font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
+                    href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+                    onClick={() => setOpen(false)}
                   >
-                    Logout
-                  </button>
-                ) : null}
+                    Login
+                  </Link>
+                )}
 
                 <a
                   className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95"
