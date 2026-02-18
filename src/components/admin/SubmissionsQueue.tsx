@@ -172,14 +172,14 @@ export function SubmissionsQueue() {
             {submissions.map((s) => (
               <tr key={s.id} className="border-b border-slate-100 align-top">
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{fmt(s.createdAt)}</td>
-                <td className="py-3 pr-4 min-w-[240px]">
+                <td className="py-3 pr-4 min-w-[360px]">
                   <div className="font-semibold text-[var(--text)]">{s.title}</div>
                   <div className="mt-1 text-[var(--muted)] line-clamp-2">{s.description}</div>
                   {s.tagsCsv ? <div className="mt-1 text-xs text-[var(--muted)]">tags: {s.tagsCsv}</div> : null}
                 </td>
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{s.authorDisplayName}</td>
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{s.contactEmail}</td>
-                <td className="py-3 pr-4 min-w-[520px] text-[var(--muted)]">
+                <td className="py-3 pr-4 min-w-[420px] text-[var(--muted)]">
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-2">
@@ -222,7 +222,7 @@ export function SubmissionsQueue() {
                     </div>
 
                     <input
-                      className="rounded-lg border border-slate-200 px-3 py-2"
+                      className="w-full max-w-[360px] rounded-lg border border-slate-200 px-3 py-2"
                       placeholder="Moderation reason (optional)"
                       value={draftReason[s.id] ?? ""}
                       onChange={(e) => setDraftReason((p) => ({ ...p, [s.id]: e.target.value }))}
