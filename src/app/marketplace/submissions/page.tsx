@@ -48,7 +48,17 @@ export default async function MarketplaceSubmissionsPage() {
           {submissions.map((s) => (
             <div key={s.id} className="rounded-xl border border-slate-200 p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="font-semibold text-[var(--text)]">{s.title}</div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="font-semibold text-[var(--text)]">{s.title}</div>
+                  {s.status === "draft" || s.status === "submitted" || s.status === "needs_changes" ? (
+                    <Link
+                      className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-semibold text-[var(--text)] hover:bg-slate-50"
+                      href={`/marketplace/submit?edit=${encodeURIComponent(s.id)}`}
+                    >
+                      Edit
+                    </Link>
+                  ) : null}
+                </div>
                 <div className="text-sm text-[var(--muted)]">
                   {new Date(s.createdAt).toISOString().replace("T", " ").slice(0, 16)}
                 </div>
@@ -64,11 +74,6 @@ export default async function MarketplaceSubmissionsPage() {
               </div>
               <div className="mt-3 text-[var(--muted)]">{s.description}</div>
               <div className="mt-3 flex flex-wrap gap-3 text-sm">
-                {s.status === "draft" || s.status === "submitted" || s.status === "needs_changes" ? (
-                  <Link className="text-[color:var(--coral-bright)] underline" href={`/marketplace/submit?edit=${encodeURIComponent(s.id)}`}>
-                    Edit
-                  </Link>
-                ) : null}
                 {s.sourceUrl ? (
                   <a className="text-[color:var(--coral-bright)] underline break-all" href={s.sourceUrl} target="_blank" rel="noreferrer">
                     Source URL
