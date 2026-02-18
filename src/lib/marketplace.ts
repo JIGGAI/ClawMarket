@@ -1,15 +1,35 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+export type MarketplaceRecipeOrigin = "bundled" | "ugc";
+
 export type MarketplaceRecipe = {
   slug: string;
   kind: "team" | "agent";
+  origin: MarketplaceRecipeOrigin;
+
   name: string;
   description: string;
   version: string;
   tags: string[];
+
+  // Source (always something renderable/fetchable)
   sourceUrl: string;
+
+  // Bundled-only conveniences
   homepageUrl?: string;
+
+  // UGC-only / audit-ish fields (optional so registry-backed recipes stay minimal)
+  submissionId?: string;
+  authorDisplayName?: string;
+  contactEmail?: string;
+  license?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+
+  // Additional UGC pointers (display-only; do not assume present)
+  ugcSourceUrl?: string | null;
+  zipUrl?: string | null;
 };
 
 export type MarketplaceRegistry = {
@@ -27,7 +47,14 @@ export async function loadRegistry(): Promise<MarketplaceRegistry> {
   if (!data || typeof data !== "object" || !Array.isArray(obj.recipes)) {
     throw new Error("Invalid marketplace registry.json");
   }
-  return data;
+
+  // Back-compat: older registry entries won’t include `origin`.
+  const recipes = (data.recipes ?? []).map((r) => ({
+    ...r,
+    origin: (r as { origin?: MarketplaceRecipeOrigin }).origin ?? "bundled",
+  }));
+
+  return { ...data, recipes };
 }
 
 export function search(recipes: MarketplaceRecipe[], q: string | null) {

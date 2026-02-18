@@ -18,21 +18,39 @@ function submissionToRecipe(sub: {
   sourceUrl: string | null;
   zipUrl: string | null;
   bodyMd: string | null;
+  authorDisplayName: string;
+  contactEmail: string;
+  license: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }): MarketplaceRecipe | null {
   const slug = sub.slug ?? sub.id;
 
   // Prefer explicit sourceUrl; otherwise, if bodyMd exists, expose it via same-origin API.
-  const sourceUrl = sub.sourceUrl ?? (sub.bodyMd != null ? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body` : null);
-  if (!sourceUrl) return null;
+  const renderableSourceUrl =
+    sub.sourceUrl ??
+    (sub.bodyMd != null ? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body` : null);
+  if (!renderableSourceUrl) return null;
 
   return {
     slug,
     kind: "agent",
+    origin: "ugc",
     name: sub.title,
     description: sub.description,
     version: "ugc",
     tags: tagsFromCsv(sub.tagsCsv),
-    sourceUrl,
+    sourceUrl: renderableSourceUrl,
+
+    submissionId: sub.id,
+    authorDisplayName: sub.authorDisplayName,
+    contactEmail: sub.contactEmail,
+    license: sub.license,
+    createdAt: sub.createdAt.toISOString(),
+    updatedAt: sub.updatedAt.toISOString(),
+
+    ugcSourceUrl: sub.sourceUrl,
+    zipUrl: sub.zipUrl,
   };
 }
 
@@ -56,6 +74,11 @@ export async function GET(req: Request) {
         sourceUrl: true,
         zipUrl: true,
         bodyMd: true,
+        authorDisplayName: true,
+        contactEmail: true,
+        license: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 

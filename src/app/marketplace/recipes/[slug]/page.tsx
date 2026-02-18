@@ -1,6 +1,9 @@
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
 import type { MarketplaceRecipe } from "@/lib/marketplace";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -63,6 +66,35 @@ function installCommand(r: MarketplaceRecipe) {
   return r.kind === "team"
     ? `openclaw recipes scaffold-team ${r.slug} -t my-${r.slug} --apply-config`
     : `openclaw recipes scaffold ${r.slug} --agent-id my-${r.slug.replace(/-/g, "")} --apply-config`;
+}
+
+function formatIsoDate(iso: string | undefined) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toISOString().replace("T", " ").replace(/\.\d{3}Z$/, "Z");
+}
+
+async function fetchModerationForRecipe(recipe: MarketplaceRecipe) {
+  if (recipe.origin !== "ugc") return null;
+  const id = recipe.submissionId;
+  if (!id) return null;
+
+  return prisma.submission.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      slug: true,
+      status: true,
+      moderatedAt: true,
+      moderatedByUserId: true,
+      moderationReason: true,
+      publishedAt: true,
+      publishedByUserId: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
 }
 
 async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
@@ -141,8 +173,13 @@ export default async function MarketplaceRecipeDetailPage({
     throw e;
   }
 
+  const session = await getServerSession(authOptions);
+  const role = session?.role ?? "user";
+  const canModerate = role === "moderator" || role === "admin";
+
   const cmd = installCommand(recipe);
   const markdown = await fetchMarkdown(recipe.sourceUrl);
+  const moderation = canModerate ? await fetchModerationForRecipe(recipe) : null;
 
   return (
     <main className="w-full">
@@ -268,21 +305,88 @@ export default async function MarketplaceRecipeDetailPage({
                     <dd className="text-[var(--text)]">{recipe.kind}</dd>
                   </div>
                   <div className="flex items-center justify-between gap-4">
+                    <dt className="text-[var(--muted)]">Origin</dt>
+                    <dd className="text-[var(--text)]">{recipe.origin}</dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4">
                     <dt className="text-[var(--muted)]">Version</dt>
                     <dd className="text-[var(--text)]">{recipe.version}</dd>
                   </div>
+
+                  {recipe.authorDisplayName ? (
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Author</dt>
+                      <dd className="text-[var(--text)]">{recipe.authorDisplayName}</dd>
+                    </div>
+                  ) : null}
+
+                  {formatIsoDate(recipe.updatedAt) ? (
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Updated</dt>
+                      <dd className="font-mono text-[var(--text)]">{formatIsoDate(recipe.updatedAt)}</dd>
+                    </div>
+                  ) : null}
+
                   <div className="flex items-center justify-between gap-4">
                     <dt className="text-[var(--muted)]">Source</dt>
-                    <dd className="text-[var(--text)]">GitHub</dd>
+                    <dd className="text-[var(--text)]">{recipe.origin === "ugc" ? "Submission" : "GitHub"}</dd>
                   </div>
                 </dl>
               </div>
 
               <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
                 <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
-                <p className="mt-2 text-sm text-[var(--muted)]">
-                  Admin-only moderation/publish state will appear here once UGC submissions land.
-                </p>
+
+                {!canModerate ? (
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    Moderation details are visible to moderators/admins.
+                  </p>
+                ) : recipe.origin !== "ugc" ? (
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    This is a bundled recipe (no submission moderation state).
+                  </p>
+                ) : !moderation ? (
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    No moderation record found for this submission.
+                  </p>
+                ) : (
+                  <dl className="mt-4 space-y-3 text-sm">
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Status</dt>
+                      <dd className="font-mono text-[var(--text)]">{moderation.status}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Moderated</dt>
+                      <dd className="font-mono text-[var(--text)]">
+                        {moderation.moderatedAt ? moderation.moderatedAt.toISOString() : "—"}
+                      </dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Moderated by</dt>
+                      <dd className="font-mono text-[var(--text)]">
+                        {moderation.moderatedByUserId ?? "—"}
+                      </dd>
+                    </div>
+                    {moderation.moderationReason ? (
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Reason</dt>
+                        <dd className="text-[var(--text)]">{moderation.moderationReason}</dd>
+                      </div>
+                    ) : null}
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Published</dt>
+                      <dd className="font-mono text-[var(--text)]">
+                        {moderation.publishedAt ? moderation.publishedAt.toISOString() : "—"}
+                      </dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Published by</dt>
+                      <dd className="font-mono text-[var(--text)]">
+                        {moderation.publishedByUserId ?? "—"}
+                      </dd>
+                    </div>
+                  </dl>
+                )}
               </div>
             </aside>
           </div>
