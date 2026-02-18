@@ -184,7 +184,7 @@ export default async function MarketplaceRecipeDetailPage({
   return (
     <main className="w-full">
       <FadeIn>
-        <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
+        <section className="px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-wrap items-center justify-between gap-6">
               <div className="min-w-0">
