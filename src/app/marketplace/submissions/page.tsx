@@ -33,6 +33,11 @@ export default async function MarketplaceSubmissionsPage() {
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace">
               Marketplace
             </Link>
+            {(session as unknown as { role?: string })?.role === "admin" || (session as unknown as { role?: string })?.role === "moderator" ? (
+              <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/admin/submissions">
+                Admin
+              </Link>
+            ) : null}
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/user">
               User
             </Link>
