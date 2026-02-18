@@ -21,6 +21,29 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   return NextResponse.json({ ok: true, submission: row });
 }
 
+export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  // Allow owner (verified) to delete regardless of status.
+  // Allow moderator/admin to delete any submission.
+  const owner = await requireVerified();
+  const mod = await requireRole("moderator");
+
+  const canModerate = mod.ok;
+  const r = owner.ok ? owner : mod;
+  if (!r.ok) return r.res;
+
+  const userId = r.session.userId;
+  const { id } = await ctx.params;
+
+  const existing = await prisma.submission.findFirst({
+    where: canModerate ? { id } : { id, createdBy: userId },
+    select: { id: true },
+  });
+  if (!existing) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
+
+  await prisma.submission.delete({ where: { id } });
+  return NextResponse.json({ ok: true });
+}
+
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   // Allow the submission owner (verified) to edit drafts/needs_changes.
   // Allow moderator/admin to edit any non-published submission.
