@@ -93,8 +93,49 @@ async function fetchModerationForRecipe(recipe: MarketplaceRecipe) {
       publishedByUserId: true,
       createdAt: true,
       updatedAt: true,
+      bodyMd: true,
+      sourceUrl: true,
     },
   });
+}
+
+function submissionToRecipe(sub: {
+  id: string;
+  slug: string | null;
+  title: string;
+  description: string;
+  tagsCsv: string;
+  sourceUrl: string | null;
+  bodyMd: string | null;
+  authorDisplayName: string;
+  contactEmail: string;
+  license: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}): MarketplaceRecipe {
+  const slug = sub.slug ?? sub.id;
+  const renderableSourceUrl = sub.sourceUrl ?? `/api/marketplace/recipes/${encodeURIComponent(slug)}/body`;
+
+  return {
+    slug,
+    kind: "agent",
+    origin: "ugc",
+    name: sub.title,
+    description: sub.description,
+    version: "ugc",
+    tags: String(sub.tagsCsv ?? "")
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean),
+    sourceUrl: renderableSourceUrl,
+    submissionId: sub.id,
+    authorDisplayName: sub.authorDisplayName,
+    contactEmail: sub.contactEmail,
+    license: sub.license,
+    createdAt: sub.createdAt.toISOString(),
+    updatedAt: sub.updatedAt.toISOString(),
+    ugcSourceUrl: sub.sourceUrl,
+  };
 }
 
 async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
@@ -135,51 +176,79 @@ export default async function MarketplaceRecipeDetailPage({
 }) {
   const { slug } = await params;
 
+  const session = await getServerSession(authOptions);
+  const role = session?.role ?? "user";
+  const canModerate = role === "moderator" || role === "admin";
+
   let recipe: MarketplaceRecipe;
   try {
     recipe = await fetchRecipe(slug);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    if (msg === "NOT_FOUND") {
-      return (
-        <main className="w-full">
-          <FadeIn>
-            <section className="px-6 py-20 lg:px-16">
-              <div className="mx-auto max-w-3xl">
-                <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
-                  Marketplace
-                </p>
-                <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-                  Recipe not found
-                </h1>
-                <p className="mt-6 text-lg text-[var(--muted)]">
-                  We couldn’t find a recipe with slug <span className="font-mono">{slug}</span>.
-                </p>
-                <div className="mt-8">
-                  <a
-                    href="/marketplace"
-                    className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
-                  >
-                    Back to Marketplace
-                  </a>
-                </div>
-              </div>
-            </section>
-          </FadeIn>
-        </main>
-      );
+    if (msg === "NOT_FOUND" && canModerate) {
+      // Admin/moderator view: allow loading an unpublished submission directly.
+      const sub = await prisma.submission.findFirst({
+        where: { OR: [{ slug }, { id: slug }] },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          description: true,
+          tagsCsv: true,
+          sourceUrl: true,
+          bodyMd: true,
+          authorDisplayName: true,
+          contactEmail: true,
+          license: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      if (sub) {
+        recipe = submissionToRecipe(sub);
+      } else {
+        // fall through to not-found UI
+        recipe = null as unknown as MarketplaceRecipe;
+      }
+    } else if (msg === "NOT_FOUND") {
+      recipe = null as unknown as MarketplaceRecipe;
+    } else {
+      throw e;
     }
-
-    throw e;
   }
 
-  const session = await getServerSession(authOptions);
-  const role = session?.role ?? "user";
-  const canModerate = role === "moderator" || role === "admin";
+  if (!recipe) {
+    return (
+      <main className="w-full">
+        <FadeIn>
+          <section className="px-6 py-20 lg:px-16">
+            <div className="mx-auto max-w-3xl">
+              <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Marketplace</p>
+              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Recipe not found</h1>
+              <p className="mt-6 text-lg text-[var(--muted)]">
+                We couldn’t find a recipe with slug <span className="font-mono">{slug}</span>.
+              </p>
+              <div className="mt-8">
+                <a
+                  href="/marketplace"
+                  className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+                >
+                  Back to Marketplace
+                </a>
+              </div>
+            </div>
+          </section>
+        </FadeIn>
+      </main>
+    );
+  }
 
   const cmd = installCommand(recipe);
-  const markdown = await fetchMarkdown(recipe.sourceUrl);
   const moderation = canModerate ? await fetchModerationForRecipe(recipe) : null;
+
+  // For unpublished UGC, recipe.sourceUrl may point at a route that requires moderator cookies;
+  // fall back to DB body when present.
+  const markdown = (moderation?.bodyMd ?? null) || (await fetchMarkdown(recipe.sourceUrl));
 
   return (
     <main className="w-full">
