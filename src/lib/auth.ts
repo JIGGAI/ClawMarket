@@ -56,9 +56,25 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user }) => {
       // Stable identity and role for server-side enforcement.
+      // Also: "role seeding" via ADMIN_EMAILS should take effect without requiring
+      // a forced sign-out/sign-in cycle (helps unblock admin testing in prod/dev).
       const s = session as Session & { userId?: string; role?: "user" | "moderator" | "admin" };
       s.userId = user.id;
-      s.role = (user as unknown as { role?: "user" | "moderator" | "admin" }).role;
+
+      const u = user as unknown as { role?: "user" | "moderator" | "admin"; email?: string | null };
+      const admins = parseAdminEmails();
+      const email = String(u.email ?? "").toLowerCase();
+
+      if (email && admins.includes(email) && u.role !== "admin") {
+        try {
+          await prisma.user.update({ where: { id: user.id }, data: { role: "admin" } });
+          s.role = "admin";
+        } catch {
+          // best-effort; fall back to existing role below
+        }
+      }
+
+      s.role = s.role ?? u.role;
       return s;
     },
   },
