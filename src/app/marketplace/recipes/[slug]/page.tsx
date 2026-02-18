@@ -417,8 +417,8 @@ export default async function MarketplaceRecipeDetailPage({
               <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
                 <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
                 <p className="mt-2 text-sm text-[var(--muted)]">
-                  Prefer the one-line scaffold command on this page. If you want to install manually, you can download
-                  the recipe Markdown and place it into your OpenClaw workspace.
+                  To install community recipes manually, download the recipe Markdown and place it into your OpenClaw
+                  workspace.
                 </p>
 
                 <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
