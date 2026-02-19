@@ -314,7 +314,7 @@ export default async function MarketplaceRecipeDetailPage({
       <FadeIn>
         <section className="px-6 py-12 lg:px-16">
           <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-3">
-            <div className="lg:col-span-2">
+            <div className="min-w-0 lg:col-span-2">
               <h2 className="text-2xl font-bold text-[var(--text)]">Install / Scaffold</h2>
               <p className="mt-2 text-[var(--muted)]">
                 Copy-paste the command below in a terminal where OpenClaw is installed.
@@ -375,7 +375,7 @@ export default async function MarketplaceRecipeDetailPage({
               </div>
             </div>
 
-            <aside className="lg:col-span-1">
+            <aside className="min-w-0 lg:col-span-1">
               <div className="rounded-2xl border border-[var(--border)] bg-white/70 p-6">
                 <h3 className="text-lg font-bold text-[var(--text)]">By the numbers</h3>
 
