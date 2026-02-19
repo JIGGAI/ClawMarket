@@ -232,7 +232,7 @@ export default async function MarketplaceRecipeDetailPage({
 
   if (!recipe) {
     return (
-      <main className="w-full overflow-x-hidden">
+      <main className="w-full">
         <FadeIn>
           <section className="px-6 py-20 lg:px-16">
             <div className="mx-auto max-w-3xl">
@@ -264,7 +264,7 @@ export default async function MarketplaceRecipeDetailPage({
   const markdown = (moderation?.bodyMd ?? null) || (await fetchMarkdown(recipe.sourceUrl));
 
   return (
-    <main className="w-full overflow-x-hidden">
+    <main className="w-full">
       <FadeIn>
         <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
@@ -358,9 +358,9 @@ export default async function MarketplaceRecipeDetailPage({
                 {markdown ? <CopyLineButton text={markdown} /> : null}
               </div>
 
-              <div className="mt-5 overflow-hidden rounded-2xl border border-[var(--border)] bg-white/70">
+              <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white/70">
                 {markdown ? (
-                  <div className="max-h-[70vh] overflow-auto px-6 py-5">
+                  <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
                     <div className="markdown text-[var(--text)]">
                       <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                         {markdown}
@@ -431,7 +431,7 @@ export default async function MarketplaceRecipeDetailPage({
                   <li>Move it into your workspace recipes folder:</li>
                 </ol>
 
-                <pre className="mt-3 overflow-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200">
+                <pre className="mt-3 max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]">
                   <code>{`mkdir -p ~/.openclaw/workspace/recipes
 # then move/copy the file into that folder
 # e.g. mv ~/Downloads/${recipe.slug}.md ~/.openclaw/workspace/recipes/`}</code>
