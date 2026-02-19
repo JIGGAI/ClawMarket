@@ -23,7 +23,7 @@ export default async function AdminSubmissionsPage() {
             <h1 className="text-3xl font-bold text-[var(--text)]">Submissions queue</h1>
             <p className="mt-2 text-[var(--muted)]">Review and moderate recipe submissions.</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-wrap items-center justify-start gap-3 sm:w-auto sm:justify-end">
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/admin">
               Admin
             </Link>
