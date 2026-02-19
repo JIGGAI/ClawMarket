@@ -31,7 +31,7 @@ const markdownComponents: Components = {
   ),
   pre: ({ children, ...props }) => (
     <pre
-      className="codeblock mt-4 max-w-full overflow-x-auto overflow-y-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200"
+      className="codeblock mt-4 max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]"
       {...props}
     >
       <div className="mb-2 flex items-center gap-2">
@@ -320,12 +320,14 @@ export default async function MarketplaceRecipeDetailPage({
                 Copy-paste the command below in a terminal where OpenClaw is installed.
               </p>
 
-              <div className="mt-5 max-w-full overflow-x-auto rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="min-w-0 overflow-x-auto">
+              <div className="mt-5 max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                     <span className="text-emerald-400">$</span> {cmd}
                   </div>
-                  <CopyLineButton text={cmd} />
+                  <div className="self-end sm:self-auto">
+                    <CopyLineButton text={cmd} />
+                  </div>
                 </div>
               </div>
 
