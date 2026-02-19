@@ -34,12 +34,12 @@ export default async function MarketplaceSubmissionsPage() {
   return (
     <main className="px-6 py-16 lg:px-16">
       <div className="mx-auto max-w-4xl rounded-2xl bg-white p-8 shadow">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Your submissions</h1>
             <p className="mt-2 text-[var(--muted)]">Submissions you’ve created from this account.</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-wrap items-center justify-start gap-3 sm:w-auto sm:justify-end">
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace">
               Marketplace
             </Link>
