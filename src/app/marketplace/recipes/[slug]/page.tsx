@@ -45,8 +45,10 @@ const markdownComponents: Components = {
   code: ({ className, children, ...props }) => {
     const isBlock = (className ?? "").includes("language-");
     if (isBlock) {
+      // Mobile: wrap long lines so code blocks don't force horizontal overflow.
+      // Desktop: keep classic preformatted behavior.
       return (
-        <code className="block whitespace-pre" {...props}>
+        <code className="block whitespace-pre-wrap break-words sm:whitespace-pre" {...props}>
           {children}
         </code>
       );
@@ -318,7 +320,7 @@ export default async function MarketplaceRecipeDetailPage({
                 Copy-paste the command below in a terminal where OpenClaw is installed.
               </p>
 
-              <div className="mt-5 max-w-full overflow-hidden rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+              <div className="mt-5 max-w-full overflow-x-auto rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="min-w-0 overflow-x-auto">
                     <span className="text-emerald-400">$</span> {cmd}
