@@ -266,8 +266,8 @@ export default async function MarketplaceRecipeDetailPage({
       <FadeIn>
         <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
-            <div className="flex items-start justify-between gap-6">
-              <div className="min-w-0 flex-1 pr-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+              <div className="min-w-0 flex-1 sm:pr-4">
                 <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
                   Marketplace
                 </p>
@@ -296,7 +296,7 @@ export default async function MarketplaceRecipeDetailPage({
                 </div>
               </div>
 
-              <div className="flex-none self-start">
+              <div className="order-first flex-none self-end sm:order-last sm:self-start">
                 <BackButton
                   fallbackHref="/marketplace"
                   className="inline-block whitespace-nowrap rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
