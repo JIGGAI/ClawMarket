@@ -1,66 +1,224 @@
 {
-  "version": 1,
-  "generatedAt": "2026-02-12T23:35:00Z",
+  "version": 2,
+  "generatedAt": "2026-02-19T00:03:20Z",
   "recipes": [
     {
-      "slug": "development-team",
+      "slug": "business-team",
       "kind": "team",
-      "name": "Development Team",
-      "description": "Lead + dev + devops + test. File-first lanes and optional cron loops.",
+      "origin": "bundled",
+      "name": "Business Team",
+      "description": "A small generalist business team (ops, sales, marketing, finance, analyst) that runs execution through a shared workspace.",
       "version": "0.1.0",
-      "tags": ["team", "engineering", "qa", "file-first"],
-      "sourceUrl": "https://raw.githubusercontent.com/rjdjohnston/clawcipes/main/recipes/default/development-team.md",
-      "homepageUrl": "https://github.com/rjdjohnston/clawcipes"
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/business-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
     },
     {
-      "slug": "product-team",
+      "slug": "clinic-team",
       "kind": "team",
-      "name": "Product Team",
-      "description": "PM/Design/Engineering/QA delivery loop with a shared workspace.",
+      "origin": "bundled",
+      "name": "Clinic Team",
+      "description": "A small clinic operations team (intake, scheduling, billing, compliance, patient education) coordinated via a shared workspace.",
       "version": "0.1.0",
-      "tags": ["team", "product"],
-      "sourceUrl": "https://raw.githubusercontent.com/rjdjohnston/clawcipes/main/recipes/default/product-team.md",
-      "homepageUrl": "https://github.com/rjdjohnston/clawcipes"
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/clinic-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
     },
     {
-      "slug": "research-team",
+      "slug": "construction-team",
       "kind": "team",
-      "name": "Research Team",
-      "description": "Citations-first research pipeline: sources → notes → briefs.",
+      "origin": "bundled",
+      "name": "Construction Team",
+      "description": "A construction project delivery team (PM, estimator, scheduler, safety, procurement, field) coordinated via a shared workspace.",
       "version": "0.1.0",
-      "tags": ["team", "research"],
-      "sourceUrl": "https://raw.githubusercontent.com/rjdjohnston/clawcipes/main/recipes/default/research-team.md",
-      "homepageUrl": "https://github.com/rjdjohnston/clawcipes"
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/construction-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
     },
     {
-      "slug": "writing-team",
+      "slug": "crypto-trader-team",
       "kind": "team",
-      "name": "Writing Team",
-      "description": "Briefs → outlines → drafts → review/edit (testing) → done.",
+      "origin": "bundled",
+      "name": "Crypto Trader Team",
+      "description": "A crypto trading support team (onchain research, news, risk, execution ops, journaling) coordinated via a shared workspace.",
       "version": "0.1.0",
-      "tags": ["team", "writing"],
-      "sourceUrl": "https://raw.githubusercontent.com/rjdjohnston/clawcipes/main/recipes/default/writing-team.md",
-      "homepageUrl": "https://github.com/rjdjohnston/clawcipes"
-    },
-    {
-      "slug": "social-team",
-      "kind": "team",
-      "name": "Social Team",
-      "description": "Draft → approval/review (testing) → schedule/publish.",
-      "version": "0.1.0",
-      "tags": ["team", "social"],
-      "sourceUrl": "https://raw.githubusercontent.com/rjdjohnston/clawcipes/main/recipes/default/social-team.md",
-      "homepageUrl": "https://github.com/rjdjohnston/clawcipes"
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/crypto-trader-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
     },
     {
       "slug": "customer-support-team",
       "kind": "team",
+      "origin": "bundled",
       "name": "Customer Support Team",
-      "description": "Triage → resolve → verification (testing) → done/outbox.",
+      "description": "A support workflow team (triage, resolver, kb-writer) that turns cases into replies and knowledge base articles.",
       "version": "0.1.0",
-      "tags": ["team", "support"],
-      "sourceUrl": "https://raw.githubusercontent.com/rjdjohnston/clawcipes/main/recipes/default/customer-support-team.md",
-      "homepageUrl": "https://github.com/rjdjohnston/clawcipes"
+      "tags": [
+        "team",
+        "support"
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/customer-support-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "developer",
+      "kind": "agent",
+      "origin": "bundled",
+      "name": "Developer",
+      "description": "An individual software developer agent for implementing tickets with runtime tooling.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/developer.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "development-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Development Team",
+      "description": "A small engineering team with a shared workspace (lead, dev, devops, test) using file-first tickets.",
+      "version": "0.2.0",
+      "tags": [
+        "team",
+        "engineering",
+        "qa",
+        "file-first"
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/development-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "editor",
+      "kind": "agent",
+      "origin": "bundled",
+      "name": "Editor",
+      "description": "An individual editor agent that polishes drafts and enforces a style/quality bar.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/editor.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "financial-planner-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Financial Planner Team",
+      "description": "A financial planning practice team (advisor, analyst, tax, insurance, ops) coordinated via a shared workspace.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/financial-planner-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "law-firm-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Law Firm Team",
+      "description": "A legal practice team (intake, research, drafting, compliance, ops) coordinated via a shared workspace.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/law-firm-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "marketing-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Marketing Team",
+      "description": "A marketing execution team (SEO, copy, ads, social, design, analytics) coordinated via a shared workspace.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/marketing-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "product-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Product Team",
+      "description": "A product delivery team (pm, designer, engineer, qa) that turns ideas into shipped features.",
+      "version": "0.1.0",
+      "tags": [
+        "team",
+        "product"
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/product-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "project-manager",
+      "kind": "agent",
+      "origin": "bundled",
+      "name": "Project Manager",
+      "description": "A project manager agent that keeps the backlog tidy and runs cadences.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/project-manager.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "research-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Research Team",
+      "description": "A research team (lead, researcher, fact-checker, summarizer) that produces sourced briefs and notes.",
+      "version": "0.1.0",
+      "tags": [
+        "team",
+        "research"
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/research-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "researcher",
+      "kind": "agent",
+      "origin": "bundled",
+      "name": "Researcher",
+      "description": "An individual researcher agent that produces sourced notes and briefs.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/researcher.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "social-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Social Team",
+      "description": "A platform-specialist social team with a shared workspace (lead + platform roles + ops roles).",
+      "version": "0.1.0",
+      "tags": [
+        "team",
+        "social"
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/social-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "stock-trader-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Stock Trader Team",
+      "description": "A trading support team (research, signals, risk, journaling, ops) coordinated via a shared workspace.",
+      "version": "0.1.0",
+      "tags": [],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/stock-trader-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
+    },
+    {
+      "slug": "writing-team",
+      "kind": "team",
+      "origin": "bundled",
+      "name": "Writing Team",
+      "description": "A writing pipeline (lead, outliner, writer, editor) that produces drafts and polished deliverables.",
+      "version": "0.1.0",
+      "tags": [
+        "team",
+        "writing"
+      ],
+      "sourceUrl": "https://raw.githubusercontent.com/JIGGAI/ClawRecipes/main/recipes/default/writing-team.md",
+      "homepageUrl": "https://github.com/JIGGAI/ClawRecipes"
     }
   ]
 }
