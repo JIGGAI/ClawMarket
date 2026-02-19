@@ -361,11 +361,9 @@ export default async function MarketplaceRecipeDetailPage({
               <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white/70">
                 {markdown ? (
                   <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
-                    <div className="markdown text-[var(--text)]">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                        {markdown}
-                      </ReactMarkdown>
-                    </div>
+                    <pre className="max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-white/0 font-mono text-sm text-[var(--text)] [-webkit-overflow-scrolling:touch]">
+                      <code>{markdown}</code>
+                    </pre>
                   </div>
                 ) : (
                   <div className="px-6 py-5 text-[var(--muted)]">
