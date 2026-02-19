@@ -31,7 +31,7 @@ const markdownComponents: Components = {
   ),
   pre: ({ children, ...props }) => (
     <pre
-      className="codeblock mt-4 overflow-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200"
+      className="codeblock mt-4 max-w-full overflow-x-auto overflow-y-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200"
       {...props}
     >
       <div className="mb-2 flex items-center gap-2">
@@ -230,7 +230,7 @@ export default async function MarketplaceRecipeDetailPage({
 
   if (!recipe) {
     return (
-      <main className="w-full">
+      <main className="w-full overflow-x-hidden">
         <FadeIn>
           <section className="px-6 py-20 lg:px-16">
             <div className="mx-auto max-w-3xl">
@@ -262,7 +262,7 @@ export default async function MarketplaceRecipeDetailPage({
   const markdown = (moderation?.bodyMd ?? null) || (await fetchMarkdown(recipe.sourceUrl));
 
   return (
-    <main className="w-full">
+    <main className="w-full overflow-x-hidden">
       <FadeIn>
         <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
@@ -318,7 +318,7 @@ export default async function MarketplaceRecipeDetailPage({
                 Copy-paste the command below in a terminal where OpenClaw is installed.
               </p>
 
-              <div className="mt-5 rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+              <div className="mt-5 max-w-full overflow-hidden rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="min-w-0 overflow-x-auto">
                     <span className="text-emerald-400">$</span> {cmd}
