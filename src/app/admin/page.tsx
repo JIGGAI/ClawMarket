@@ -33,6 +33,9 @@ export default async function AdminPage() {
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/admin/submissions">
               Submissions queue
             </Link>
+            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/admin/users">
+              Users
+            </Link>
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/user">
               User
             </Link>
