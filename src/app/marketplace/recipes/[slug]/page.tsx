@@ -291,7 +291,7 @@ export default async function MarketplaceRecipeDetailPage({
                   href={recipe.sourceUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                  className="inline-block rounded-lg border border-[var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                 >
                   View raw
                 </a>
@@ -300,15 +300,15 @@ export default async function MarketplaceRecipeDetailPage({
                     href={recipe.homepageUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                    className="inline-block rounded-lg border border-[var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                   >
                     Project
                   </a>
                 ) : null}
-                {markdown ? <CopyLineButton text={markdown} /> : null}
+                {markdown ? <CopyLineButton text={markdown} size="default" /> : null}
               </div>
 
-              <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white/70">
+              <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
                 {markdown ? (
                   <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
                     <pre className="max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-white/0 font-mono text-sm text-[var(--text)] [-webkit-overflow-scrolling:touch]">
