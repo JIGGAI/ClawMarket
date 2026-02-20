@@ -33,9 +33,7 @@ export default async function AdminSubmissionsPage() {
             <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/marketplace">
               Marketplace
             </Link>
-            <Link className="rounded-lg border border-slate-200 px-4 py-2 font-semibold hover:bg-slate-50" href="/user">
-              User
-            </Link>
+            {/* User link removed */}
           </div>
         </div>
 
