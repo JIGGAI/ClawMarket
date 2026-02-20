@@ -60,6 +60,8 @@ export function Nav() {
     return pathname;
   }, [pathname]);
 
+  const hideUserButton = Boolean(pathname && pathname.startsWith("/admin"));
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-16">
@@ -89,7 +91,7 @@ export function Nav() {
               <DiscordIcon className="h-5 w-5" />
             </a>
 
-            {session ? (
+            {session && !hideUserButton ? (
               <div className="relative ml-1" role="navigation" aria-label="User menu">
                 <div className="group relative">
                   <button type="button" className="h-9 w-9 overflow-hidden rounded-full bg-slate-200" aria-haspopup="menu" aria-label="Open user menu" title={session.user?.email ?? "Account"}>
@@ -102,10 +104,15 @@ export function Nav() {
                   </button>
 
                   <div className="invisible absolute right-0 top-full z-50 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-lg opacity-0 transition group-hover:visible group-hover:opacity-100" role="menu">
-                    <button type="button" className="w-full px-4 py-2 text-left text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" onClick={() => (window.location.href = "/user")}>
+                    <div className="px-4 py-2 text-left text-sm text-[var(--text)]">
                       <div className="truncate font-semibold">{session.user?.name ?? session.user?.email ?? "Account"}</div>
                       <div className="truncate text-xs text-[var(--muted)]">{session.user?.email ?? ""}</div>
-                    </button>
+                    </div>
+                    {!hideUserButton ? (
+                      <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/user">
+                        User
+                      </Link>
+                    ) : null}
                     <div className="my-2 h-px w-full bg-slate-100" />
                     <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/marketplace/submit">
                       Submit recipe
@@ -163,9 +170,11 @@ export function Nav() {
 
                 {session ? (
                   <>
-                    <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/user" onClick={() => setOpen(false)}>
-                      {session.user?.email ?? "Account"}
-                    </Link>
+                    {!hideUserButton ? (
+                      <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/user" onClick={() => setOpen(false)}>
+                        {session.user?.email ?? "Account"}
+                      </Link>
+                    ) : null}
                     <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace/submit" onClick={() => setOpen(false)}>
                       Submit recipe
                     </Link>
