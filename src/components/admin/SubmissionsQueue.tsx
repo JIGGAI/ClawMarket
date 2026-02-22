@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type SubmissionStatus =
   | "submitted"
@@ -73,7 +73,7 @@ export function SubmissionsQueue() {
     }
   }
 
-  async function refresh() {
+  const refresh = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -86,7 +86,7 @@ export function SubmissionsQueue() {
         }
         if (res.status === 403) {
           throw new Error(
-            `${base}. Your account is not a moderator/admin. To seed an admin in prod/dev, set ADMIN_EMAILS to include your login email, then sign out/in (or re-auth) so your User.role updates.`
+            `${base}. Your account is not a moderator/admin. To seed an admin in prod/dev, set ADMIN_EMAILS to include your login email, then sign out/in (or re-auth) so your User.role updates.`,
           );
         }
         throw new Error(base);
@@ -109,11 +109,11 @@ export function SubmissionsQueue() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void refresh();
-  }, []);
+  }, [refresh]);
 
   async function applyAction(id: string, forceStatus?: SubmissionStatus) {
     const status = forceStatus ?? draftStatus[id] ?? byId.get(id)?.status;
