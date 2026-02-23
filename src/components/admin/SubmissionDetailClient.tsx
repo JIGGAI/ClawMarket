@@ -47,12 +47,20 @@ export function SubmissionDetailClient({ submission }: { submission: Submission 
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
+  const requiresReason = status === "needs_changes" || status === "rejected";
+
   const viewSlug = useMemo(() => submission.slug || submission.id, [submission.id, submission.slug]);
   const viewHref = `/marketplace/recipes/${encodeURIComponent(viewSlug)}`;
   const editHref = `/marketplace/submit?edit=${encodeURIComponent(submission.id)}`;
 
   async function save(nextStatus?: SubmissionStatus) {
     const s = nextStatus ?? status;
+
+    if ((s === "needs_changes" || s === "rejected") && !reason.trim()) {
+      setError("Please include a moderation reason for needs_changes / rejected.");
+      return;
+    }
+
     setSaving(true);
     setError(null);
     setNotice(null);
@@ -155,8 +163,9 @@ export function SubmissionDetailClient({ submission }: { submission: Submission 
                 value={status}
                 onChange={(e) => setStatus(e.target.value as SubmissionStatus)}
               >
-                <option value="draft">draft</option>
-                <option value="submitted">submitted</option>
+                <option value="submitted" disabled>
+                  submitted (not settable)
+                </option>
                 <option value="approved">approved</option>
                 <option value="needs_changes">needs_changes</option>
                 <option value="rejected">rejected</option>
@@ -166,7 +175,7 @@ export function SubmissionDetailClient({ submission }: { submission: Submission 
             </div>
 
             <div className="mt-4">
-              <label className="text-xs text-[var(--muted)]">Reason (optional)</label>
+              <label className="text-xs text-[var(--muted)]">Reason {requiresReason ? "(required)" : "(optional)"}</label>
               <textarea
                 className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
                 rows={4}

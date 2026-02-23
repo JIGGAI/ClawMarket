@@ -41,6 +41,10 @@ export async function POST(req: Request) {
   if (!id) return NextResponse.json({ ok: false, error: "id is required" }, { status: 400 });
   if (!status) return NextResponse.json({ ok: false, error: "status is required" }, { status: 400 });
 
+  if ((status === "needs_changes" || status === "rejected") && !(reason || "").trim()) {
+    return NextResponse.json({ ok: false, error: "reason is required for needs_changes/rejected" }, { status: 400 });
+  }
+
   const allowed: Array<"rejected" | "needs_changes" | "approved" | "published" | "unpublished"> = [
     "rejected",
     "needs_changes",
@@ -57,7 +61,7 @@ export async function POST(req: Request) {
     status,
     moderatedAt: now,
     moderatedByUserId: r.session.userId,
-    moderationReason: reason,
+    moderationReason: (reason || "").trim() ? (reason || "").trim() : null,
   };
 
   if (status === "published") {

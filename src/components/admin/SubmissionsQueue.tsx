@@ -121,7 +121,13 @@ export function SubmissionsQueue() {
     if (!status) return;
 
     const reasonRaw = draftReason[id] ?? "";
-    const reason = reasonRaw.trim() ? reasonRaw.trim() : undefined;
+    const reasonTrimmed = reasonRaw.trim();
+    const reason = reasonTrimmed ? reasonTrimmed : undefined;
+
+    if ((status === "needs_changes" || status === "rejected") && !reasonTrimmed) {
+      setError("Please include a moderation reason for needs_changes / rejected.");
+      return;
+    }
 
     setSaving((p) => ({ ...p, [id]: true }));
     setError(null);
