@@ -11,7 +11,8 @@ set -euo pipefail
 # Notes:
 # - Requires an email-verified session (requireVerified()).
 # - Moderator/admin endpoints additionally require role (requireRole()).
-# - This script does NOT create a submission (would require a valid CAPTCHA token).
+# - If no submissions exist, the script will create a *draft* submission first
+#   (drafts do NOT require CAPTCHA), then moderate/publish it.
 
 BASE_URL="${BASE_URL:-http://localhost:3000}"
 COOKIE="${COOKIE:-}"
@@ -35,6 +36,18 @@ hdr_cookie=( -H "Cookie: ${COOKIE}" )
 
 say() { printf "\n==> %s\n" "$1"; }
 
+read_ok() {
+  node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{try{const j=JSON.parse(s);process.stdout.write(String(!!j.ok))}catch{process.stdout.write("false")}})'
+}
+
+read_first_id() {
+  node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{const j=JSON.parse(s);const id=j.submissions?.[0]?.id||"";process.stdout.write(id)})'
+}
+
+read_created_id() {
+  node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{const j=JSON.parse(s);const id=j.submission?.id||"";process.stdout.write(id)})'
+}
+
 say "GET /api/admin/submissions (moderator queue)"
 resp=$(curl -sS "${BASE_URL}/api/admin/submissions" "${hdr_cookie[@]}" -H 'accept: application/json') || {
   echo "Request failed" >&2
@@ -43,26 +56,52 @@ resp=$(curl -sS "${BASE_URL}/api/admin/submissions" "${hdr_cookie[@]}" -H 'accep
 echo "$resp" | head -c 2000
 printf "\n"
 
-ok=$(echo "$resp" | node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{try{const j=JSON.parse(s);process.stdout.write(String(!!j.ok))}catch{process.stdout.write("false")}})')
+ok=$(echo "$resp" | read_ok)
 if [[ "$ok" != "true" ]]; then
   echo "ERROR: expected ok:true (check role/emailVerified/cookie)." >&2
   exit 1
 fi
 
 if [[ -z "$SUBMISSION_ID" ]]; then
-  SUBMISSION_ID=$(echo "$resp" | node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{const j=JSON.parse(s);const id=j.submissions?.[0]?.id||"";process.stdout.write(id)})')
+  SUBMISSION_ID=$(echo "$resp" | read_first_id)
 fi
 
 if [[ -z "$SUBMISSION_ID" ]]; then
-  echo "No submissions found to moderate; set SUBMISSION_ID manually." >&2
-  exit 0
+  say "No submissions found — creating a draft submission (no CAPTCHA)"
+
+  # Draft submissions only require a title client-side, and do not require CAPTCHA.
+  # This gives us a real DB row to moderate/publish.
+  draft_title="Smoke test submission $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  create_resp=$(curl -sS "${BASE_URL}/api/marketplace/submissions" "${hdr_cookie[@]}" \
+    -H 'content-type: application/json' \
+    -H 'accept: application/json' \
+    -d "$(node -e 'console.log(JSON.stringify({title: process.env.draft_title, description: "", tags: [], authorDisplayName: "", contactEmail: "", draft: true}))')" \
+  )
+
+  echo "$create_resp" | head -c 2000
+  printf "\n"
+
+  create_ok=$(echo "$create_resp" | node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{try{const j=JSON.parse(s);process.stdout.write(String(!!j.ok))}catch{process.stdout.write("false")}})')
+  if [[ "$create_ok" != "true" ]]; then
+    echo "ERROR: failed to create a draft submission." >&2
+    exit 1
+  fi
+
+  SUBMISSION_ID=$(echo "$create_resp" | read_created_id)
+fi
+
+if [[ -z "$SUBMISSION_ID" ]]; then
+  echo "ERROR: could not determine SUBMISSION_ID." >&2
+  exit 1
 fi
 
 echo "Using SUBMISSION_ID=$SUBMISSION_ID"
+export SUBMISSION_ID
 
 say "POST /api/admin/submissions (set approved)"
 curl -sS "${BASE_URL}/api/admin/submissions" "${hdr_cookie[@]}" \
   -H 'content-type: application/json' \
+  -H 'accept: application/json' \
   -d "$(node -e 'console.log(JSON.stringify({id: process.env.SUBMISSION_ID, status: "approved"}))')" \
   | head -c 2000
 printf "\n"
@@ -70,6 +109,7 @@ printf "\n"
 say "POST /api/admin/submissions (set published)"
 curl -sS "${BASE_URL}/api/admin/submissions" "${hdr_cookie[@]}" \
   -H 'content-type: application/json' \
+  -H 'accept: application/json' \
   -d "$(node -e 'console.log(JSON.stringify({id: process.env.SUBMISSION_ID, status: "published"}))')" \
   | head -c 2000
 printf "\n"
