@@ -75,7 +75,7 @@ if [[ -z "$SUBMISSION_ID" ]]; then
   create_resp=$(curl -sS "${BASE_URL}/api/marketplace/submissions" "${hdr_cookie[@]}" \
     -H 'content-type: application/json' \
     -H 'accept: application/json' \
-    -d "$(node -e 'console.log(JSON.stringify({title: process.env.draft_title, description: "", tags: [], authorDisplayName: "", contactEmail: "", draft: true}))')" \
+    -d "$(draft_title="$draft_title" node -e 'console.log(JSON.stringify({title: process.env.draft_title, description: "", tags: [], authorDisplayName: "", contactEmail: "", draft: true}))')" \
   )
 
   echo "$create_resp" | head -c 2000
