@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBySlug, loadRegistry, type MarketplaceRecipe } from "@/lib/marketplace";
+import { parseRecipeFrontmatter } from "@/lib/recipe-frontmatter";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/require";
 
@@ -124,6 +125,22 @@ export async function GET(
 
     if (!recipe) {
       return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
+    }
+
+    // Bundled recipe enhancement: parse YAML frontmatter to expose agents[] + cronJobs[].
+    // (UGC recipes are free-form markdown and may not include this structure.)
+    if (recipe.origin === "bundled") {
+      try {
+        const res = await fetch(recipe.sourceUrl, { next: { revalidate: 300 } });
+        if (res.ok) {
+          const md = await res.text();
+          const parsed = parseRecipeFrontmatter(md);
+          if (parsed?.agents?.length) recipe.agents = parsed.agents;
+          if (parsed?.cronJobs?.length) recipe.cronJobs = parsed.cronJobs;
+        }
+      } catch {
+        // best-effort
+      }
     }
 
     return NextResponse.json({ ok: true, recipe });
