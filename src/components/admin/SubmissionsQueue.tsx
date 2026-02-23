@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type SubmissionStatus =
+  | "draft"
   | "submitted"
+  | "approved"
   | "needs_changes"
   | "rejected"
   | "published"
@@ -194,7 +197,11 @@ export function SubmissionsQueue() {
               <tr key={s.id} className="border-b border-slate-100 align-top">
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{fmt(s.createdAt)}</td>
                 <td className="py-3 pr-4 min-w-[360px]">
-                  <div className="font-semibold text-[var(--text)]">{s.title}</div>
+                  <div className="font-semibold text-[var(--text)]">
+                    <Link className="hover:underline" href={`/admin/submissions/${encodeURIComponent(s.id)}`}>
+                      {s.title}
+                    </Link>
+                  </div>
                   <div className="mt-1 text-[var(--muted)] line-clamp-2">{s.description}</div>
                   {s.tagsCsv ? <div className="mt-1 text-xs text-[var(--muted)]">tags: {s.tagsCsv}</div> : null}
                 </td>
@@ -210,6 +217,7 @@ export function SubmissionsQueue() {
                           onChange={(e) => setDraftStatus((p) => ({ ...p, [s.id]: e.target.value as SubmissionStatus }))}
                         >
                           <option value="submitted">submitted</option>
+                          <option value="approved">approved</option>
                           <option value="needs_changes">needs_changes</option>
                           <option value="rejected">rejected</option>
                           <option value="published">published</option>
