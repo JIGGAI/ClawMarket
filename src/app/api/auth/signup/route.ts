@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/mailer";
+import { verifyRecaptchaV2Token } from "@/lib/captcha";
 
 function baseUrl(req: Request) {
   const envBase = process.env.NEXTAUTH_URL || process.env.AUTH_URL;
@@ -16,16 +17,23 @@ function baseUrl(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json()) as { email?: string; password?: string; name?: string };
+    const body = (await req.json()) as { email?: string; password?: string; name?: string; captchaToken?: string };
     const email = String(body.email ?? "").trim().toLowerCase();
     const password = String(body.password ?? "");
     const name = String(body.name ?? "").trim();
+    const captchaToken = String(body.captchaToken ?? "");
 
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
     }
     if (password.length < 8) {
       return NextResponse.json({ error: "Password must be at least 8 characters." }, { status: 400 });
+    }
+
+    // CAPTCHA is required for signup/account creation.
+    const captcha = await verifyRecaptchaV2Token(captchaToken);
+    if (!captcha.ok) {
+      return NextResponse.json({ error: captcha.error }, { status: 400 });
     }
 
     const existing = await prisma.user.findUnique({ where: { email } });

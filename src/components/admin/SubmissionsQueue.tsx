@@ -85,9 +85,7 @@ export function SubmissionsQueue() {
           throw new Error(`${base}. You must be signed in.`);
         }
         if (res.status === 403) {
-          throw new Error(
-            `${base}. Your account is not a moderator/admin. To seed an admin in prod/dev, set ADMIN_EMAILS to include your login email, then sign out/in (or re-auth) so your User.role updates.`,
-          );
+          throw new Error(`${base}. You don't have permission to view admin submissions.`);
         }
         throw new Error(base);
       }
@@ -135,9 +133,7 @@ export function SubmissionsQueue() {
         const base = json.error || `Request failed (${res.status})`;
         if (res.status === 401) throw new Error(`${base}. You must be signed in.`);
         if (res.status === 403) {
-          throw new Error(
-            `${base}. Your account is not a moderator/admin. Ensure ADMIN_EMAILS contains your email and re-auth so your role is updated.`
-          );
+          throw new Error(`${base}. You don't have permission to moderate submissions.`);
         }
         throw new Error(base);
       }
@@ -147,16 +143,6 @@ export function SubmissionsQueue() {
       } else {
         await refresh();
       }
-
-      // toast-ish confirmation
-      setNoticeById((p) => ({ ...p, [id]: `Saved (${status})` }));
-      setTimeout(() => {
-        setNoticeById((p) => {
-          const next = { ...p };
-          delete next[id];
-          return next;
-        });
-      }, 2500);
 
       // toast-ish confirmation
       setNoticeById((p) => ({ ...p, [id]: `Saved (${status})` }));
