@@ -64,7 +64,7 @@ export async function GET(
     // Prefer DB-backed published submissions first.
     const sub = await prisma.submission.findFirst({
       where: {
-        status: { in: ["published", "approved"] },
+        status: { in: ["published"] },
         OR: [{ slug: s }, { id: s }],
       },
       select: {
