@@ -48,6 +48,10 @@ read_created_id() {
   node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{const j=JSON.parse(s);const id=j.submission?.id||"";process.stdout.write(id)})'
 }
 
+read_recipe_has_submission() {
+  node -e 'let s="";process.stdin.on("data",d=>s+=d);process.stdin.on("end",()=>{try{const j=JSON.parse(s);const id=process.env.SUBMISSION_ID;const items=j.recipes||j.items||[];const found=items.some(r=>r.submissionId===id||r.submission?.id===id||r.id===id);process.stdout.write(found?"true":"false");}catch{process.stdout.write("false")}})'
+}
+
 say "GET /api/admin/submissions (moderator queue)"
 resp=$(curl -sS "${BASE_URL}/api/admin/submissions" "${hdr_cookie[@]}" -H 'accept: application/json') || {
   echo "Request failed" >&2
@@ -115,7 +119,16 @@ curl -sS "${BASE_URL}/api/admin/submissions" "${hdr_cookie[@]}" \
 printf "\n"
 
 say "GET /api/marketplace/recipes (ensure published appears)"
-curl -sS "${BASE_URL}/api/marketplace/recipes" -H 'accept: application/json' | head -c 2000
+recipes_resp=$(curl -sS "${BASE_URL}/api/marketplace/recipes" -H 'accept: application/json')
+echo "$recipes_resp" | head -c 2000
 printf "\n"
+
+found=$(echo "$recipes_resp" | read_recipe_has_submission)
+if [[ "$found" != "true" ]]; then
+  echo "ERROR: expected published submission to appear in /api/marketplace/recipes." >&2
+  exit 1
+fi
+
+echo "OK: published submission is visible in the public list"
 
 say "Done"
