@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireVerified } from "@/lib/require";
 import { prisma } from "@/lib/prisma";
 import { validateHttpUrlNoPrivateIps } from "@/lib/ssrf";
+import { verifyRecaptchaV2Token } from "@/lib/captcha";
 import { randomSuffix, slugify } from "@/lib/slug";
 import { sanitizePlainText, sanitizeTag } from "@/lib/sanitize";
 
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
     zipUrl?: string;
     body?: string; // recipe markdown
     draft?: boolean;
+    captchaToken?: string;
   };
 
   const title = sanitizePlainText(body.title, { maxLen: 160 });
@@ -59,6 +61,11 @@ export async function POST(req: Request) {
   const sourceUrl = typeof body.sourceUrl === "string" ? sanitizePlainText(body.sourceUrl, { maxLen: 2000 }) : "";
   const recipeBodyText = typeof body.body === "string" ? sanitizePlainText(body.body, { maxLen: 200_000 }) : "";
   const isDraft = body.draft === true;
+
+  if (!isDraft) {
+    const captcha = await verifyRecaptchaV2Token(String(body.captchaToken ?? ""));
+    if (!captcha.ok) return NextResponse.json({ ok: false, error: captcha.error }, { status: 400 });
+  }
 
   if (!isDraft) {
     if (!title) return NextResponse.json({ ok: false, error: "title is required" }, { status: 400 });
