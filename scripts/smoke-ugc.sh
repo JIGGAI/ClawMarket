@@ -15,10 +15,19 @@ set -euo pipefail
 
 BASE_URL="${BASE_URL:-http://localhost:3000}"
 COOKIE="${COOKIE:-}"
+COOKIE_FILE="${COOKIE_FILE:-${HOME}/.openclaw/secrets/clawmarket-cookie.txt}"
 SUBMISSION_ID="${SUBMISSION_ID:-}"
 
+# Allow a local cookie file so you don't have to paste env vars every time.
+# File should contain the full Cookie header value (single line), e.g.
+#   next-auth.session-token=...; __Secure-next-auth.session-token=...; ...
+if [[ -z "$COOKIE" && -f "$COOKIE_FILE" ]]; then
+  COOKIE="$(cat "$COOKIE_FILE")"
+fi
+
 if [[ -z "$COOKIE" ]]; then
-  echo "ERROR: COOKIE env var is required (paste your session cookie string)." >&2
+  echo "ERROR: COOKIE env var is required (paste your session cookie string)," >&2
+  echo "       or create COOKIE_FILE at: $COOKIE_FILE" >&2
   exit 2
 fi
 
