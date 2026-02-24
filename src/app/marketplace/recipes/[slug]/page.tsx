@@ -263,134 +263,228 @@ export default async function MarketplaceRecipeDetailPage({
 
       <FadeIn>
         <section className="px-6 py-12 lg:px-16">
-          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-3">
-            <div className="min-w-0 lg:col-span-2">
-              <h2 className="text-2xl font-bold text-[var(--text)]">Install / Scaffold</h2>
-              <p className="mt-2 text-[var(--muted)]">
-                Copy-paste the command below in a terminal where OpenClaw is installed.
-              </p>
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-2xl font-bold text-[var(--text)]">Install / Scaffold</h2>
+            <p className="mt-2 text-[var(--muted)]">
+              Copy-paste the command below in a terminal where OpenClaw is installed.
+            </p>
 
-              <div className="mt-5 max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
-                    <span className="text-emerald-400">$</span> {cmd}
-                  </div>
-                  <div className="self-end sm:self-auto">
-                    <CopyLineButton text={cmd} />
-                  </div>
+            <div className="mt-5 max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
+                  <span className="text-emerald-400">$</span> {cmd}
+                </div>
+                <div className="self-end sm:self-auto">
+                  <CopyLineButton text={cmd} />
                 </div>
               </div>
+            </div>
 
-              <h2 className="mt-12 text-2xl font-bold text-[var(--text)]">Source</h2>
-              <p className="mt-2 text-[var(--muted)]">
-                This is the recipe’s Markdown source.
-              </p>
+            {/* Mobile-first layout: structured summary above raw recipe source */}
+            <div className="mt-12 grid gap-10 lg:grid-cols-3">
+              <aside className="min-w-0 lg:col-span-1">
+                <details className="rounded-2xl border border-[var(--border)] bg-white/70 p-6" open>
+                  <summary className="cursor-pointer text-lg font-bold text-[var(--text)]">Recipe information</summary>
+                  <div className="mt-3 space-y-1 text-sm text-[var(--muted)]">
+                    <div>
+                      <span className="text-[var(--muted)]">Recipe id:</span> <span className="font-mono text-[var(--text)]">{recipe.id ?? recipe.slug}</span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--muted)]">Version:</span> <span className="text-[var(--text)]">{recipe.version}</span>
+                    </div>
+                    {recipe.kind === "team" ? (
+                      <div>
+                        <span className="text-[var(--muted)]">Team id:</span> <span className="font-mono text-[var(--text)]">{recipe.teamId ?? recipe.slug}</span>
+                      </div>
+                    ) : null}
+                    {recipe.description ? <div className="pt-1 whitespace-pre-wrap text-[var(--text)]">{recipe.description}</div> : null}
+                  </div>
+                </details>
 
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <a
-                  href={recipe.sourceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-block rounded-lg border border-[var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
-                >
-                  View raw
-                </a>
-                {recipe.homepageUrl ? (
+                <details className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6" open>
+                  <summary className="cursor-pointer text-lg font-bold text-[var(--text)]">Agents ({recipe.agents?.length ?? 0})</summary>
+                  <div className="mt-3 space-y-2">
+                    {(recipe.agents ?? []).map((a, idx) => (
+                      <details key={`${a.role ?? "agent"}:${idx}`} className="rounded-xl border border-[var(--border)] bg-white/60 p-4">
+                        <summary className="cursor-pointer text-sm text-[var(--text)]">
+                          <span className="font-semibold">{a.name ?? a.role ?? "(unnamed)"}</span>
+                          {a.role ? <span className="text-[var(--muted)]"> — {a.role}</span> : null}
+                        </summary>
+                        <div className="mt-2 space-y-1 text-sm text-[var(--muted)]">
+                          <div>
+                            <span className="text-[var(--muted)]">Role:</span> <span className="text-[var(--text)]">{a.role ?? "(none)"}</span>
+                          </div>
+                          <div>
+                            <span className="text-[var(--muted)]">Tools profile:</span> <span className="text-[var(--text)]">{a.tools?.profile ?? "(default)"}</span>
+                          </div>
+                          <div>
+                            <span className="text-[var(--muted)]">Allow:</span>{" "}
+                            <span className="text-[var(--text)]">{(a.tools?.allow ?? []).length ? (a.tools?.allow ?? []).join(", ") : "(none)"}</span>
+                          </div>
+                          <div>
+                            <span className="text-[var(--muted)]">Deny:</span>{" "}
+                            <span className="text-[var(--text)]">{(a.tools?.deny ?? []).length ? (a.tools?.deny ?? []).join(", ") : "(none)"}</span>
+                          </div>
+                          <div className="pt-1">
+                            <span className="text-[var(--muted)]">Expected files:</span>{" "}
+                            <span className="text-[var(--text)]">{(recipe.files ?? []).map((f) => f.path).filter(Boolean).join(", ") || "(not listed)"}</span>
+                          </div>
+                        </div>
+                      </details>
+                    ))}
+                    {(!recipe.agents || recipe.agents.length === 0) ? (
+                      <div className="text-sm text-[var(--muted)]">(No agents listed in frontmatter)</div>
+                    ) : null}
+                  </div>
+                </details>
+
+                <details className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6" open>
+                  <summary className="cursor-pointer text-lg font-bold text-[var(--text)]">Cron jobs ({recipe.cronJobs?.length ?? 0})</summary>
+                  <div className="mt-3 space-y-2">
+                    {(recipe.cronJobs ?? []).map((c, idx) => (
+                      <details key={`${c.id ?? "cron"}:${idx}`} className="rounded-xl border border-[var(--border)] bg-white/60 p-4">
+                        <summary className="cursor-pointer text-sm text-[var(--text)]">
+                          <span className="font-semibold">{c.name ?? c.id ?? "(unnamed)"}</span>
+                          {c.schedule ? <span className="text-[var(--muted)]"> — {c.schedule}</span> : null}
+                        </summary>
+                        <div className="mt-2 space-y-1 text-sm text-[var(--muted)]">
+                          {c.timezone ? (
+                            <div>
+                              <span className="text-[var(--muted)]">Timezone:</span> <span className="text-[var(--text)]">{c.timezone}</span>
+                            </div>
+                          ) : null}
+                          {typeof c.enabledByDefault === "boolean" ? (
+                            <div>
+                              <span className="text-[var(--muted)]">Enabled by default:</span>{" "}
+                              <span className="text-[var(--text)]">{c.enabledByDefault ? "yes" : "no"}</span>
+                            </div>
+                          ) : null}
+                          {c.message ? (
+                            <div className="mt-2 whitespace-pre-wrap rounded-lg border border-[var(--border)] bg-white/60 p-3 text-sm text-[var(--text)]">
+                              {c.message}
+                            </div>
+                          ) : null}
+                        </div>
+                      </details>
+                    ))}
+                    {(!recipe.cronJobs || recipe.cronJobs.length === 0) ? (
+                      <div className="text-sm text-[var(--muted)]">(No cron jobs listed in frontmatter)</div>
+                    ) : null}
+                  </div>
+                </details>
+
+                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
+                  <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
+
+                  <dl className="mt-4 space-y-3 text-sm">
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Slug</dt>
+                      <dd className="font-mono text-[var(--text)]">{recipe.slug}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Kind</dt>
+                      <dd className="text-[var(--text)]">{recipe.kind}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Origin</dt>
+                      <dd className="text-[var(--text)]">{recipe.origin}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Version</dt>
+                      <dd className="text-[var(--text)]">{recipe.version}</dd>
+                    </div>
+
+                    {recipe.authorDisplayName ? (
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Author</dt>
+                        <dd className="text-[var(--text)]">{recipe.authorDisplayName}</dd>
+                      </div>
+                    ) : null}
+
+                    {formatIsoDate(recipe.updatedAt) ? (
+                      <div className="flex items-center justify-between gap-4">
+                        <dt className="text-[var(--muted)]">Updated</dt>
+                        <dd className="font-mono text-[var(--text)]">{formatIsoDate(recipe.updatedAt)}</dd>
+                      </div>
+                    ) : null}
+
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-[var(--muted)]">Source</dt>
+                      <dd className="text-[var(--text)]">{recipe.origin === "ugc" ? "Submission" : "GitHub"}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
+                  <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    To install community recipes manually, download the recipe Markdown and place it into your OpenClaw
+                    workspace.
+                  </p>
+
+                  <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
+                    <li>
+                      Click <span className="font-semibold">View raw</span> below to open the recipe Markdown.
+                    </li>
+                    <li>
+                      Save it locally as <span className="font-mono">{recipe.slug}.md</span>.
+                    </li>
+                    <li>Move it into your workspace recipes folder:</li>
+                  </ol>
+
+                  <pre className="mt-3 max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]">
+                    <code>{`mkdir -p ~/.openclaw/workspace/recipes
+# then move/copy the file into that folder
+# e.g. mv ~/Downloads/${recipe.slug}.md ~/.openclaw/workspace/recipes/`}</code>
+                  </pre>
+
+                  <p className="mt-3 text-sm text-[var(--muted)]">After that, it should show up in your local OpenClaw recipes list.</p>
+                </div>
+              </aside>
+
+              <div className="min-w-0 lg:col-span-2">
+                <h2 className="text-2xl font-bold text-[var(--text)]">Source</h2>
+                <p className="mt-2 text-[var(--muted)]">This is the recipe’s Markdown source.</p>
+
+                <div className="mt-5 flex flex-wrap items-center gap-3">
                   <a
-                    href={recipe.homepageUrl}
+                    href={recipe.sourceUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-block rounded-lg border border-[var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
                   >
-                    Project
+                    View raw
                   </a>
-                ) : null}
-                {markdown ? <CopyLineButton text={markdown} size="default" /> : null}
-              </div>
+                  {recipe.homepageUrl ? (
+                    <a
+                      href={recipe.homepageUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block rounded-lg border border-[var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                    >
+                      Project
+                    </a>
+                  ) : null}
+                  {markdown ? <CopyLineButton text={markdown} size="default" /> : null}
+                </div>
 
-              <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
-                {markdown ? (
-                  <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
-                    <pre className="max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-white/0 font-mono text-sm text-[var(--text)] [-webkit-overflow-scrolling:touch]">
-                      <code>{markdown}</code>
-                    </pre>
-                  </div>
-                ) : (
-                  <div className="px-6 py-5 text-[var(--muted)]">
-                    Couldn’t load the recipe source right now. Use “View raw” to open it directly.
-                  </div>
-                )}
+                <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+                  {markdown ? (
+                    <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
+                      <pre className="max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-white/0 font-mono text-sm text-[var(--text)] [-webkit-overflow-scrolling:touch]">
+                        <code>{markdown}</code>
+                      </pre>
+                    </div>
+                  ) : (
+                    <div className="px-6 py-5 text-[var(--muted)]">
+                      Couldn’t load the recipe source right now. Use “View raw” to open it directly.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <aside className="min-w-0 lg:col-span-1">
-              <div className="rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                <h3 className="text-lg font-bold text-[var(--text)]">By the numbers</h3>
-
-                <dl className="mt-4 space-y-3 text-sm">
-                  <div className="flex items-center justify-between gap-4">
-                    <dt className="text-[var(--muted)]">Slug</dt>
-                    <dd className="font-mono text-[var(--text)]">{recipe.slug}</dd>
-                  </div>
-                  <div className="flex items-center justify-between gap-4">
-                    <dt className="text-[var(--muted)]">Kind</dt>
-                    <dd className="text-[var(--text)]">{recipe.kind}</dd>
-                  </div>
-                  <div className="flex items-center justify-between gap-4">
-                    <dt className="text-[var(--muted)]">Origin</dt>
-                    <dd className="text-[var(--text)]">{recipe.origin}</dd>
-                  </div>
-                  <div className="flex items-center justify-between gap-4">
-                    <dt className="text-[var(--muted)]">Version</dt>
-                    <dd className="text-[var(--text)]">{recipe.version}</dd>
-                  </div>
-
-                  {recipe.authorDisplayName ? (
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Author</dt>
-                      <dd className="text-[var(--text)]">{recipe.authorDisplayName}</dd>
-                    </div>
-                  ) : null}
-
-                  {formatIsoDate(recipe.updatedAt) ? (
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Updated</dt>
-                      <dd className="font-mono text-[var(--text)]">{formatIsoDate(recipe.updatedAt)}</dd>
-                    </div>
-                  ) : null}
-
-                  <div className="flex items-center justify-between gap-4">
-                    <dt className="text-[var(--muted)]">Source</dt>
-                    <dd className="text-[var(--text)]">{recipe.origin === "ugc" ? "Submission" : "GitHub"}</dd>
-                  </div>
-                </dl>
-              </div>
-
-              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
-                <p className="mt-2 text-sm text-[var(--muted)]">
-                  To install community recipes manually, download the recipe Markdown and place it into your OpenClaw
-                  workspace.
-                </p>
-
-                <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
-                  <li>Click <span className="font-semibold">View raw</span> above to open the recipe Markdown.</li>
-                  <li>Save it locally as <span className="font-mono">{recipe.slug}.md</span>.</li>
-                  <li>Move it into your workspace recipes folder:</li>
-                </ol>
-
-                <pre className="mt-3 max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]">
-                  <code>{`mkdir -p ~/.openclaw/workspace/recipes
-# then move/copy the file into that folder
-# e.g. mv ~/Downloads/${recipe.slug}.md ~/.openclaw/workspace/recipes/`}</code>
-                </pre>
-
-                <p className="mt-3 text-sm text-[var(--muted)]">
-                  After that, it should show up in your local OpenClaw recipes list.
-                </p>
-              </div>
-
-              {role === "admin" ? (
+            {role === "admin" ? (
                 <div className="mt-6 rounded-2xl border border-[var(--border)] bg-slate-50 p-6">
                   <h3 className="text-lg font-bold text-[var(--text)]">Moderation</h3>
 
@@ -436,7 +530,6 @@ export default async function MarketplaceRecipeDetailPage({
                   )}
                 </div>
               ) : null}
-            </aside>
           </div>
         </section>
       </FadeIn>
