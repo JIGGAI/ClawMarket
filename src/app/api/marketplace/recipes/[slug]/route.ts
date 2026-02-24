@@ -144,6 +144,11 @@ export async function GET(
           const parsed = parseRecipeFrontmatter(md);
           if (parsed?.agents?.length) recipe.agents = parsed.agents;
           if (parsed?.cronJobs?.length) recipe.cronJobs = parsed.cronJobs;
+          if (parsed?.id) recipe.id = parsed.id;
+          if (parsed?.version) recipe.version = parsed.version;
+          if (parsed?.description) recipe.description = parsed.description;
+          if (parsed?.teamId) (recipe as unknown as { teamId?: string }).teamId = parsed.teamId;
+          if (parsed?.files?.length) (recipe as unknown as { files?: unknown[] }).files = parsed.files;
         }
       } catch {
         // best-effort

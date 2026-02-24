@@ -22,6 +22,9 @@ export type MarketplaceRecipe = {
   homepageUrl?: string;
 
   // Parsed fields (bundled recipes with YAML frontmatter)
+  id?: string;
+  teamId?: string;
+  files?: Array<{ path?: string; template?: string; mode?: string }>;
   agents?: ParsedRecipeAgent[];
   cronJobs?: ParsedRecipeCronJob[];
 
