@@ -62,8 +62,15 @@ export async function GET(
     const { slug } = await ctx.params;
     const s = slug.trim();
 
-    // Prefer DB-backed published submissions first.
-    const sub = await prisma.submission.findFirst({
+    // Registry lookup first so bundled recipes "win" if a UGC submission collides on slug.
+    // (We have real bundled slugs like "product-team" that may also exist as a submission slug.)
+    const registry = await loadRegistry();
+    const bundled = getBySlug(registry.recipes, s);
+
+    // Prefer DB-backed published submissions first (unless a bundled recipe exists for this slug).
+    const sub = bundled
+      ? null
+      : await prisma.submission.findFirst({
       where: {
         status: { in: ["published", "approved"] },
         OR: [{ slug: s }, { id: s }],
@@ -93,8 +100,9 @@ export async function GET(
     }
 
     // Admin/moderator view: allow viewing unpublished submissions by id/slug.
+    // Still prefer bundled if a bundled slug exists.
     const mod = await requireRole("moderator");
-    if (mod.ok) {
+    if (mod.ok && !bundled) {
       const anySub = await prisma.submission.findFirst({
         where: { OR: [{ slug: s }, { id: s }] },
         select: {
@@ -120,8 +128,7 @@ export async function GET(
     }
 
     // Fallback to bundled/file-backed registry.
-    const registry = await loadRegistry();
-    const recipe = getBySlug(registry.recipes, s);
+    const recipe = bundled;
 
     if (!recipe) {
       return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
