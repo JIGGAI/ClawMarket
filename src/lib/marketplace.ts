@@ -3,6 +3,8 @@ import path from "node:path";
 
 export type MarketplaceRecipeOrigin = "bundled" | "ugc";
 
+import type { ParsedRecipeAgent, ParsedRecipeCronJob } from "@/lib/recipe-frontmatter";
+
 export type MarketplaceRecipe = {
   slug: string;
   kind: "team" | "agent";
@@ -18,6 +20,10 @@ export type MarketplaceRecipe = {
 
   // Bundled-only conveniences
   homepageUrl?: string;
+
+  // Parsed fields (bundled recipes with YAML frontmatter)
+  agents?: ParsedRecipeAgent[];
+  cronJobs?: ParsedRecipeCronJob[];
 
   // UGC-only / audit-ish fields (optional so registry-backed recipes stay minimal)
   submissionId?: string;
