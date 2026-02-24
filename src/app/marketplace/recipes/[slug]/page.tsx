@@ -283,52 +283,98 @@ export default async function MarketplaceRecipeDetailPage({
             {/* Mobile-first layout: structured summary above raw recipe source */}
             <div className="mt-12 grid gap-10 lg:grid-cols-3">
               <aside className="min-w-0 lg:col-span-1">
-                {recipe.kind === "team" && (recipe.agents?.length ?? 0) > 0 ? (
-                  <div className="rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                    <h3 className="text-lg font-bold text-[var(--text)]">Roles / Agents</h3>
-                    <ul className="mt-4 space-y-2 text-sm">
-                      {recipe.agents?.map((a, idx) => (
-                        <li key={`${a.role ?? "role"}-${idx}`} className="flex items-start justify-between gap-4">
-                          <div className="min-w-0">
-                            <div className="font-semibold text-[var(--text)]">
-                              {a.name ?? a.role ?? "(unnamed)"}
-                            </div>
-                            {a.role ? <div className="text-[var(--muted)]">role: {a.role}</div> : null}
-                          </div>
-                          {a.agentId ? <div className="font-mono text-[var(--muted)]">{a.agentId}</div> : null}
-                        </li>
-                      ))}
-                    </ul>
+                <details className="rounded-2xl border border-[var(--border)] bg-white/70 p-6" open>
+                  <summary className="cursor-pointer text-lg font-bold text-[var(--text)]">Recipe information</summary>
+                  <div className="mt-3 space-y-1 text-sm text-[var(--muted)]">
+                    <div>
+                      <span className="text-[var(--muted)]">Recipe id:</span> <span className="font-mono text-[var(--text)]">{recipe.id ?? recipe.slug}</span>
+                    </div>
+                    <div>
+                      <span className="text-[var(--muted)]">Version:</span> <span className="text-[var(--text)]">{recipe.version}</span>
+                    </div>
+                    {recipe.kind === "team" ? (
+                      <div>
+                        <span className="text-[var(--muted)]">Team id:</span> <span className="font-mono text-[var(--text)]">{recipe.teamId ?? recipe.slug}</span>
+                      </div>
+                    ) : null}
+                    {recipe.description ? <div className="pt-1 whitespace-pre-wrap text-[var(--text)]">{recipe.description}</div> : null}
                   </div>
-                ) : null}
+                </details>
 
-                {(recipe.cronJobs?.length ?? 0) > 0 ? (
-                  <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                    <h3 className="text-lg font-bold text-[var(--text)]">Cron jobs</h3>
-                    <ul className="mt-4 space-y-3 text-sm">
-                      {recipe.cronJobs?.map((c, idx) => (
-                        <li key={`${c.id ?? "cron"}-${idx}`} className="rounded-xl border border-[var(--border)] bg-white/60 p-4">
-                          <div className="font-semibold text-[var(--text)]">{c.name ?? c.id ?? "Cron job"}</div>
-                          {c.schedule ? (
-                            <div className="mt-1 font-mono text-[var(--muted)]">
-                              {c.schedule}
-                              {c.timezone ? ` (${c.timezone})` : ""}
+                <details className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6" open>
+                  <summary className="cursor-pointer text-lg font-bold text-[var(--text)]">Agents ({recipe.agents?.length ?? 0})</summary>
+                  <div className="mt-3 space-y-2">
+                    {(recipe.agents ?? []).map((a, idx) => (
+                      <details key={`${a.role ?? "agent"}:${idx}`} className="rounded-xl border border-[var(--border)] bg-white/60 p-4">
+                        <summary className="cursor-pointer text-sm text-[var(--text)]">
+                          <span className="font-semibold">{a.name ?? a.role ?? "(unnamed)"}</span>
+                          {a.role ? <span className="text-[var(--muted)]"> — {a.role}</span> : null}
+                        </summary>
+                        <div className="mt-2 space-y-1 text-sm text-[var(--muted)]">
+                          <div>
+                            <span className="text-[var(--muted)]">Role:</span> <span className="text-[var(--text)]">{a.role ?? "(none)"}</span>
+                          </div>
+                          <div>
+                            <span className="text-[var(--muted)]">Tools profile:</span> <span className="text-[var(--text)]">{a.tools?.profile ?? "(default)"}</span>
+                          </div>
+                          <div>
+                            <span className="text-[var(--muted)]">Allow:</span>{" "}
+                            <span className="text-[var(--text)]">{(a.tools?.allow ?? []).length ? (a.tools?.allow ?? []).join(", ") : "(none)"}</span>
+                          </div>
+                          <div>
+                            <span className="text-[var(--muted)]">Deny:</span>{" "}
+                            <span className="text-[var(--text)]">{(a.tools?.deny ?? []).length ? (a.tools?.deny ?? []).join(", ") : "(none)"}</span>
+                          </div>
+                          <div className="pt-1">
+                            <span className="text-[var(--muted)]">Expected files:</span>{" "}
+                            <span className="text-[var(--text)]">{(recipe.files ?? []).map((f) => f.path).filter(Boolean).join(", ") || "(not listed)"}</span>
+                          </div>
+                        </div>
+                      </details>
+                    ))}
+                    {(!recipe.agents || recipe.agents.length === 0) ? (
+                      <div className="text-sm text-[var(--muted)]">(No agents listed in frontmatter)</div>
+                    ) : null}
+                  </div>
+                </details>
+
+                <details className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6" open>
+                  <summary className="cursor-pointer text-lg font-bold text-[var(--text)]">Cron jobs ({recipe.cronJobs?.length ?? 0})</summary>
+                  <div className="mt-3 space-y-2">
+                    {(recipe.cronJobs ?? []).map((c, idx) => (
+                      <details key={`${c.id ?? "cron"}:${idx}`} className="rounded-xl border border-[var(--border)] bg-white/60 p-4">
+                        <summary className="cursor-pointer text-sm text-[var(--text)]">
+                          <span className="font-semibold">{c.name ?? c.id ?? "(unnamed)"}</span>
+                          {c.schedule ? <span className="text-[var(--muted)]"> — {c.schedule}</span> : null}
+                        </summary>
+                        <div className="mt-2 space-y-1 text-sm text-[var(--muted)]">
+                          {c.timezone ? (
+                            <div>
+                              <span className="text-[var(--muted)]">Timezone:</span> <span className="text-[var(--text)]">{c.timezone}</span>
                             </div>
                           ) : null}
                           {typeof c.enabledByDefault === "boolean" ? (
-                            <div className="mt-1 text-[var(--muted)]">
-                              enabledByDefault: {c.enabledByDefault ? "true" : "false"}
+                            <div>
+                              <span className="text-[var(--muted)]">Enabled by default:</span>{" "}
+                              <span className="text-[var(--text)]">{c.enabledByDefault ? "yes" : "no"}</span>
                             </div>
                           ) : null}
-                          {c.message ? <div className="mt-2 text-[var(--muted)]">{c.message}</div> : null}
-                        </li>
-                      ))}
-                    </ul>
+                          {c.message ? (
+                            <div className="mt-2 whitespace-pre-wrap rounded-lg border border-[var(--border)] bg-white/60 p-3 text-sm text-[var(--text)]">
+                              {c.message}
+                            </div>
+                          ) : null}
+                        </div>
+                      </details>
+                    ))}
+                    {(!recipe.cronJobs || recipe.cronJobs.length === 0) ? (
+                      <div className="text-sm text-[var(--muted)]">(No cron jobs listed in frontmatter)</div>
+                    ) : null}
                   </div>
-                ) : null}
+                </details>
 
-                <div className={(recipe.kind === "team" ? "mt-6 " : "") + "rounded-2xl border border-[var(--border)] bg-white/70 p-6"}>
-                  <h3 className="text-lg font-bold text-[var(--text)]">Metadata</h3>
+                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
+                  <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
 
                   <dl className="mt-4 space-y-3 text-sm">
                     <div className="flex items-center justify-between gap-4">
