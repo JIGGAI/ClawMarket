@@ -21,12 +21,7 @@ function installCommand(r: MarketplaceRecipe) {
     : `openclaw recipes scaffold ${r.slug} --agent-id my-${r.slug.replace(/-/g, "")} --apply-config`;
 }
 
-function formatIsoDate(iso: string | undefined) {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toISOString().replace("T", " ").replace(/\.\d{3}Z$/, "Z");
-}
+// (formatIsoDate removed: no longer needed after removing duplicate metadata card)
 
 async function fetchModerationForRecipe(recipe: MarketplaceRecipe) {
   if (recipe.origin !== "ugc") return null;
@@ -386,47 +381,7 @@ export default async function MarketplaceRecipeDetailPage({
                   </div>
                 </details>
 
-                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                  <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
-
-                  <dl className="mt-4 space-y-3 text-sm">
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Slug</dt>
-                      <dd className="font-mono text-[var(--text)]">{recipe.slug}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Kind</dt>
-                      <dd className="text-[var(--text)]">{recipe.kind}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Origin</dt>
-                      <dd className="text-[var(--text)]">{recipe.origin}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Version</dt>
-                      <dd className="text-[var(--text)]">{recipe.version}</dd>
-                    </div>
-
-                    {recipe.authorDisplayName ? (
-                      <div className="flex items-center justify-between gap-4">
-                        <dt className="text-[var(--muted)]">Author</dt>
-                        <dd className="text-[var(--text)]">{recipe.authorDisplayName}</dd>
-                      </div>
-                    ) : null}
-
-                    {formatIsoDate(recipe.updatedAt) ? (
-                      <div className="flex items-center justify-between gap-4">
-                        <dt className="text-[var(--muted)]">Updated</dt>
-                        <dd className="font-mono text-[var(--text)]">{formatIsoDate(recipe.updatedAt)}</dd>
-                      </div>
-                    ) : null}
-
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Source</dt>
-                      <dd className="text-[var(--text)]">{recipe.origin === "ugc" ? "Submission" : "GitHub"}</dd>
-                    </div>
-                  </dl>
-                </div>
+                {/* removed duplicate top "How to install" (metadata) card per RJ */}
 
                 <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
                   <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
