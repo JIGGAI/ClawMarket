@@ -387,7 +387,7 @@ export default async function MarketplaceRecipeDetailPage({
                 </details>
 
                 <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                  <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
+                  <h3 className="text-lg font-bold text-[var(--text)]">Recipe information</h3>
 
                   <dl className="mt-4 space-y-3 text-sm">
                     <div className="flex items-center justify-between gap-4">
