@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Modal } from "@/components/Modal";
+import { ReCaptchaV2 } from "@/components/ReCaptchaV2";
 import SignInOptions from "@/app/login/SignInOptions";
 
 type ApiOk = { ok: true; submission: { id: string } };
@@ -38,6 +39,10 @@ export default function SubmitClient() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaSiteKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY || "";
+  const onCaptcha = useCallback((t: string | null) => setCaptchaToken(t), []);
 
   const tags = useMemo(() => parseTags(tagsCsv), [tagsCsv]);
 
@@ -98,6 +103,12 @@ export default function SubmitClient() {
 
     const isDraft = opts?.draft === true;
 
+    // CAPTCHA is required for non-draft submissions (abusable flow).
+    if (!isDraft) {
+      if (!captchaSiteKey) return setError("CAPTCHA is not configured (missing NEXT_PUBLIC_CAPTCHA_SITE_KEY)");
+      if (!captchaToken) return setError("Please complete the CAPTCHA.");
+    }
+
     if (!title.trim()) return setError(isDraft ? "Title is required for drafts" : "Title is required");
 
     if (!isDraft) {
@@ -126,6 +137,7 @@ export default function SubmitClient() {
           sourceUrl: sourceUrl.trim() ? sourceUrl.trim() : undefined,
           body: body.trim() ? body.trim() : undefined,
           draft: opts?.draft === true,
+          captchaToken: opts?.draft === true ? undefined : captchaToken,
         }),
       });
 
@@ -332,6 +344,14 @@ export default function SubmitClient() {
                   Must include YAML frontmatter with an <code>id:</code>. We validate and sanitize on submit.
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <div className="text-sm font-semibold text-[var(--text)]">Anti-spam</div>
+            <p className="mt-1 text-sm text-[var(--muted)]">Complete the CAPTCHA to submit (draft saves don’t require it).</p>
+            <div className="mt-3">
+              <ReCaptchaV2 siteKey={captchaSiteKey} onToken={onCaptcha} />
             </div>
           </div>
 

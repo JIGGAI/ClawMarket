@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { badgeClass, uiStatusLabel } from "@/lib/submission-ui";
 import { UserSubmissionCard } from "@/components/marketplace/UserSubmissionCard";
 
@@ -17,9 +18,30 @@ type Submission = {
 
 export default function SubmissionsClient({ submissions }: { submissions: Submission[] }) {
   const [items, setItems] = useState(submissions);
+  const search = useSearchParams();
+
+  const submittedId = search?.get("submitted");
+  const editedId = search?.get("edited");
+
+  const banner = useMemo(() => {
+    if (!submittedId) return null;
+    const isEdit = Boolean(editedId);
+    return {
+      title: isEdit ? "Submission updated" : "Submission received",
+      body: isEdit
+        ? `Your changes were saved. Submission id: ${submittedId}`
+        : `Thanks! Your submission is now in the review queue. Submission id: ${submittedId}`,
+    };
+  }, [submittedId, editedId]);
 
   return (
     <div className="mt-8 space-y-4">
+      {banner ? (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+          <div className="font-semibold">{banner.title}</div>
+          <div className="mt-1 text-emerald-800">{banner.body}</div>
+        </div>
+      ) : null}
       {items.map((s) => {
         const editable = s.status === "draft" || s.status === "submitted" || s.status === "needs_changes";
         const createdAt = new Date(s.createdAt).toISOString().replace("T", " ").slice(0, 16);

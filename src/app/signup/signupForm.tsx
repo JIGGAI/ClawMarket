@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
+import { ReCaptchaV2 } from "@/components/ReCaptchaV2";
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,10 @@ export default function SignUpForm() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  const captchaSiteKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY || "";
+  const onCaptcha = useCallback((t: string | null) => setCaptchaToken(t), []);
 
   return (
     <form
@@ -18,10 +23,13 @@ export default function SignUpForm() {
         setError(null);
         setLoading(true);
         try {
+          if (!captchaSiteKey) throw new Error("CAPTCHA is not configured (missing NEXT_PUBLIC_CAPTCHA_SITE_KEY)");
+          if (!captchaToken) throw new Error("Please complete the CAPTCHA.");
+
           const res = await fetch("/api/auth/signup", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ email, password, name }),
+            body: JSON.stringify({ email, password, name, captchaToken }),
           });
           const data = (await res.json()) as { ok?: boolean; error?: string };
           if (!res.ok) throw new Error(data.error || `Signup failed (${res.status})`);
@@ -68,10 +76,14 @@ export default function SignUpForm() {
         type="password"
       />
 
+      <div className="mt-3">
+        <ReCaptchaV2 siteKey={captchaSiteKey} onToken={onCaptcha} />
+      </div>
+
       <button
         type="submit"
         disabled={loading}
-        className="mt-2 rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
+        className="mt-4 rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
       >
         {loading ? "Creating…" : "Create account"}
       </button>

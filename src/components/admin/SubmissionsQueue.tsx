@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type SubmissionStatus =
+  | "draft"
   | "submitted"
+  | "approved"
   | "needs_changes"
   | "rejected"
   | "published"
@@ -73,7 +76,7 @@ export function SubmissionsQueue() {
     }
   }
 
-  async function refresh() {
+  const refresh = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -85,9 +88,7 @@ export function SubmissionsQueue() {
           throw new Error(`${base}. You must be signed in.`);
         }
         if (res.status === 403) {
-          throw new Error(
-            `${base}. Your account is not a moderator/admin. To seed an admin in prod/dev, set ADMIN_EMAILS to include your login email, then sign out/in (or re-auth) so your User.role updates.`
-          );
+          throw new Error(`${base}. You don't have permission to view admin submissions.`);
         }
         throw new Error(base);
       }
@@ -109,18 +110,24 @@ export function SubmissionsQueue() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void refresh();
-  }, []);
+  }, [refresh]);
 
   async function applyAction(id: string, forceStatus?: SubmissionStatus) {
     const status = forceStatus ?? draftStatus[id] ?? byId.get(id)?.status;
     if (!status) return;
 
     const reasonRaw = draftReason[id] ?? "";
-    const reason = reasonRaw.trim() ? reasonRaw.trim() : undefined;
+    const reasonTrimmed = reasonRaw.trim();
+    const reason = reasonTrimmed ? reasonTrimmed : undefined;
+
+    if ((status === "needs_changes" || status === "rejected") && !reasonTrimmed) {
+      setError("Please include a moderation reason for needs_changes / rejected.");
+      return;
+    }
 
     setSaving((p) => ({ ...p, [id]: true }));
     setError(null);
@@ -135,9 +142,7 @@ export function SubmissionsQueue() {
         const base = json.error || `Request failed (${res.status})`;
         if (res.status === 401) throw new Error(`${base}. You must be signed in.`);
         if (res.status === 403) {
-          throw new Error(
-            `${base}. Your account is not a moderator/admin. Ensure ADMIN_EMAILS contains your email and re-auth so your role is updated.`
-          );
+          throw new Error(`${base}. You don't have permission to moderate submissions.`);
         }
         throw new Error(base);
       }
@@ -147,16 +152,6 @@ export function SubmissionsQueue() {
       } else {
         await refresh();
       }
-
-      // toast-ish confirmation
-      setNoticeById((p) => ({ ...p, [id]: `Saved (${status})` }));
-      setTimeout(() => {
-        setNoticeById((p) => {
-          const next = { ...p };
-          delete next[id];
-          return next;
-        });
-      }, 2500);
 
       // toast-ish confirmation
       setNoticeById((p) => ({ ...p, [id]: `Saved (${status})` }));
@@ -208,7 +203,11 @@ export function SubmissionsQueue() {
               <tr key={s.id} className="border-b border-slate-100 align-top">
                 <td className="py-3 pr-4 whitespace-nowrap text-[var(--muted)]">{fmt(s.createdAt)}</td>
                 <td className="py-3 pr-4 min-w-[360px]">
-                  <div className="font-semibold text-[var(--text)]">{s.title}</div>
+                  <div className="font-semibold text-[var(--text)]">
+                    <Link className="hover:underline" href={`/admin/submissions/${encodeURIComponent(s.id)}`}>
+                      {s.title}
+                    </Link>
+                  </div>
                   <div className="mt-1 text-[var(--muted)] line-clamp-2">{s.description}</div>
                   {s.tagsCsv ? <div className="mt-1 text-xs text-[var(--muted)]">tags: {s.tagsCsv}</div> : null}
                 </td>
@@ -224,6 +223,7 @@ export function SubmissionsQueue() {
                           onChange={(e) => setDraftStatus((p) => ({ ...p, [s.id]: e.target.value as SubmissionStatus }))}
                         >
                           <option value="submitted">submitted</option>
+                          <option value="approved">approved</option>
                           <option value="needs_changes">needs_changes</option>
                           <option value="rejected">rejected</option>
                           <option value="published">published</option>
