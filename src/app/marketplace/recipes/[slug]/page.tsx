@@ -91,10 +91,22 @@ function submissionToRecipe(sub: {
   };
 }
 
+function resolveSiteOrigin(): string {
+  // Prefer the current Vercel deployment (preview/dev/prod) when available.
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+
+  // Fall back to an explicitly configured site URL.
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, "");
+
+  // Local dev fallback.
+  return "http://localhost:3000";
+}
+
 async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
-  // Use a relative URL so preview/dev/prod always hits the same deployment.
-  // Using NEXT_PUBLIC_SITE_URL here can accidentally point at a different environment.
-  const res = await fetch(`/api/marketplace/recipes/${encodeURIComponent(slug)}`, {
+  // IMPORTANT: this runs server-side. Node fetch requires absolute URLs.
+  // Use VERCEL_URL so preview builds hit their own API.
+  const base = resolveSiteOrigin();
+  const res = await fetch(`${base}/api/marketplace/recipes/${encodeURIComponent(slug)}`, {
     next: { revalidate: 60 },
   });
 
@@ -114,8 +126,8 @@ function absoluteUrl(url: string): string {
   // Keep absolute URLs as-is.
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
 
-  // For internal routes ("/api/..."), keep them relative so they hit the current deployment.
-  if (url.startsWith("/")) return url;
+  // For internal routes ("/api/..."), build an absolute URL against the current deployment.
+  if (url.startsWith("/")) return `${resolveSiteOrigin()}${url}`;
 
   return url;
 }
