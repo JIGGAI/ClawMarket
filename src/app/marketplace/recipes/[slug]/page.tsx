@@ -92,10 +92,11 @@ function submissionToRecipe(sub: {
 }
 
 async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/marketplace/recipes/${encodeURIComponent(slug)}`,
-    { next: { revalidate: 60 } }
-  );
+  // Use a relative URL so preview/dev/prod always hits the same deployment.
+  // Using NEXT_PUBLIC_SITE_URL here can accidentally point at a different environment.
+  const res = await fetch(`/api/marketplace/recipes/${encodeURIComponent(slug)}`, {
+    next: { revalidate: 60 },
+  });
 
   if (res.status === 404) {
     throw new Error("NOT_FOUND");
@@ -110,13 +111,13 @@ async function fetchRecipe(slug: string): Promise<MarketplaceRecipe> {
 }
 
 function absoluteUrl(url: string): string {
+  // Keep absolute URLs as-is.
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
-  if (!url.startsWith("/")) return url;
 
-  const site =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
-  return site ? `${site}${url}` : url;
+  // For internal routes ("/api/..."), keep them relative so they hit the current deployment.
+  if (url.startsWith("/")) return url;
+
+  return url;
 }
 
 async function fetchMarkdown(url: string): Promise<string | null> {
