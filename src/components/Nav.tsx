@@ -74,6 +74,12 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/marketplace">
             Marketplace
           </Link>
+          <Link className="hover:text-[var(--text)]" href="/plugins/kitchen">
+            Kitchen Plugin
+          </Link>
+          <Link className="hover:text-[var(--text)]" href="/plugins/recipes">
+            Recipes Plugin
+          </Link>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
@@ -160,6 +166,12 @@ export function Nav() {
                   Docs
                 </a>
                 <div className="my-2 h-px w-full bg-slate-100" />
+                <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/plugins/kitchen" onClick={() => setOpen(false)}>
+                  Kitchen Plugin
+                </Link>
+                <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/plugins/recipes" onClick={() => setOpen(false)}>
+                  Recipes Plugin
+                </Link>
 
                 {session ? (
                   <>
