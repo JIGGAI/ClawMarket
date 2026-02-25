@@ -47,18 +47,55 @@ export default function RecipesPluginPage() {
                 <a className="block text-[color:var(--coral-bright)] underline" href="https://github.com/JIGGAI/ClawRecipes" target="_blank" rel="noreferrer">
                   GitHub: JIGGAI/ClawRecipes
                 </a>
-                <a className="block text-[color:var(--coral-bright)] underline" href="https://docs.openclaw.ai" target="_blank" rel="noreferrer">
-                  Docs: docs.openclaw.ai
+                <a className="block text-[color:var(--coral-bright)] underline" href="https://github.com/JIGGAI/ClawRecipes/tree/main/docs" target="_blank" rel="noreferrer">
+                  Docs: github.com/JIGGAI/ClawRecipes/docs
                 </a>
               </div>
             </div>
           </div>
 
           <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
-            <div className="text-lg font-semibold text-[var(--text)]">Common commands</div>
-            <div className="mt-4 grid gap-4">
+            <div className="text-lg font-semibold text-[var(--text)]">Commands</div>
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              Examples of the ClawRecipes CLI commands provided by the Recipes plugin.
+            </p>
+
+            <div className="mt-5 grid gap-4">
               <CodeBlock title="List recipes" code="openclaw recipes list" />
+              <CodeBlock title="Show a recipe" code="openclaw recipes show <recipeId>" />
+              <CodeBlock title="Check missing skills (all)" code="openclaw recipes status" />
+              <CodeBlock title="Check missing skills (one recipe)" code="openclaw recipes status <recipeId>" />
+
+              <CodeBlock title="Install a marketplace recipe" code="openclaw recipes install <slug>" />
+              <CodeBlock title="Install a marketplace recipe (custom registry)" code="openclaw recipes install <slug> --registry-base https://clawkitchen.ai" />
+
+              <CodeBlock title="Install a ClawHub skill (team scope)" code="openclaw recipes install-skill <skill> --team-id <teamId>" />
+              <CodeBlock title="Install a ClawHub skill (agent scope)" code="openclaw recipes install-skill <skill> --agent-id <agentId>" />
+              <CodeBlock title="Install a ClawHub skill (global)" code="openclaw recipes install-skill <skill> --global" />
+
+              <CodeBlock title="Scaffold an agent" code="openclaw recipes scaffold <recipeId> --agent-id <agentId> --apply-config" />
               <CodeBlock title="Scaffold a team" code="openclaw recipes scaffold-team <recipeId> -t <teamId> --apply-config" />
+
+              <CodeBlock title="List tickets for a team" code="openclaw recipes tickets --team-id <teamId>" />
+              <CodeBlock title="Move a ticket" code="openclaw recipes move-ticket --team-id <teamId> --ticket <ticket> --to testing" />
+              <CodeBlock title="QA handoff (move to testing + assign tester)" code="openclaw recipes handoff --team-id <teamId> --ticket <ticket>" />
+              <CodeBlock title="Complete a ticket (move to done)" code="openclaw recipes complete --team-id <teamId> --ticket <ticket>" />
+
+              <CodeBlock title="Assign a ticket" code="openclaw recipes assign --team-id <teamId> --ticket <ticket> --owner dev" />
+              <CodeBlock title="Take a ticket (assign + in-progress)" code="openclaw recipes take --team-id <teamId> --ticket <ticket> --owner dev" />
+
+              <CodeBlock title="Dispatch (lead: request -> inbox/backlog)" code='openclaw recipes dispatch --team-id <teamId> --request "Add a new feature"' />
+
+              <CodeBlock title="Cleanup closed assignment stubs" code="openclaw recipes cleanup-closed-assignments --team-id <teamId>" />
+              <CodeBlock title="Cleanup test workspaces (dry run)" code="openclaw recipes cleanup-workspaces" />
+              <CodeBlock title="Cleanup test workspaces (delete)" code="openclaw recipes cleanup-workspaces --yes" />
+
+              <CodeBlock title="Migrate legacy team workspace" code="openclaw recipes migrate-team --team-id <teamId> --mode move" />
+              <CodeBlock title="Remove a team (safe uninstall)" code="openclaw recipes remove-team --team-id <teamId>" />
+
+              <CodeBlock title="Show routing bindings" code="openclaw recipes bindings" />
+              <CodeBlock title="Bind a DM/channel to an agent" code="openclaw recipes bind --agent-id <agentId> --channel telegram --peer-kind dm --peer-id <peerId>" />
+              <CodeBlock title="Unbind routing bindings" code="openclaw recipes unbind --channel telegram --peer-kind dm --peer-id <peerId>" />
             </div>
           </div>
         </div>
