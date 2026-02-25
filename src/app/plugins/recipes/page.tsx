@@ -47,8 +47,8 @@ export default function RecipesPluginPage() {
                 <a className="block text-[color:var(--coral-bright)] underline" href="https://github.com/JIGGAI/ClawRecipes" target="_blank" rel="noreferrer">
                   GitHub: JIGGAI/ClawRecipes
                 </a>
-                <a className="block text-[color:var(--coral-bright)] underline" href="https://docs.openclaw.ai" target="_blank" rel="noreferrer">
-                  Docs: docs.openclaw.ai
+                <a className="block text-[color:var(--coral-bright)] underline" href="https://github.com/JIGGAI/ClawRecipes/tree/main/docs" target="_blank" rel="noreferrer">
+                  Docs: github.com/JIGGAI/ClawRecipes/docs
                 </a>
               </div>
             </div>

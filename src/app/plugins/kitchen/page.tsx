@@ -1,10 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { CodeBlock } from "@/components/plugins/CodeBlock";
+import { ImageModal } from "@/components/plugins/ImageModal";
 
-export const metadata = {
-  title: "Kitchen Plugin – ClawRecipes",
-};
+// metadata export removed because this page is a client component (uses modal state).
 
 const screenshots = Array.from({ length: 8 }).map((_, i) => {
   const n = String(i + 1).padStart(2, "0");
@@ -15,6 +17,10 @@ const screenshots = Array.from({ length: 8 }).map((_, i) => {
 });
 
 export default function KitchenPluginPage() {
+  const [open, setOpen] = useState(false);
+  const [activeSrc, setActiveSrc] = useState<string>(screenshots[0]?.src ?? "");
+  const [activeAlt, setActiveAlt] = useState<string>(screenshots[0]?.alt ?? "Screenshot");
+
   return (
     <main className="px-6 py-16 lg:px-16">
       <div className="mx-auto max-w-5xl">
@@ -56,8 +62,8 @@ export default function KitchenPluginPage() {
                 <a className="block text-[color:var(--coral-bright)] underline" href="https://github.com/JIGGAI/ClawKitchen" target="_blank" rel="noreferrer">
                   GitHub: JIGGAI/ClawKitchen
                 </a>
-                <a className="block text-[color:var(--coral-bright)] underline" href="https://docs.openclaw.ai" target="_blank" rel="noreferrer">
-                  Docs: docs.openclaw.ai
+                <a className="block text-[color:var(--coral-bright)] underline" href="https://github.com/JIGGAI/ClawKitchen/tree/main/docs" target="_blank" rel="noreferrer">
+                  Docs: github.com/JIGGAI/ClawKitchen/docs
                 </a>
               </div>
             </div>
@@ -67,13 +73,23 @@ export default function KitchenPluginPage() {
             <div className="text-lg font-semibold text-[var(--text)]">Screenshots</div>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {screenshots.map((s) => (
-                <div key={s.src} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                <button
+                  key={s.src}
+                  type="button"
+                  className="overflow-hidden rounded-xl border border-slate-200 bg-white text-left hover:opacity-95"
+                  onClick={() => {
+                    setActiveSrc(s.src);
+                    setActiveAlt(s.alt);
+                    setOpen(true);
+                  }}
+                >
                   <Image src={s.src} alt={s.alt} width={1200} height={750} className="h-auto w-full" />
-                </div>
+                </button>
               ))}
             </div>
           </div>
         </div>
+        <ImageModal open={open} src={activeSrc} alt={activeAlt} onClose={() => setOpen(false)} />
       </div>
     </main>
   );
