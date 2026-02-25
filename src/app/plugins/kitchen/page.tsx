@@ -18,8 +18,7 @@ const screenshots = Array.from({ length: 8 }).map((_, i) => {
 
 export default function KitchenPluginPage() {
   const [open, setOpen] = useState(false);
-  const [activeSrc, setActiveSrc] = useState<string>(screenshots[0]?.src ?? "");
-  const [activeAlt, setActiveAlt] = useState<string>(screenshots[0]?.alt ?? "Screenshot");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <main className="px-6 py-16 lg:px-16">
@@ -78,8 +77,8 @@ export default function KitchenPluginPage() {
                   type="button"
                   className="overflow-hidden rounded-xl border border-slate-200 bg-white text-left hover:opacity-95"
                   onClick={() => {
-                    setActiveSrc(s.src);
-                    setActiveAlt(s.alt);
+                    const idx = screenshots.findIndex((x) => x.src === s.src);
+                    setActiveIndex(Math.max(0, idx));
                     setOpen(true);
                   }}
                 >
@@ -89,7 +88,13 @@ export default function KitchenPluginPage() {
             </div>
           </div>
         </div>
-        <ImageModal open={open} src={activeSrc} alt={activeAlt} onClose={() => setOpen(false)} />
+        <ImageModal
+          open={open}
+          items={screenshots}
+          index={activeIndex}
+          onChangeIndex={setActiveIndex}
+          onClose={() => setOpen(false)}
+        />
       </div>
     </main>
   );
