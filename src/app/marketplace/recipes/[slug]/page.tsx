@@ -5,6 +5,8 @@ import type { MarketplaceRecipe } from "@/lib/marketplace";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const metadata = {
   title: "Recipe – Marketplace – ClawRecipes",
@@ -426,9 +428,55 @@ export default async function MarketplaceRecipeDetailPage({
                 <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
                   {markdown ? (
                     <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
-                      <pre className="max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-white/0 font-mono text-sm text-[var(--text)] [-webkit-overflow-scrolling:touch]">
-                        <code>{markdown}</code>
-                      </pre>
+                      <div className="space-y-4 text-[15px] leading-7 text-[var(--text)]">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            h1: ({ children }) => (
+                              <h1 className="text-2xl font-bold tracking-tight text-[var(--text)]">{children}</h1>
+                            ),
+                            h2: ({ children }) => (
+                              <h2 className="text-xl font-bold tracking-tight text-[var(--text)]">{children}</h2>
+                            ),
+                            h3: ({ children }) => (
+                              <h3 className="text-lg font-semibold tracking-tight text-[var(--text)]">{children}</h3>
+                            ),
+                            a: ({ href, children }) => (
+                              <a
+                                href={href}
+                                target={href?.startsWith("/") ? undefined : "_blank"}
+                                rel={href?.startsWith("/") ? undefined : "noreferrer"}
+                                className="text-[color:var(--coral-bright)] underline"
+                              >
+                                {children}
+                              </a>
+                            ),
+                            code: ({ className, children }) => {
+                              const isBlock = className?.includes("language-");
+                              if (isBlock) return <code className={className}>{children}</code>;
+                              return (
+                                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[0.95em] text-slate-900">
+                                  {children}
+                                </code>
+                              );
+                            },
+                            pre: ({ children }) => (
+                              <pre className="max-w-full overflow-x-auto rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200 [-webkit-overflow-scrolling:touch]">
+                                {children}
+                              </pre>
+                            ),
+                            ul: ({ children }) => <ul className="list-disc space-y-1 pl-6">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal space-y-1 pl-6">{children}</ol>,
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-4 border-slate-200 pl-4 text-[var(--muted)]">
+                                {children}
+                              </blockquote>
+                            ),
+                          }}
+                        >
+                          {markdown}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   ) : (
                     <div className="px-6 py-5 text-[var(--muted)]">
