@@ -15,4 +15,6 @@ else
 fi
 
 echo "[build] running next build"
-next build
+# Ensure Next runs the production build pipeline. A non-production NODE_ENV causes
+# Next to warn and can break prerender/export.
+NODE_ENV=production next build
