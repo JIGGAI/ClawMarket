@@ -15,4 +15,5 @@ else
 fi
 
 echo "[build] running next build"
-next build
+# Force a consistent build environment even if the shell has NODE_ENV set to a non-standard value.
+NODE_ENV=production next build
