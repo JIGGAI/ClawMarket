@@ -66,7 +66,7 @@ export default function SubmissionsClient({ submissions }: { submissions: Submis
             <div className="mt-3 flex flex-wrap gap-3 text-sm">
               {s.sourceUrl ? (
                 <a className="text-[color:var(--coral-bright)] underline break-all" href={s.sourceUrl} target="_blank" rel="noreferrer">
-                  Source URL
+                  {s.sourceUrl}
                 </a>
               ) : null}
               {s.bodyMd ? (
