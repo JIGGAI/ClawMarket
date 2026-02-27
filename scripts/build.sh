@@ -15,4 +15,4 @@ else
 fi
 
 echo "[build] running next build"
-next build
+NODE_ENV=production next build

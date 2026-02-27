@@ -5,6 +5,8 @@ import type { MarketplaceRecipe } from "@/lib/marketplace";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const metadata = {
   title: "Recipe – Marketplace – ClawRecipes",
@@ -438,10 +440,51 @@ export default async function MarketplaceRecipeDetailPage({
 
                 <div className="mt-5 max-w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
                   {markdown ? (
-                    <div className="max-h-none overflow-visible px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
-                      <pre className="max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-white/0 font-mono text-sm text-[var(--text)] [-webkit-overflow-scrolling:touch]">
-                        <code>{markdown}</code>
-                      </pre>
+                    <div className="px-6 py-5 sm:max-h-[70vh] sm:overflow-auto">
+                      <article className="max-w-none text-[var(--text)]">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            h1: (p) => <h1 className="mt-6 text-2xl font-bold" {...p} />,
+                            h2: (p) => <h2 className="mt-6 text-xl font-bold" {...p} />,
+                            h3: (p) => <h3 className="mt-5 text-lg font-semibold" {...p} />,
+                            p: (p) => <p className="mt-3 leading-7 text-[var(--text)]" {...p} />,
+                            a: (p) => <a className="underline hover:opacity-80" target="_blank" rel="noreferrer" {...p} />,
+                            ul: (p) => <ul className="mt-3 list-disc pl-6" {...p} />,
+                            ol: (p) => <ol className="mt-3 list-decimal pl-6" {...p} />,
+                            li: (p) => <li className="mt-1" {...p} />,
+                            blockquote: (p) => (
+                              <blockquote className="mt-4 border-l-4 border-slate-200 pl-4 italic text-[var(--muted)]" {...p} />
+                            ),
+                            code: ({ className, children, ...props }) => {
+                              const isBlock = typeof className === "string" && className.includes("language-");
+                              if (isBlock) {
+                                return (
+                                  <code className={className} {...props}>
+                                    {children}
+                                  </code>
+                                );
+                              }
+                              return (
+                                <code
+                                  className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[0.9em] text-slate-900"
+                                  {...props}
+                                >
+                                  {children}
+                                </code>
+                              );
+                            },
+                            pre: (p) => (
+                              <pre
+                                className="mt-4 max-w-full overflow-x-auto rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]"
+                                {...p}
+                              />
+                            ),
+                          }}
+                        >
+                          {markdown}
+                        </ReactMarkdown>
+                      </article>
                     </div>
                   ) : (
                     <div className="px-6 py-5 text-[var(--muted)]">
