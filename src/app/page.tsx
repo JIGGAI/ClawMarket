@@ -49,7 +49,10 @@ const agentsImages = [
 
 const recipesImages = [{ src: "/images/recipes/recipes-1.png", alt: "Recipes" }];
 
-const cronImages = [{ src: "/images/cron/cron-1.png", alt: "Cron" }];
+const cronImages = [
+  { src: "/images/cron/cron-1.png", alt: "Cron jobs" },
+  { src: "/images/cron/cron-2.png", alt: "Cron jobs" },
+];
 
 // These filenames include a narrow no-break space in the original screenshot name; use URL-encoded paths.
 const goalsImages = [
