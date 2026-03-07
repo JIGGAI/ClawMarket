@@ -31,8 +31,8 @@ export function CopyLineButton({
 
   const base =
     size === "default"
-      ? "inline-flex items-center rounded-lg border border-[var(--border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
-      : "inline-flex items-center rounded-md border border-[var(--border)] bg-white/60 px-2 py-1 text-[11px] font-semibold text-[var(--text)] shadow-sm hover:border-[color:var(--coral-bright)]";
+      ? "inline-flex items-center rounded-lg border border-[var(--border)] bg-white/5 px-4 py-2 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)] hover:bg-white/10"
+      : "inline-flex items-center rounded-md border border-[var(--border)] bg-white/10 px-2 py-1 text-[11px] font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)] hover:bg-white/15";
 
   return (
     <button
