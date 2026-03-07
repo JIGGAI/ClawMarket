@@ -76,7 +76,7 @@ export function Nav() {
         </Link>
 
         <nav className="hidden items-center gap-6 text-base text-[var(--muted)] sm:flex">
-          <Link className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-[#ffffff] shadow-sm transition hover:brightness-95" href="/get-started">
+          <Link className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold !text-white shadow-sm transition hover:brightness-95" href="/get-started">
             Get Started
           </Link>
           <Link className="hover:text-[var(--text)]" href="/marketplace">
@@ -90,13 +90,15 @@ export function Nav() {
               Our Plugins
               <ChevronDownIcon className="h-4 w-4" />
             </button>
-            <div className="invisible absolute left-0 top-full z-50 mt-2 w-52 rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
-              <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/recipes">
-                ClawRecipes
-              </Link>
-              <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/kitchen">
-                ClawKitchen
-              </Link>
+            <div className="invisible absolute left-0 top-full z-50 w-52 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100">
+              <div className="rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-2 shadow-lg">
+                <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/recipes">
+                  ClawRecipes
+                </Link>
+                <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/kitchen">
+                  ClawKitchen
+                </Link>
+              </div>
             </div>
           </div>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
@@ -150,7 +152,7 @@ export function Nav() {
                 </div>
               </div>
             ) : (
-              <Link className="ml-1 rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-[#ffffff] shadow-sm transition hover:brightness-95" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
+              <Link className="ml-1 rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold !text-white shadow-sm transition hover:brightness-95" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
                 Login
               </Link>
             )}
@@ -175,7 +177,7 @@ export function Nav() {
           <div className="mx-auto max-w-7xl px-6 pb-4 lg:px-16">
             <div className="rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-3 shadow-sm">
               <div className="flex flex-col gap-2 text-base text-[var(--muted)]">
-                <Link className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold text-[#ffffff] hover:brightness-95" href="/get-started" onClick={() => setOpen(false)}>
+                <Link className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold !text-white hover:brightness-95" href="/get-started" onClick={() => setOpen(false)}>
                   Get Started
                 </Link>
                 <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>

@@ -165,7 +165,7 @@ export default function HowItWorksPage() {
           <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
             <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Command Playbook</p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)] lg:text-4xl">
-              Key commands from Get Started
+              Key recipe commands
             </h2>
             <p className="mt-4 max-w-4xl text-sm leading-7 text-[var(--muted)]">
               Install, verify, scaffold, and maintain your setup with repeatable commands.
