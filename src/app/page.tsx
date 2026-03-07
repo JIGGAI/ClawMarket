@@ -3,12 +3,64 @@ import Link from "next/link";
 
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
+import { ScreenshotGrid } from "@/components/ScreenshotGrid";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
   { name: "Dev", icon: "🧑‍🔧", blurb: "Builds features and keeps quality high." },
   { name: "DevOps", icon: "🧯", blurb: "Keeps deployments, infra, and safety tight." },
   { name: "QA", icon: "🔍", blurb: "Verifies recipes and catches regressions." },
+];
+
+// Screenshots (openable in modal)
+const kitchenImages = Array.from({ length: 8 }).map((_, i) => {
+  const n = String(i + 1).padStart(2, "0");
+  return {
+    src: `/images/plugins/kitchen/kitchen-${n}.jpg`,
+    alt: `ClawKitchen screenshot ${n}`,
+  };
+});
+
+const teamsImages = [
+  { src: "/images/teams/team-building.png", alt: "Team building" },
+  { src: "/images/teams/create-custom-team.png", alt: "Create custom team" },
+  { src: "/images/teams/custom-team-2.png", alt: "Custom team details" },
+  { src: "/images/teams/marketing-team-editor.png", alt: "Marketing team editor" },
+];
+
+const workflowsImages = [
+  { src: "/images/workflows/workflow-1.png", alt: "Workflow" },
+  { src: "/images/workflows/workflow-2.png", alt: "Workflow" },
+  { src: "/images/workflows/workflow-3.png", alt: "Workflow" },
+  { src: "/images/workflows/workflow-runs.png", alt: "Workflow runs" },
+  { src: "/images/workflows/workflow-runs-detail.png", alt: "Workflow run detail" },
+];
+
+const ticketsImages = [
+  { src: "/images/tickets/tickets-1.png", alt: "Tickets" },
+  { src: "/images/tickets/tickets-2.png", alt: "Tickets" },
+  { src: "/images/tickets/edit-tickets.png", alt: "Edit ticket" },
+];
+
+const agentsImages = [
+  { src: "/images/agents/agents-1.png", alt: "Agents" },
+  { src: "/images/agents/agents-2.png", alt: "Agents" },
+];
+
+const recipesImages = [{ src: "/images/recipes/recipes-1.png", alt: "Recipes" }];
+
+const cronImages = [{ src: "/images/cron/cron-1.png", alt: "Cron" }];
+
+// These filenames include a narrow no-break space in the original screenshot name; use URL-encoded paths.
+const goalsImages = [
+  {
+    src: "/images/goals/Screenshot%202026-03-06%20at%2010.57.02%E2%80%AFPM.png",
+    alt: "Goals" ,
+  },
+  {
+    src: "/images/goals/Screenshot%202026-03-06%20at%2010.57.31%E2%80%AFPM.png",
+    alt: "Goals" ,
+  },
 ];
 
 function Card({
@@ -241,6 +293,10 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+
+            <div className="mt-12">
+              <ScreenshotGrid title="Agent UI" items={agentsImages} columns="2" />
+            </div>
           </div>
         </section>
       </FadeIn>
@@ -267,6 +323,10 @@ export default function HomePage() {
                 body="Run the same loop daily without losing track: triage, verify, ship, report — always in the same shape."
               />
             </div>
+          </div>
+
+          <div className="mx-auto mt-12 max-w-6xl">
+            <ScreenshotGrid title="Cron jobs" items={cronImages} columns="2" />
           </div>
         </section>
       </FadeIn>
@@ -298,6 +358,100 @@ export default function HomePage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-12">
+              <ScreenshotGrid title="Tickets" items={ticketsImages} columns="3" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Workflows */}
+      <FadeIn>
+        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Workflows</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Run structured work — and see the artifacts
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Queue runs, run now, inspect outputs, and keep everything file-first.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={workflowsImages} columns="3" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Teams */}
+      <FadeIn>
+        <section className="px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Teams</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Build custom teams from agents
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Create and edit team structures that match how you actually ship.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={teamsImages} columns="2" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Goals */}
+      <FadeIn>
+        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Goals</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Track goals alongside execution
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Keep long-lived goals visible while the team works tickets and workflows.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={goalsImages} columns="2" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: Marketplace */}
+      <FadeIn>
+        <section className="px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Marketplace</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Install proven templates instead of reinventing everything
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Browse team recipes and agent recipes — then scaffold into your own OpenClaw workspace.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={recipesImages} columns="2" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: ClawKitchen */}
+      <FadeIn>
+        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              A UI that makes agent teams usable
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Screenshots you can click through — same modal behavior as the Kitchen plugin page.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={kitchenImages} columns="4" />
             </div>
           </div>
         </section>
