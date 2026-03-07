@@ -60,3 +60,8 @@ If `NEXT_PUBLIC_SITE_URL` is not set, the app will fall back to Vercel’s `VERC
 ## Notes
 - Marketplace UGC “published recipes” are sourced from the DB and merged into the public recipes API.
 - Current UGC detail slugs are generated on submit and stored on `Submission.slug` (API also accepts legacy `id` during the migration window).
+
+## Optional homepage metrics env vars
+- `METRICS_GITHUB_REPO` (default: `JIGGAI/ClawRecipes`)
+- `METRICS_NPM_PACKAGE` (default: `@jiggai/recipes`)
+- `NEXT_PUBLIC_METRICS_COUNTRIES` (or `METRICS_COUNTRIES`) for the countries stat label/value

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
+import { getPublicMetrics } from "@/lib/public-metrics";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
@@ -55,12 +56,6 @@ const recipesImages = [
 const cronImages = [
   { src: "/images/cron/cron-1.png", alt: "Cron jobs" },
   { src: "/images/cron/cron-2.png", alt: "Cron jobs" },
-];
-
-const trustStats = [
-  { label: "GitHub Stars", value: "Community-loved", blurb: "Open source with an active contributor base." },
-  { label: "Installs", value: "Growing daily", blurb: "Teams are scaffolding real workflows every day." },
-  { label: "Countries", value: "Used worldwide", blurb: "Built for distributed teams and global contributors." },
 ];
 
 const whatYouGet = [
@@ -121,7 +116,14 @@ function Card({
   );
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const metrics = await getPublicMetrics();
+  const trustStats = [
+    { label: "GitHub Stars", value: metrics.stars, blurb: "Open source with an active contributor base." },
+    { label: "Installs", value: metrics.installs, blurb: "Last 30 days on npm for @jiggai/recipes." },
+    { label: "Countries", value: metrics.countries, blurb: "Set with NEXT_PUBLIC_METRICS_COUNTRIES." },
+  ];
+
   return (
     <main className="w-full">
       <FadeIn>
