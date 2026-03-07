@@ -50,6 +50,14 @@ function CloseIcon({ className }: { className?: string }) {
   );
 }
 
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export function Nav() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
@@ -77,12 +85,20 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/how-it-works">
             How It Works
           </Link>
-          <Link className="hover:text-[var(--text)]" href="/plugins/recipes">
-            Recipes Plugin
-          </Link>
-          <Link className="hover:text-[var(--text)]" href="/plugins/kitchen">
-            Kitchen Plugin
-          </Link>
+          <div className="group relative">
+            <button type="button" className="inline-flex items-center gap-1 hover:text-[var(--text)]">
+              Our plugins
+              <ChevronDownIcon className="h-4 w-4" />
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 mt-2 w-52 rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+              <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/recipes">
+                ClawRecipes
+              </Link>
+              <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/kitchen">
+                ClawKitchen
+              </Link>
+            </div>
+          </div>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
@@ -172,12 +188,15 @@ export function Nav() {
                   Docs
                 </a>
                 <div className="my-2 h-px w-full bg-[var(--border)]" />
-                <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/recipes" onClick={() => setOpen(false)}>
-                  Recipes Plugin
-                </Link>
-                <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/kitchen" onClick={() => setOpen(false)}>
-                  Kitchen Plugin
-                </Link>
+                <div className="rounded-lg border border-[var(--border)] bg-white/5 p-2">
+                  <div className="px-2 pb-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Our plugins</div>
+                  <Link className="block rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/recipes" onClick={() => setOpen(false)}>
+                    ClawRecipes
+                  </Link>
+                  <Link className="block rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/kitchen" onClick={() => setOpen(false)}>
+                    ClawKitchen
+                  </Link>
+                </div>
 
                 {session ? (
                   <>

@@ -6,6 +6,7 @@ import { CopyLineButton } from "@/components/CopyLineButton";
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
 import { getPublicMetrics } from "@/lib/public-metrics";
 import { WorkflowsShowcase } from "@/components/WorkflowsShowcase";
+import { NewsletterSubscribeForm } from "@/components/NewsletterSubscribeForm";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
@@ -600,6 +601,54 @@ export default async function HomePage() {
             <div className="mt-12">
               <ScreenshotGrid items={kitchenImages} columns="4" />
             </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section className="px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--coral-bright)_55%,transparent)] bg-[linear-gradient(135deg,rgba(255,77,77,0.22),rgba(255,77,77,0.05))] p-8 shadow-[var(--shadow)] lg:p-12">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#ffc1c1]">Live Visibility</p>
+              <h2 className="mt-3 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-6xl">
+                Create your team in &lt;30 seconds
+              </h2>
+              <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">
+                See what your agents are doing, what is blocked, and what shipped, without digging through scattered logs.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/marketplace"
+                  className="rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-sm font-semibold text-[#0b1220] transition hover:brightness-95"
+                >
+                  Start from Marketplace
+                </Link>
+                <a
+                  href="https://discord.gg/BKGUkGTR"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg border border-[var(--border)] bg-black/20 px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-black/30"
+                >
+                  See what your agents are doing →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section className="px-6 pb-20 lg:px-16">
+          <div className="mx-auto max-w-4xl rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
+            <div className="text-center">
+              <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Newsletter</p>
+              <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)]">Get product updates</h3>
+              <p className="mt-3 text-sm text-[var(--muted)]">
+                Monthly updates on new recipes, workflows, and agent operations best practices.
+              </p>
+            </div>
+
+            <NewsletterSubscribeForm />
           </div>
         </section>
       </FadeIn>
