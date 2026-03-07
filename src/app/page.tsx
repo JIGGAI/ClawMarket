@@ -4,11 +4,54 @@ import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
 
+// Example: 4-agent Marketing Team template
 const agents = [
-  { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
-  { name: "Dev", icon: "🧑‍🔧", blurb: "Builds features and keeps quality high." },
-  { name: "DevOps", icon: "🧯", blurb: "Keeps deployments, infra, and safety tight." },
-  { name: "QA", icon: "🔍", blurb: "Verifies recipes and catches regressions." },
+  { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan, assigns work, and keeps the loop moving." },
+  { name: "SEO", icon: "🔎", blurb: "Finds opportunities, keywords, and creates briefs." },
+  { name: "Copy", icon: "✍️", blurb: "Writes landing pages, emails, and ad variants." },
+  { name: "Social", icon: "📣", blurb: "Turns campaigns into posts, schedules, and learns from results." },
+];
+
+const clawRecipesBenefits = [
+  {
+    title: "Roles + conventions",
+    body: "Lead/dev/test/marketing roles with clear responsibilities — so everyone has a job (and handoffs don’t collapse).",
+  },
+  {
+    title: "Shared context",
+    body: "Team memory + shared files out of the box — agents collaborate instead of hallucinating in isolation.",
+  },
+  {
+    title: "File-first by design",
+    body: "Work lives in your workspace (AGENTS.md, SOUL.md, tickets, outputs). Reviewable, greppable, and git-friendly.",
+  },
+  {
+    title: "Structured workflows",
+    body: "Intake → assign → execute → verify. Teams can run without you babysitting every step.",
+  },
+  {
+    title: "Swarm-ready",
+    body: "Add a swarm/orchestrator pattern when you want parallel execution (multiple agents pushing toward one outcome).",
+  },
+];
+
+const clawKitchenBenefits = [
+  {
+    title: "Create/edit teams",
+    body: "Add teams + agents without living in the terminal.",
+  },
+  {
+    title: "Manage team files",
+    body: "Edit shared context + team files in one place (AGENTS.md, SOUL.md, and more).",
+  },
+  {
+    title: "Run workflows + track artifacts",
+    body: "Kick off runs, see what happened, and inspect outputs/artifacts without guesswork.",
+  },
+  {
+    title: "Install skills/tools across the team",
+    body: "Roll out capabilities consistently so the whole team stays in sync.",
+  },
 ];
 
 function Card({
@@ -221,8 +264,8 @@ export default function HomePage() {
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Line</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">A team of agents</h2>
             <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Specialists you can message like coworkers. Each role has its own tools, templates, and responsibilities — and
-              you can extend them with recipes.
+              Start with a real team template (example below: a 4-agent marketing squad) — roles, tools, and conventions
+              included.
             </p>
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -240,6 +283,64 @@ export default function HomePage() {
                   <div className="mt-2 text-base text-[var(--muted)]">{a.blurb}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: ClawRecipes benefits */}
+      <FadeIn>
+        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawRecipes</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Structure that makes teams of agents work
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              The point isn’t “spawn agents.” The point is a team that can take work, keep context, and produce artifacts
+              you can review.
+            </p>
+
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {clawRecipesBenefits.map((f) => (
+                <Card key={f.title} title={f.title} body={f.body} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      {/* FEATURE: ClawKitchen benefits */}
+      <FadeIn>
+        <section className="px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              The UI that makes it usable day-to-day
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Manage teams, files, and workflows in one place — and see exactly what ran and what it produced.
+            </p>
+
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {clawKitchenBenefits.map((f) => (
+                <Card key={f.title} title={f.title} body={f.body} />
+              ))}
+            </div>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                className="rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+                href="/plugins/kitchen"
+              >
+                Learn about ClawKitchen
+              </Link>
+              <Link
+                className="rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                href="/plugins/recipes"
+              >
+                Learn about ClawRecipes
+              </Link>
             </div>
           </div>
         </section>
