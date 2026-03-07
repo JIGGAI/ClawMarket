@@ -1,13 +1,13 @@
 type PublicMetrics = {
   stars: string;
-  installs: string;
-  countries: string;
+  recipesInstalls: string;
+  kitchenInstalls: string;
 };
 
 const FALLBACK: PublicMetrics = {
   stars: "Community-loved",
-  installs: "Growing daily",
-  countries: "Used worldwide",
+  recipesInstalls: "Growing daily",
+  kitchenInstalls: "Growing daily",
 };
 
 function compact(value: number): string {
@@ -32,8 +32,7 @@ async function fetchGitHubStars(): Promise<string | null> {
   return stars === null ? null : compact(stars);
 }
 
-async function fetchNpmDownloads(): Promise<string | null> {
-  const pkg = process.env.METRICS_NPM_PACKAGE ?? "@jiggai/recipes";
+async function fetchNpmDownloads(pkg: string): Promise<string | null> {
   const encoded = encodeURIComponent(pkg);
   const res = await fetch(`https://api.npmjs.org/downloads/point/last-month/${encoded}`, {
     next: { revalidate: 3600 },
@@ -45,25 +44,25 @@ async function fetchNpmDownloads(): Promise<string | null> {
   return downloads === null ? null : `${compact(downloads)}/mo`;
 }
 
-function getCountriesMetric(): string {
-  const fromEnv = process.env.NEXT_PUBLIC_METRICS_COUNTRIES ?? process.env.METRICS_COUNTRIES;
-  if (!fromEnv) return FALLBACK.countries;
-  return fromEnv;
-}
-
 export async function getPublicMetrics(): Promise<PublicMetrics> {
   try {
-    const [stars, installs] = await Promise.all([fetchGitHubStars(), fetchNpmDownloads()]);
+    const recipesPkg = process.env.METRICS_NPM_RECIPES_PACKAGE ?? "@jiggai/recipes";
+    const kitchenPkg = process.env.METRICS_NPM_KITCHEN_PACKAGE ?? "@jiggai/kitchen";
+    const [stars, recipesInstalls, kitchenInstalls] = await Promise.all([
+      fetchGitHubStars(),
+      fetchNpmDownloads(recipesPkg),
+      fetchNpmDownloads(kitchenPkg),
+    ]);
     return {
       stars: stars ?? FALLBACK.stars,
-      installs: installs ?? FALLBACK.installs,
-      countries: getCountriesMetric(),
+      recipesInstalls: recipesInstalls ?? FALLBACK.recipesInstalls,
+      kitchenInstalls: kitchenInstalls ?? FALLBACK.kitchenInstalls,
     };
   } catch {
     return {
       stars: FALLBACK.stars,
-      installs: FALLBACK.installs,
-      countries: getCountriesMetric(),
+      recipesInstalls: FALLBACK.recipesInstalls,
+      kitchenInstalls: FALLBACK.kitchenInstalls,
     };
   }
 }

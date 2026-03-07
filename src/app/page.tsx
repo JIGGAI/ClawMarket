@@ -128,9 +128,30 @@ function Card({
 export default async function HomePage() {
   const metrics = await getPublicMetrics();
   const trustStats = [
-    { label: "GitHub Stars", value: metrics.stars, blurb: "Open source with an active contributor base." },
-    { label: "Installs", value: metrics.installs, blurb: "Last 30 days on npm for @jiggai/recipes." },
-    { label: "Countries", value: metrics.countries, blurb: "Set with NEXT_PUBLIC_METRICS_COUNTRIES." },
+    {
+      label: "GitHub Stars",
+      value: metrics.stars,
+      blurb: "Open source with an active contributor base.",
+      icon: "⭐",
+      iconBg: "bg-[#f59e0b]/20",
+      iconColor: "text-[#fcd34d]",
+    },
+    {
+      label: "ClawRecipes Installs",
+      value: metrics.recipesInstalls,
+      blurb: "Last 30 days on npm for @jiggai/recipes.",
+      icon: "📦",
+      iconBg: "bg-[#3b82f6]/20",
+      iconColor: "text-[#93c5fd]",
+    },
+    {
+      label: "ClawKitchen Installs",
+      value: metrics.kitchenInstalls,
+      blurb: "Last 30 days on npm for @jiggai/kitchen.",
+      icon: "🍳",
+      iconBg: "bg-[#10b981]/20",
+      iconColor: "text-[#6ee7b7]",
+    },
   ];
 
   return (
@@ -207,6 +228,9 @@ export default async function HomePage() {
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 {trustStats.map((stat) => (
                   <div key={stat.label} className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+                    <div className={`inline-grid size-8 place-items-center rounded-lg ${stat.iconBg}`}>
+                      <span className={`text-base ${stat.iconColor}`}>{stat.icon}</span>
+                    </div>
                     <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{stat.label}</div>
                     <div className="mt-2 text-xl font-semibold text-[var(--text)]">{stat.value}</div>
                     <div className="mt-1 text-sm text-[var(--muted)]">{stat.blurb}</div>
@@ -483,14 +507,56 @@ export default async function HomePage() {
         <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Workflows</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              Run structured work — and see the artifacts
-            </h2>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Here&apos;s what it looks like</h2>
             <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Queue runs, run now, inspect outputs, and keep everything file-first.
+              See real run queues, execution logs, and artifacts in one place. This is the operational view teams use every day.
             </p>
-            <div className="mt-12">
-              <ScreenshotGrid items={workflowsImages} columns="3" />
+
+            <div className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] lg:p-8">
+              <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
+                <a
+                  href={workflowsImages[3]?.src}
+                  className="group relative block overflow-hidden rounded-2xl border border-[var(--border)]"
+                >
+                  <Image
+                    src={workflowsImages[3]?.src ?? "/images/workflows/workflow-runs.png"}
+                    alt="Workflow runs board"
+                    width={1200}
+                    height={760}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                    <div className="text-sm font-semibold text-white">Run queue + status overview</div>
+                  </div>
+                </a>
+
+                <div className="grid gap-4">
+                  <a href={workflowsImages[4]?.src} className="overflow-hidden rounded-2xl border border-[var(--border)]">
+                    <Image
+                      src={workflowsImages[4]?.src ?? "/images/workflows/workflow-runs-detail.png"}
+                      alt="Workflow run detail"
+                      width={560}
+                      height={320}
+                      className="h-full w-full object-cover"
+                    />
+                  </a>
+                  <div className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+                    <p className="text-sm text-[var(--muted)]">
+                      What you can inspect:
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Run history</span>
+                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Artifacts</span>
+                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Logs</span>
+                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Failures</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <ScreenshotGrid items={workflowsImages} columns="3" />
+              </div>
             </div>
           </div>
         </section>

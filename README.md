@@ -63,5 +63,5 @@ If `NEXT_PUBLIC_SITE_URL` is not set, the app will fall back to Vercel’s `VERC
 
 ## Optional homepage metrics env vars
 - `METRICS_GITHUB_REPO` (default: `JIGGAI/ClawRecipes`)
-- `METRICS_NPM_PACKAGE` (default: `@jiggai/recipes`)
-- `NEXT_PUBLIC_METRICS_COUNTRIES` (or `METRICS_COUNTRIES`) for the countries stat label/value
+- `METRICS_NPM_RECIPES_PACKAGE` (default: `@jiggai/recipes`)
+- `METRICS_NPM_KITCHEN_PACKAGE` (default: `@jiggai/kitchen`)
