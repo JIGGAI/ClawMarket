@@ -50,6 +50,14 @@ function CloseIcon({ className }: { className?: string }) {
   );
 }
 
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export function Nav() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
@@ -61,77 +69,90 @@ export function Nav() {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color:var(--bg)]/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-16">
         <Link href="/" className="text-xl font-bold tracking-tight text-[var(--text)]" onClick={() => setOpen(false)}>
           <span className="mr-1">🦞</span> ClawRecipes
         </Link>
 
         <nav className="hidden items-center gap-6 text-base text-[var(--muted)] sm:flex">
-          <Link className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95" href="/get-started">
+          <Link className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold !text-white shadow-sm transition hover:brightness-95" href="/get-started">
             Get Started
           </Link>
           <Link className="hover:text-[var(--text)]" href="/marketplace">
             Marketplace
           </Link>
-          <Link className="hover:text-[var(--text)]" href="/plugins/recipes">
-            Recipes Plugin
+          <Link className="hover:text-[var(--text)]" href="/how-it-works">
+            How It Works
           </Link>
-          <Link className="hover:text-[var(--text)]" href="/plugins/kitchen">
-            Kitchen Plugin
-          </Link>
+          <div className="group relative">
+            <button type="button" className="inline-flex items-center gap-1 hover:text-[var(--text)]">
+              Our Plugins
+              <ChevronDownIcon className="h-4 w-4" />
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 w-52 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100">
+              <div className="rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-2 shadow-lg">
+                <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/recipes">
+                  ClawRecipes
+                </Link>
+                <Link className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-white/5" href="/plugins/kitchen">
+                  ClawKitchen
+                </Link>
+              </div>
+            </div>
+          </div>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
 
           <div className="flex items-center gap-3">
-            <a className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black" href={githubUrl} target="_blank" rel="noreferrer" aria-label="ClawRecipes on GitHub" title="GitHub">
+            <a className="inline-flex items-center justify-center px-3 py-2 text-[var(--muted)] transition hover:text-[var(--text)]" href={githubUrl} target="_blank" rel="noreferrer" aria-label="ClawRecipes on GitHub" title="GitHub">
               <GitHubIcon className="h-5 w-5" />
             </a>
-            <a className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black" href={xUrl} target="_blank" rel="noreferrer" aria-label="ClawRecipes on X" title="@clawrecipes on X">
+            <a className="inline-flex items-center justify-center px-3 py-2 text-[var(--muted)] transition hover:text-[var(--text)]" href={xUrl} target="_blank" rel="noreferrer" aria-label="ClawRecipes on X" title="@clawrecipes on X">
               <XIcon className="h-4 w-4" />
             </a>
-            <a className="inline-flex items-center justify-center px-3 py-2 text-[var(--text)] hover:text-black" href={discordUrl} target="_blank" rel="noreferrer" aria-label="ClawRecipes on Discord" title="Discord">
+            <a className="inline-flex items-center justify-center px-3 py-2 text-[var(--muted)] transition hover:text-[var(--text)]" href={discordUrl} target="_blank" rel="noreferrer" aria-label="ClawRecipes on Discord" title="Discord">
               <DiscordIcon className="h-5 w-5" />
             </a>
 
             {session ? (
               <div className="relative ml-1" role="navigation" aria-label="User menu">
                 <div className="group relative">
-                  <button type="button" className="h-9 w-9 overflow-hidden rounded-full bg-slate-200" aria-haspopup="menu" aria-label="Open user menu" title={session.user?.email ?? "Account"}>
+                  <button type="button" className="h-9 w-9 overflow-hidden rounded-full border border-[var(--border)] bg-[color:var(--bg-soft)]" aria-haspopup="menu" aria-label="Open user menu" title={session.user?.email ?? "Account"}>
                     {session.user?.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={session.user.image} alt="" className="h-full w-full object-cover" />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-slate-700">{(session.user?.email?.[0] ?? "U").toUpperCase()}</div>
+                      <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-[var(--text)]">{(session.user?.email?.[0] ?? "U").toUpperCase()}</div>
                     )}
                   </button>
 
-                  <div className="invisible absolute right-0 top-full z-50 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-lg opacity-0 transition group-hover:visible group-hover:opacity-100" role="menu">
-                    <button type="button" className="w-full px-4 py-2 text-left text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" onClick={() => (window.location.href = "/user")}>
+                  <div className="invisible absolute right-0 top-full z-50 w-56 rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] py-2 shadow-lg opacity-0 transition group-hover:visible group-hover:opacity-100" role="menu">
+                    <button type="button" className="w-full px-4 py-2 text-left text-sm text-[var(--text)] hover:bg-white/5" role="menuitem" onClick={() => (window.location.href = "/user")}>
                       <div className="truncate font-semibold">{session.user?.name ?? session.user?.email ?? "Account"}</div>
                       <div className="truncate text-xs text-[var(--muted)]">{session.user?.email ?? ""}</div>
                     </button>
-                    <div className="my-2 h-px w-full bg-slate-100" />
-                    <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/marketplace/submit">
+                    <div className="my-2 h-px w-full bg-[var(--border)]" />
+                    <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-white/5" role="menuitem" href="/marketplace/submit">
                       Submit recipe
                     </Link>
-                    <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/marketplace/submissions">
+                    <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-white/5" role="menuitem" href="/marketplace/submissions">
                       My recipes
                     </Link>
                     {role === "admin" || role === "moderator" ? (
-                      <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-slate-50" role="menuitem" href="/admin">
+                      <Link className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-white/5" role="menuitem" href="/admin">
                         Admin
                       </Link>
                     ) : null}
-                    <button type="button" className="w-full px-4 py-2 text-left text-sm font-semibold text-[var(--text)] hover:bg-slate-50" role="menuitem" onClick={() => signOut({ callbackUrl: "/" })}>
+                    <button type="button" className="w-full px-4 py-2 text-left text-sm font-semibold text-[var(--text)] hover:bg-white/5" role="menuitem" onClick={() => signOut({ callbackUrl: "/" })}>
                       Logout
                     </button>
                   </div>
                 </div>
               </div>
             ) : (
-              <Link className="ml-1 rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:brightness-95" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
+              <Link className="ml-1 rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold !text-white shadow-sm transition hover:brightness-95" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
                 Login
               </Link>
             )}
@@ -142,7 +163,7 @@ export function Nav() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-2 text-[var(--text)] shadow-sm hover:bg-slate-50"
+            className="inline-flex items-center justify-center rounded-lg border border-[var(--border)] bg-[color:var(--bg-soft)] p-2 text-[var(--text)] shadow-sm hover:bg-white/5"
             aria-label={open ? "Close menu" : "Open menu"}
             title={open ? "Close menu" : "Open menu"}
           >
@@ -154,43 +175,49 @@ export function Nav() {
       {open ? (
         <div className="sm:hidden">
           <div className="mx-auto max-w-7xl px-6 pb-4 lg:px-16">
-            <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+            <div className="rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-3 shadow-sm">
               <div className="flex flex-col gap-2 text-base text-[var(--muted)]">
-                <Link className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold text-white hover:brightness-95" href="/get-started" onClick={() => setOpen(false)}>
+                <Link className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold !text-white hover:brightness-95" href="/get-started" onClick={() => setOpen(false)}>
                   Get Started
                 </Link>
-                <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>
+                <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>
                   Marketplace
                 </Link>
-                <a className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+                <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/how-it-works" onClick={() => setOpen(false)}>
+                  How It Works
+                </Link>
+                <a className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                   Docs
                 </a>
-                <div className="my-2 h-px w-full bg-slate-100" />
-                <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/plugins/recipes" onClick={() => setOpen(false)}>
-                  Recipes Plugin
-                </Link>
-                <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/plugins/kitchen" onClick={() => setOpen(false)}>
-                  Kitchen Plugin
-                </Link>
+                <div className="my-2 h-px w-full bg-[var(--border)]" />
+                <div className="rounded-lg border border-[var(--border)] bg-white/5 p-2">
+                  <div className="px-2 pb-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Our Plugins</div>
+                  <Link className="block rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/recipes" onClick={() => setOpen(false)}>
+                    ClawRecipes
+                  </Link>
+                  <Link className="block rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/kitchen" onClick={() => setOpen(false)}>
+                    ClawKitchen
+                  </Link>
+                </div>
 
                 {session ? (
                   <>
-                    <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/user" onClick={() => setOpen(false)}>
+                    <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/user" onClick={() => setOpen(false)}>
                       {session.user?.email ?? "Account"}
                     </Link>
-                    <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace/submit" onClick={() => setOpen(false)}>
+                    <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/marketplace/submit" onClick={() => setOpen(false)}>
                       Submit recipe
                     </Link>
-                    <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/marketplace/submissions" onClick={() => setOpen(false)}>
+                    <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/marketplace/submissions" onClick={() => setOpen(false)}>
                       My recipes
                     </Link>
                     {role === "admin" || role === "moderator" ? (
-                      <Link className="rounded-lg px-3 py-2 hover:bg-slate-50 hover:text-[var(--text)]" href="/admin" onClick={() => setOpen(false)}>
+                      <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/admin" onClick={() => setOpen(false)}>
                         Admin
                       </Link>
                     ) : null}
                     <button
-                      className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-slate-50 hover:text-[var(--text)]"
+                      className="rounded-lg px-3 py-2 text-left font-semibold hover:bg-white/5 hover:text-[var(--text)]"
                       onClick={() => {
                         setOpen(false);
                         signOut({ callbackUrl: "/" });
@@ -200,7 +227,7 @@ export function Nav() {
                     </button>
                   </>
                 ) : (
-                  <Link className="rounded-lg px-3 py-2 font-semibold hover:bg-slate-50 hover:text-[var(--text)]" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} onClick={() => setOpen(false)}>
+                  <Link className="rounded-lg px-3 py-2 font-semibold hover:bg-white/5 hover:text-[var(--text)]" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`} onClick={() => setOpen(false)}>
                     Login
                   </Link>
                 )}
@@ -208,7 +235,7 @@ export function Nav() {
                 <a className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95" href={githubUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                   GitHub
                 </a>
-                <a className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-base font-semibold text-[var(--text)] shadow-sm hover:bg-slate-50" href={xUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+                <a className="inline-flex items-center justify-center rounded-lg border border-[var(--border)] bg-transparent px-4 py-2 text-base font-semibold text-[var(--text)] shadow-sm hover:bg-white/5" href={xUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                   X
                 </a>
               </div>

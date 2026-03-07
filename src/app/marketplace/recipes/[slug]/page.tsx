@@ -211,7 +211,9 @@ export default async function MarketplaceRecipeDetailPage({
   return (
     <main className="w-full">
       <FadeIn>
-        <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-16 lg:px-16">
+        <section className="relative overflow-hidden px-6 py-16 lg:px-16">
+          <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-[color:color-mix(in_oklab,var(--coral-bright)_20%,transparent)] blur-3xl" />
+          <div className="pointer-events-none absolute -left-24 -top-20 h-56 w-56 rounded-full bg-[color:color-mix(in_oklab,var(--cyan-bright)_18%,transparent)] blur-3xl" />
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
               <div className="min-w-0 flex-1 sm:pr-4">
@@ -226,16 +228,16 @@ export default async function MarketplaceRecipeDetailPage({
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-[var(--border)] bg-white/70 px-3 py-1 text-xs font-semibold text-[var(--text)]">
+                  <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-xs font-semibold text-[var(--text)]">
                     {kindLabel(recipe.kind)}
                   </span>
-                  <span className="rounded-full border border-[var(--border)] bg-white/70 px-3 py-1 text-xs font-semibold text-[var(--text)]">
+                  <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-xs font-semibold text-[var(--text)]">
                     v{recipe.version}
                   </span>
                   {(recipe.tags ?? []).slice(0, 8).map((t) => (
                     <span
                       key={t}
-                      className="rounded-full border border-[var(--border)] bg-white/50 px-3 py-1 text-xs text-[var(--muted)]"
+                      className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-xs text-[var(--muted)]"
                     >
                       {t}
                     </span>
@@ -246,7 +248,7 @@ export default async function MarketplaceRecipeDetailPage({
               <div className="order-first flex-none self-end sm:order-last sm:self-start">
                 <BackButton
                   fallbackHref="/marketplace"
-                  className="inline-block whitespace-nowrap rounded-lg border border-[var(--border)] bg-white/70 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                  className="inline-block whitespace-nowrap rounded-lg border border-[var(--border)] bg-white/5 px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)] hover:bg-white/10"
                 >
                   ← Back
                 </BackButton>

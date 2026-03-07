@@ -35,11 +35,11 @@ export function ScreenshotGrid({
           <button
             key={s.src}
             type="button"
-            className="overflow-hidden rounded-xl border border-slate-200 bg-white text-left hover:opacity-95"
+            className="overflow-hidden rounded-xl border border-[var(--border)] bg-[color:var(--card)] text-left transition hover:bg-white/5"
             onClick={() => openGallery({ items, index: idx })}
           >
             {/* Standardize thumbnails: fixed aspect ratio + cover to avoid white bars */}
-            <div className="relative aspect-[16/10] w-full bg-slate-50">
+            <div className="relative aspect-[16/10] w-full bg-[color:var(--bg-soft)]">
               <Image
                 src={s.src}
                 alt={s.alt}

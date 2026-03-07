@@ -83,7 +83,7 @@ export default function SignUpForm() {
       <button
         type="submit"
         disabled={loading}
-        className="mt-4 rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
+        className="mt-4 rounded-lg bg-[color:var(--coral-bright)] px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
       >
         {loading ? "Creating…" : "Create account"}
       </button>

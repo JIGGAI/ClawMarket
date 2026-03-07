@@ -60,3 +60,18 @@ If `NEXT_PUBLIC_SITE_URL` is not set, the app will fall back to Vercel’s `VERC
 ## Notes
 - Marketplace UGC “published recipes” are sourced from the DB and merged into the public recipes API.
 - Current UGC detail slugs are generated on submit and stored on `Submission.slug` (API also accepts legacy `id` during the migration window).
+
+## Optional homepage metrics env vars
+- `METRICS_GITHUB_REPO` (default: `JIGGAI/ClawRecipes`)
+- `METRICS_NPM_RECIPES_PACKAGE` (default: `@jiggai/recipes`)
+- `METRICS_NPM_KITCHEN_PACKAGE` (default: `@jiggai/kitchen`)
+
+## Newsletter subscribe (Mailgun)
+- API endpoint: `POST /api/newsletter/subscribe`
+- Required mail env vars (already used by existing mailer):
+  - `MAILGUN_API_KEY` (or `MAILGUN_SENDING_KEY`)
+  - `MAILGUN_DOMAIN`
+  - `AUTH_EMAIL_FROM` (or `MAILGUN_FROM`)
+- Optional:
+  - `MAILGUN_URL` (set EU endpoint when needed)
+  - `NEWSLETTER_TO` (destination inbox for signups; defaults to `AUTH_EMAIL_FROM`)

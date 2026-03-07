@@ -1,83 +1,166 @@
+import Link from "next/link";
+
+import { FadeIn } from "@/components/FadeIn";
+import { CopyLineButton } from "@/components/CopyLineButton";
+
 export const metadata = {
   title: "Get Started – ClawRecipes",
-  description: "Step-by-step instructions for installing and upgrading the ClawRecipes plugin in OpenClaw.",
+  description: "Step-by-step instructions for installing and upgrading ClawRecipes in OpenClaw.",
 };
 
-function CodeBlock({ children }: { children: React.ReactNode }) {
+function Cmd({ text }: { text: string }) {
   return (
-    <pre className="mt-3 overflow-x-auto rounded-2xl bg-slate-900 p-5 text-sm leading-6 text-slate-100 shadow-sm">
-      <code>{children}</code>
-    </pre>
+    <div className="flex items-start justify-between gap-3 text-slate-100">
+      <div className="overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
+        <span className="mr-2 text-[var(--coral-bright)]">$</span>
+        {text}
+      </div>
+      <CopyLineButton text={text} />
+    </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Step({
+  id,
+  icon,
+  title,
+  description,
+  commands,
+}: {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  commands: string[];
+}) {
   return (
-    <section className="mt-10">
-      <h2 className="text-2xl font-bold tracking-tight text-[var(--text)]">{title}</h2>
-      <div className="mt-3 space-y-3 text-[var(--muted)]">{children}</div>
-    </section>
+    <article className="rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] lg:p-7">
+      <div className="flex items-center gap-3">
+        <span className="inline-grid size-10 place-items-center rounded-xl bg-white/10 text-lg">{icon}</span>
+        <div className="text-xs font-bold tracking-[0.18em] text-[color:var(--coral-bright)]">STEP {id}</div>
+      </div>
+      <h2 className="mt-3 text-2xl font-bold tracking-tight text-[var(--text)]">{title}</h2>
+      <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{description}</p>
+
+      <div className="codeblock mt-5 overflow-hidden rounded-2xl bg-[#0a1019]">
+        <div className="flex items-center gap-2 border-b border-[var(--border)] px-4 py-3">
+          <span className="inline-block size-2.5 rounded-full bg-[#ff5f57]" />
+          <span className="inline-block size-2.5 rounded-full bg-[#febc2e]" />
+          <span className="inline-block size-2.5 rounded-full bg-[#28c840]" />
+          <span className="ml-3 text-xs text-slate-400">Terminal</span>
+        </div>
+        <div className="space-y-3 px-4 py-4 font-mono text-sm">
+          {commands.map((c) => (
+            <Cmd key={c} text={c} />
+          ))}
+        </div>
+      </div>
+    </article>
   );
 }
 
 export default function GetStartedPage() {
   return (
-    <main className="px-6 py-16 lg:px-16">
-      <div className="mx-auto max-w-4xl">
-        <h1 className="text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Get Started</h1>
-        <p className="mt-4 text-lg text-[var(--muted)]">
-          Install the ClawRecipes plugin into OpenClaw, scaffold a team or agent, and learn how to upgrade safely.
-        </p>
+    <main className="px-6 py-16 lg:px-16 lg:py-20">
+      <div className="mx-auto max-w-6xl">
+        <FadeIn>
+          <section className="rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-12">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Get Started</p>
+            <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-6xl">
+              Install ClawRecipes and scaffold your first team
+            </h1>
+            <p className="mt-6 max-w-4xl text-lg leading-8 text-[var(--muted)]">
+              Follow this quick setup flow to install the plugin, verify it loaded, and scaffold teams or individual agents.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/how-it-works"
+                className="rounded-lg bg-[color:var(--coral-bright)] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-95"
+              >
+                View How It Works
+              </Link>
+              <Link
+                href="/marketplace"
+                className="rounded-lg border border-[var(--border)] bg-white/5 px-5 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-white/10"
+              >
+                Browse Marketplace
+              </Link>
+            </div>
+          </section>
+        </FadeIn>
 
-        <Section title="1) Install the plugin">
-          <p>Install the plugin package, then restart the OpenClaw gateway so it loads the new extension.</p>
-          <CodeBlock>{`openclaw plugins install @jiggai/recipes
-openclaw gateway restart`}</CodeBlock>
-        </Section>
+        <div className="mt-10 grid gap-5">
+          <FadeIn>
+            <Step
+              id="01"
+              icon="📦"
+              title="Install the plugin"
+              description="Install ClawRecipes, then restart OpenClaw gateway so it loads the new extension."
+              commands={[
+                "openclaw plugins install @jiggai/recipes",
+                "openclaw gateway restart",
+              ]}
+            />
+          </FadeIn>
 
-        <Section title="2) Verify it loaded">
-          <p>Confirm the Recipes plugin is loaded.</p>
-          <CodeBlock>{`openclaw plugins list`}</CodeBlock>
-        </Section>
+          <FadeIn>
+            <Step
+              id="02"
+              icon="✅"
+              title="Verify and list available recipes"
+              description="Confirm the plugin loaded and inspect available builtin/workspace recipes."
+              commands={["openclaw plugins list", "openclaw recipes list"]}
+            />
+          </FadeIn>
 
-        <Section title="3) List recipes">
-          <p>List available recipes (builtin + workspace).</p>
-          <CodeBlock>{`openclaw recipes list`}</CodeBlock>
-        </Section>
+          <FadeIn>
+            <Step
+              id="03"
+              icon="🧑‍🤝‍🧑"
+              title="Scaffold a full team"
+              description="Create a team workspace with role agents and default process conventions."
+              commands={["openclaw recipes scaffold-team development-team -t my-dev-team --apply-config"]}
+            />
+          </FadeIn>
 
-        <Section title="4) Scaffold a team (shared workspace)">
-          <p>
-            Scaffold a team from a built-in team recipe. This creates <code>workspace-&lt;teamId&gt;/</code> plus role agents.
-          </p>
-          <CodeBlock>{`openclaw recipes scaffold-team development-team -t my-dev-team --apply-config`}</CodeBlock>
-        </Section>
+          <FadeIn>
+            <Step
+              id="04"
+              icon="🤖"
+              title="Scaffold a single agent"
+              description="Generate one focused agent if you don’t need a full team yet."
+              commands={["openclaw recipes scaffold researcher --agent-id my-researcher --apply-config"]}
+            />
+          </FadeIn>
 
-        <Section title="5) Scaffold a single agent">
-          <p>Scaffold a single agent from a recipe.</p>
-          <CodeBlock>{`openclaw recipes scaffold researcher --agent-id my-researcher --apply-config`}</CodeBlock>
-        </Section>
+          <FadeIn>
+            <Step
+              id="05"
+              icon="🛠️"
+              title="Common maintenance commands"
+              description="Useful commands for help, updating existing teams, and removing a team safely."
+              commands={[
+                "openclaw recipes --help",
+                "openclaw recipes scaffold-team development-team -t my-dev-team --overwrite --apply-config",
+                "openclaw recipes remove-team --team-id my-dev-team --yes",
+              ]}
+            />
+          </FadeIn>
 
-        <Section title="Commands (examples)">
-          <p>Common commands you’ll use:</p>
-          <CodeBlock>{`# Help
-openclaw recipes --help
-
-# Re-run scaffold on an existing team (update files)
-openclaw recipes scaffold-team development-team -t my-dev-team --overwrite --apply-config
-
-# Remove a team safely
-openclaw recipes remove-team --team-id my-dev-team --yes`}</CodeBlock>
-        </Section>
-
-        <Section title="Upgrade from older versions">
-          <p>
-            If you previously installed older packages (e.g. <code>@clawcipes/recipes</code>), upgrade by installing the
-            new package and restarting.
-          </p>
-          <CodeBlock>{`openclaw plugins install @jiggai/recipes
-openclaw gateway restart
-openclaw plugins list`}</CodeBlock>
-        </Section>
+          <FadeIn>
+            <Step
+              id="06"
+              icon="⬆️"
+              title="Upgrade from older package names"
+              description="If you previously used older package names, reinstall the current package and restart."
+              commands={[
+                "openclaw plugins install @jiggai/recipes",
+                "openclaw gateway restart",
+                "openclaw plugins list",
+              ]}
+            />
+          </FadeIn>
+        </div>
       </div>
     </main>
   );

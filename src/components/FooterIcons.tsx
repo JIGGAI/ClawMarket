@@ -28,7 +28,7 @@ function DiscordIcon({ className }: { className?: string }) {
 
 export function FooterIcons() {
   const iconCls = "h-5 w-5";
-  const aCls = "inline-flex items-center justify-center p-2 text-[var(--muted)] hover:text-[var(--text)]";
+  const aCls = "inline-flex items-center justify-center rounded-md p-2 text-[var(--muted)] transition hover:bg-white/5 hover:text-[var(--text)]";
 
   return (
     <div className="mt-4 flex items-center justify-center gap-2">

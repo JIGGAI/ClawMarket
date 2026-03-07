@@ -63,10 +63,10 @@ function RecipeCard({
   return (
     <a
       href={detailUrl}
-      className="group block rounded-2xl bg-white/70 p-6 transition hover:bg-white"
+      className="group block rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] transition hover:bg-white/5"
     >
       <div className="flex items-start gap-4">
-        <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 shadow-md">
+        <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-white/10 shadow-md">
           <span className="text-2xl">{icon}</span>
         </div>
         <div className="min-w-0">
@@ -80,7 +80,7 @@ function RecipeCard({
       </div>
       <p className="mt-4 text-base leading-7 text-[var(--muted)]">{description}</p>
       <div className="mt-4 overflow-x-auto rounded-lg bg-slate-900/95 px-4 py-3 font-mono text-xs text-slate-300">
-        <span className="text-emerald-400">$</span> {command}
+        <span className="text-[var(--coral-bright)]">$</span> {command}
       </div>
     </a>
   );
@@ -112,7 +112,9 @@ export default async function MarketplacePage() {
   return (
     <main className="w-full">
       <FadeIn>
-        <section className="bg-gradient-to-b from-slate-50 to-white px-6 py-20 lg:px-16">
+        <section className="relative overflow-hidden px-6 py-20 lg:px-16">
+          <div className="pointer-events-none absolute -top-28 right-0 h-72 w-72 rounded-full bg-[color:color-mix(in_oklab,var(--coral-bright)_24%,transparent)] blur-3xl" />
+          <div className="pointer-events-none absolute -left-16 -top-24 h-64 w-64 rounded-full bg-[color:color-mix(in_oklab,var(--cyan-bright)_20%,transparent)] blur-3xl" />
           <div className="mx-auto max-w-6xl text-center">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">
               Marketplace
@@ -127,13 +129,13 @@ export default async function MarketplacePage() {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a
                 href="/marketplace/submit"
-                className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+                className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-[#0b1220] shadow-md transition hover:brightness-95"
               >
                 Submit a recipe
               </a>
               <Link
                 href="/marketplace/recipes"
-                className="inline-block rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                className="inline-block rounded-lg border border-[var(--border)] bg-white/5 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)] hover:bg-white/10"
               >
                 Community recipes
               </Link>
@@ -160,7 +162,7 @@ export default async function MarketplacePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="bg-slate-50 px-6 py-16 lg:px-16">
+        <section className="bg-[color:var(--bg)]/45 px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <h2 className="text-3xl font-bold text-[var(--text)]">Agent Recipes</h2>
             <p className="mt-2 text-lg text-[var(--muted)]">
@@ -188,7 +190,7 @@ export default async function MarketplacePage() {
                 href="https://github.com/JIGGAI/ClawRecipes/tree/main/recipes/default"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+                className="inline-block rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-[#0b1220] shadow-md transition hover:brightness-95"
               >
                 View All Recipes on GitHub
               </a>

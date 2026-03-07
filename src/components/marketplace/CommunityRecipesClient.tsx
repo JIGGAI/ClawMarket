@@ -85,18 +85,18 @@ export function CommunityRecipesClient() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <input
-            className="w-64 rounded-lg border border-slate-200 px-3 py-2"
+            className="w-64 rounded-lg border border-[var(--border)] bg-white/5 px-3 py-2"
             placeholder="Search…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
           <input
-            className="w-48 rounded-lg border border-slate-200 px-3 py-2"
+            className="w-48 rounded-lg border border-[var(--border)] bg-white/5 px-3 py-2"
             placeholder="Filter tag…"
             value={tag}
             onChange={(e) => setTag(e.target.value)}
           />
-          <select className="rounded-lg border border-slate-200 px-3 py-2" value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
+          <select className="rounded-lg border border-[var(--border)] bg-white/5 px-3 py-2" value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
             <option value="newest">Sort: newest</option>
             <option value="name">Sort: name</option>
           </select>
@@ -106,7 +106,7 @@ export function CommunityRecipesClient() {
           <button
             type="button"
             onClick={() => setView("tiles")}
-            className={`rounded-lg border px-3 py-2 font-semibold ${view === "tiles" ? "border-[color:var(--coral-bright)] text-[color:var(--coral-bright)]" : "border-slate-200 hover:bg-slate-50"}`}
+            className={`rounded-lg border px-3 py-2 font-semibold ${view === "tiles" ? "border-[color:var(--coral-bright)] text-[color:var(--coral-bright)]" : "border-[var(--border)] hover:bg-white/5"}`}
             title="Tiles view"
           >
             Tiles
@@ -114,7 +114,7 @@ export function CommunityRecipesClient() {
           <button
             type="button"
             onClick={() => setView("list")}
-            className={`rounded-lg border px-3 py-2 font-semibold ${view === "list" ? "border-[color:var(--coral-bright)] text-[color:var(--coral-bright)]" : "border-slate-200 hover:bg-slate-50"}`}
+            className={`rounded-lg border px-3 py-2 font-semibold ${view === "list" ? "border-[color:var(--coral-bright)] text-[color:var(--coral-bright)]" : "border-[var(--border)] hover:bg-white/5"}`}
             title="List view"
           >
             List
@@ -132,7 +132,7 @@ export function CommunityRecipesClient() {
       {!loading && !error && view === "tiles" ? (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((r) => (
-            <a key={r.slug} href={`/marketplace/recipes/${encodeURIComponent(r.slug)}`} className="block rounded-2xl border border-slate-200 bg-white p-6 hover:border-[color:var(--coral-bright)]">
+            <a key={r.slug} href={`/marketplace/recipes/${encodeURIComponent(r.slug)}`} className="block rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] hover:border-[color:var(--coral-bright)]">
               <div className="text-lg font-semibold text-[var(--text)]">{r.name}</div>
               <div className="mt-2 text-sm text-[var(--muted)] line-clamp-3">{r.description}</div>
               {r.tags?.length ? <div className="mt-3 text-xs text-[var(--muted)]">tags: {r.tags.join(", ")}</div> : null}
@@ -142,10 +142,10 @@ export function CommunityRecipesClient() {
       ) : null}
 
       {!loading && !error && view === "list" ? (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[color:var(--card)]">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-[var(--muted)]">
+              <tr className="border-b border-[var(--border)] text-[var(--muted)]">
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Description</th>
                 <th className="px-4 py-3">Tags</th>
@@ -153,7 +153,7 @@ export function CommunityRecipesClient() {
             </thead>
             <tbody>
               {filtered.map((r) => (
-                <tr key={r.slug} className="border-b border-slate-100 align-top hover:bg-slate-50">
+                <tr key={r.slug} className="border-b border-[var(--border)] align-top hover:bg-white/5">
                   <td className="px-4 py-3 font-semibold">
                     <a className="text-[color:var(--coral-bright)] underline" href={`/marketplace/recipes/${encodeURIComponent(r.slug)}`}>
                       {r.name}
