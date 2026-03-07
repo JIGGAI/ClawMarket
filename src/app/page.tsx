@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/FadeIn";
 import { CopyLineButton } from "@/components/CopyLineButton";
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
 import { getPublicMetrics } from "@/lib/public-metrics";
+import { WorkflowsShowcase } from "@/components/WorkflowsShowcase";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
@@ -29,12 +30,11 @@ const teamsImages = [
   { src: "/images/teams/marketing-team-editor.png", alt: "Marketing team editor" },
 ];
 
-const workflowsImages = [
-  { src: "/images/workflows/workflow-1.png", alt: "Workflow" },
-  { src: "/images/workflows/workflow-2.png", alt: "Workflow" },
-  { src: "/images/workflows/workflow-3.png", alt: "Workflow" },
-  { src: "/images/workflows/workflow-runs.png", alt: "Workflow runs" },
-  { src: "/images/workflows/workflow-runs-detail.png", alt: "Workflow run detail" },
+const workflowSlides = [
+  { label: "Workflow Board", src: "/images/workflows/workflow-1.png", alt: "Workflow board" },
+  { label: "Run Queue", src: "/images/workflows/workflow-runs.png", alt: "Workflow run queue" },
+  { label: "Run Detail", src: "/images/workflows/workflow-runs-detail.png", alt: "Workflow run detail" },
+  { label: "Execution View", src: "/images/workflows/workflow-3.png", alt: "Workflow execution view" },
 ];
 
 const ticketsImages = [
@@ -191,6 +191,17 @@ export default async function HomePage() {
                   rel="noreferrer"
                 >
                   View on GitHub
+                </a>
+              </div>
+
+              <div className="mt-4">
+                <a
+                  className="inline-flex items-center rounded-lg border border-[var(--border)] bg-white/5 px-5 py-2.5 text-sm font-semibold text-[var(--text)] transition hover:bg-white/10"
+                  href="https://discord.gg/BKGUkGTR"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Need help setting up? Get onboard help →
                 </a>
               </div>
 
@@ -507,56 +518,15 @@ export default async function HomePage() {
         <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Workflows</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Here&apos;s what it looks like</h2>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Run structured work — and see the artifacts
+            </h2>
             <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              See real run queues, execution logs, and artifacts in one place. This is the operational view teams use every day.
+              Queue runs, run now, inspect outputs, and keep everything file-first.
             </p>
 
-            <div className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] lg:p-8">
-              <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-                <a
-                  href={workflowsImages[3]?.src}
-                  className="group relative block overflow-hidden rounded-2xl border border-[var(--border)]"
-                >
-                  <Image
-                    src={workflowsImages[3]?.src ?? "/images/workflows/workflow-runs.png"}
-                    alt="Workflow runs board"
-                    width={1200}
-                    height={760}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-                  />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                    <div className="text-sm font-semibold text-white">Run queue + status overview</div>
-                  </div>
-                </a>
-
-                <div className="grid gap-4">
-                  <a href={workflowsImages[4]?.src} className="overflow-hidden rounded-2xl border border-[var(--border)]">
-                    <Image
-                      src={workflowsImages[4]?.src ?? "/images/workflows/workflow-runs-detail.png"}
-                      alt="Workflow run detail"
-                      width={560}
-                      height={320}
-                      className="h-full w-full object-cover"
-                    />
-                  </a>
-                  <div className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
-                    <p className="text-sm text-[var(--muted)]">
-                      What you can inspect:
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Run history</span>
-                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Artifacts</span>
-                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Logs</span>
-                      <span className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-[var(--text)]">Failures</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <ScreenshotGrid items={workflowsImages} columns="3" />
-              </div>
+            <div className="mt-10">
+              <WorkflowsShowcase slides={workflowSlides} />
             </div>
           </div>
         </section>
