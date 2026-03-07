@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 export type ModalImageItem = { src: string; alt: string };
 
@@ -39,7 +40,7 @@ export function ImageModal({
 
   if (!open) return null;
 
-  return (
+  const node = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
       role="dialog"
@@ -79,15 +80,18 @@ export function ImageModal({
           </div>
         </div>
 
-        <div className="relative w-full">
-          <Image
-            src={active.src}
-            alt={active.alt}
-            width={2400}
-            height={1500}
-            className="h-auto w-full rounded-xl"
-            priority
-          />
+        <div className="flex flex-col">
+          {/* Full-screen friendly: keep the image centered and contained */}
+          <div className="relative flex h-[75vh] w-full items-center justify-center overflow-hidden rounded-xl bg-slate-50">
+            <Image
+              src={active.src}
+              alt={active.alt}
+              fill
+              sizes="100vw"
+              className="object-contain"
+              priority
+            />
+          </div>
           <div className="mt-2 text-xs text-[var(--muted)]">
             {i + 1} / {safeItems.length}
           </div>
@@ -95,4 +99,8 @@ export function ImageModal({
       </div>
     </div>
   );
+
+  // Anchor to <body> so layout/section containers can't clip or stack modals.
+  return createPortal(node, document.body);
+
 }

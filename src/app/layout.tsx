@@ -3,6 +3,7 @@ import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SessionProvider } from "@/components/SessionProvider";
+import { ModalGalleryProvider } from "@/components/ModalGalleryProvider";
 
 function getSiteUrl(): string {
   // Prefer an explicit canonical URL in production.
@@ -45,9 +46,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-dvh antialiased">
         <SessionProvider>
-          <Nav />
-          {children}
-          <SiteFooter />
+          <ModalGalleryProvider>
+            <Nav />
+            {children}
+            <SiteFooter />
+          </ModalGalleryProvider>
         </SessionProvider>
       </body>
     </html>
