@@ -1,34 +1,72 @@
 @import "tailwindcss";
 
 :root {
-  /* OpenClaw palette (source: openclaw.ai) */
-  --coral-bright: #ff4d4d;
-  --coral-mid: #e63946;
-  --cyan-bright: #00e5cc;
-  --cyan-mid: #14b8a6;
+  --coral-bright: #ff8c30;
+  --coral-mid: #ff6c1d;
+  --cyan-bright: #32d7ff;
+  --cyan-mid: #17a8d6;
 
-  /* Light theme surfaces */
-  --bg: #ffffff;
-  --bg-soft: #f6f8fb;
-  --card: rgba(255, 255, 255, 0.72);
-  --border: rgba(17, 24, 39, 0.10);
-  --text: #0b1220;
-  --muted: rgba(11, 18, 32, 0.68);
+  --bg: #090f18;
+  --bg-soft: #121b29;
+  --card: color-mix(in oklab, var(--bg-soft) 85%, #1e2c41);
+  --border: rgba(226, 238, 255, 0.16);
+  --text: #eef5ff;
+  --muted: rgba(222, 233, 248, 0.72);
 
-  --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  --shadow: 0 22px 60px rgba(3, 7, 13, 0.5);
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  /* Light gradient: OpenClaw coral → white (requested) */
   background:
-    radial-gradient(900px 500px at 18% -10%, color-mix(in oklab, var(--cyan-bright) 14%, transparent), transparent 62%),
-    radial-gradient(900px 500px at 82% -10%, color-mix(in oklab, var(--coral-bright) 16%, transparent), transparent 62%),
-    linear-gradient(180deg, color-mix(in oklab, var(--coral-bright) 10%, white) 0%, #ffffff 40%, var(--bg-soft) 100%);
+    radial-gradient(900px 540px at 82% -12%, color-mix(in oklab, var(--coral-bright) 24%, transparent), transparent 68%),
+    radial-gradient(900px 540px at 8% -16%, color-mix(in oklab, var(--cyan-bright) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, #060b13 0%, #0a121c 40%, #101b2a 100%);
   color: var(--text);
+  font-family: var(--font-heading), "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+code,
+pre,
+.font-mono {
+  font-family: var(--font-mono), "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+a {
+  color: inherit;
+}
+
+/* Compatibility layer for existing light utility classes on non-home pages. */
+[class~="bg-white"],
+[class~="bg-white/70"],
+[class~="bg-white/60"],
+[class~="bg-white/50"] {
+  background-color: var(--card) !important;
+}
+
+[class~="bg-white/0"] {
+  background-color: transparent !important;
+}
+
+[class~="bg-slate-50"] {
+  background-color: color-mix(in oklab, var(--bg-soft) 78%, #1a2436) !important;
+}
+
+[class~="border-slate-100"],
+[class~="border-slate-200"],
+[class~="border-slate-300"] {
+  border-color: var(--border) !important;
+}
+
+[class~="hover:bg-slate-50"]:hover {
+  background-color: color-mix(in oklab, var(--bg-soft) 84%, #1a2436) !important;
+}
+
+[class~="text-slate-700"] {
+  color: var(--muted) !important;
 }
 
 @keyframes floaty {
@@ -43,6 +81,7 @@ body {
 
 /* Quickstart-ish code block styling */
 .codeblock {
+  border: 1px solid var(--border);
   box-shadow: var(--shadow);
 }
 
@@ -81,7 +120,7 @@ body {
 .markdown li { margin: 0.25rem 0; }
 
 .markdown a {
-  color: var(--coral-mid);
+  color: var(--coral-bright);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -89,8 +128,8 @@ body {
 .markdown blockquote {
   margin: 1rem 0;
   padding: 0.75rem 1rem;
-  border-left: 3px solid color-mix(in oklab, var(--coral-bright) 55%, white);
-  background: color-mix(in oklab, var(--bg-soft) 70%, white);
+  border-left: 3px solid color-mix(in oklab, var(--coral-bright) 62%, white);
+  background: color-mix(in oklab, var(--bg-soft) 88%, #111827);
 }
 
 .markdown hr {
@@ -114,6 +153,6 @@ body {
 }
 
 .markdown th {
-  background: color-mix(in oklab, var(--bg-soft) 60%, white);
+  background: color-mix(in oklab, var(--bg-soft) 88%, #111827);
   font-weight: 600;
 }

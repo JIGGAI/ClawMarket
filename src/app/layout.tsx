@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -12,6 +13,8 @@ function getSiteUrl(): string {
 }
 
 const siteUrl = getSiteUrl();
+const headingFont = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" });
+const monoFont = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   title: "ClawRecipes — OpenClaw Recipes",
@@ -44,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-dvh antialiased">
+      <body className={`${headingFont.variable} ${monoFont.variable} min-h-dvh antialiased`}>
         <SessionProvider>
           <ModalGalleryProvider>
             <Nav />
