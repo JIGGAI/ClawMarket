@@ -207,12 +207,12 @@ export default async function HomePage() {
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
-                <a href="#proof" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Proof</a>
-                <a href="#quick-start" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Quick Start</a>
                 <a href="#shared-context" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Shared context</a>
                 <a href="#team-agents" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team agents</a>
-                <a href="#workflows" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Workflows</a>
+                <a href="#run-structured" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Workflows</a>
                 <a href="#teams-showcase" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team builder</a>
+                <a href="#agile-process" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Agile</a>
+                <a href="#cron-automation" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Automation</a>
                 <a href="#marketplace-section" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Marketplace</a>
               </div>
             </div>
@@ -475,7 +475,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section id="workflows" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
+        <section id="cron-automation" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Timer</p>
@@ -504,7 +504,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="px-6 py-20 lg:px-16">
+        <section id="agile-process" className="px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Pass</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">An agile process that sticks</h2>
@@ -537,7 +537,7 @@ export default async function HomePage() {
 
       {/* FEATURE: Workflows */}
       <FadeIn>
-        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
+        <section id="run-structured" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Workflows</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">

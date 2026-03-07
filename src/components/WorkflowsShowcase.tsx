@@ -53,13 +53,13 @@ export function WorkflowsShowcase({ slides }: { slides: WorkflowSlide[] }) {
           <div className="w-12" />
         </div>
 
-        <div className="relative">
+        <div className="relative aspect-[16/10] w-full">
           <Image
             src={current.src}
             alt={current.alt}
-            width={1400}
-            height={860}
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 1024px) 100vw, 1200px"
+            className="object-cover"
           />
         </div>
       </div>
