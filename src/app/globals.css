@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --coral-bright: #ff8c30;
-  --coral-mid: #ff6c1d;
+  --coral-bright: #ff4d4d;
+  --coral-mid: #e63946;
   --cyan-bright: #32d7ff;
   --cyan-mid: #17a8d6;
 
@@ -77,6 +77,22 @@ a {
 
 .floaty {
   animation: floaty 5.5s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-wrap {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
 }
 
 /* Quickstart-ish code block styling */

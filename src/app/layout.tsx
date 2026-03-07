@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -48,6 +49,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${headingFont.variable} ${monoFont.variable} min-h-dvh antialiased`}>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-ENVZGFKNTG" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ENVZGFKNTG');
+          `}
+        </Script>
         <SessionProvider>
           <ModalGalleryProvider>
             <Nav />
