@@ -439,7 +439,7 @@ export default function HomePage() {
               Browse team recipes and agent recipes — then scaffold into your own OpenClaw workspace.
             </p>
             <div className="mt-12">
-              <ScreenshotGrid items={recipesImages} columns="2" />
+              <ScreenshotGrid items={recipesImages} columns="3" />
             </div>
           </div>
         </section>

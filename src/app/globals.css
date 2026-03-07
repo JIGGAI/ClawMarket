@@ -1,33 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* OpenClaw palette (source: openclaw.ai) */
-  --coral-bright: #ff4d4d;
-  --coral-mid: #e63946;
-  --cyan-bright: #00e5cc;
-  --cyan-mid: #14b8a6;
+  /* ClawMetry-inspired dark palette */
+  --coral-bright: #10b981; /* repurpose accent var used across the site */
+  --coral-mid: #34d399;
+  --cyan-bright: #60a5fa;
+  --cyan-mid: #3b82f6;
 
-  /* Light theme surfaces */
-  --bg: #ffffff;
-  --bg-soft: #f6f8fb;
-  --card: rgba(255, 255, 255, 0.72);
-  --border: rgba(17, 24, 39, 0.10);
-  --text: #0b1220;
-  --muted: rgba(11, 18, 32, 0.68);
+  --bg: #0d1117;
+  --bg-soft: #0b0f1a;
+  --card: rgba(17, 24, 39, 0.65);
+  --border: rgba(148, 163, 184, 0.16);
+  --text: #f1f5f9;
+  --muted: rgba(148, 163, 184, 0.85);
 
-  --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  --shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  /* Light gradient: OpenClaw coral → white (requested) */
   background:
-    radial-gradient(900px 500px at 18% -10%, color-mix(in oklab, var(--cyan-bright) 14%, transparent), transparent 62%),
-    radial-gradient(900px 500px at 82% -10%, color-mix(in oklab, var(--coral-bright) 16%, transparent), transparent 62%),
-    linear-gradient(180deg, color-mix(in oklab, var(--coral-bright) 10%, white) 0%, #ffffff 40%, var(--bg-soft) 100%);
+    radial-gradient(900px 520px at 18% -10%, color-mix(in oklab, var(--coral-bright) 18%, transparent), transparent 62%),
+    radial-gradient(900px 520px at 82% -10%, color-mix(in oklab, #a78bfa 16%, transparent), transparent 62%),
+    linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 55%, #0b0f1a 100%);
   color: var(--text);
 }
 
