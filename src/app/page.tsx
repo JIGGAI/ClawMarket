@@ -47,7 +47,10 @@ const agentsImages = [
   { src: "/images/agents/agents-2.png", alt: "Agents" },
 ];
 
-const recipesImages = [{ src: "/images/recipes/recipes-1.png", alt: "Recipes" }];
+const recipesImages = [
+  { src: "/images/recipes/recipes-1.png", alt: "Recipes marketplace" },
+  { src: "/images/recipes/recipes-2.png", alt: "Recipes marketplace" },
+];
 
 const cronImages = [
   { src: "/images/cron/cron-1.png", alt: "Cron jobs" },
