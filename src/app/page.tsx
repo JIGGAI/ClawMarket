@@ -54,6 +54,13 @@ const clawKitchenBenefits = [
   },
 ];
 
+const kitchenImages = [
+  { src: "/images/plugins/kitchen/kitchen-01.jpg", alt: "ClawKitchen UI screenshot 1" },
+  { src: "/images/plugins/kitchen/kitchen-02.jpg", alt: "ClawKitchen UI screenshot 2" },
+  { src: "/images/plugins/kitchen/kitchen-03.jpg", alt: "ClawKitchen UI screenshot 3" },
+  { src: "/images/plugins/kitchen/kitchen-04.jpg", alt: "ClawKitchen UI screenshot 4" },
+];
+
 function Card({
   title,
   body,
@@ -313,34 +320,55 @@ export default function HomePage() {
       {/* FEATURE: ClawKitchen benefits */}
       <FadeIn>
         <section className="px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              The UI that makes it usable day-to-day
-            </h2>
-            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Manage teams, files, and workflows in one place — and see exactly what ran and what it produced.
-            </p>
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+            <div>
+              <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+                The UI that makes it usable day-to-day
+              </h2>
+              <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+                Manage teams, files, and workflows in one place — and see exactly what ran and what it produced.
+              </p>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {clawKitchenBenefits.map((f) => (
-                <Card key={f.title} title={f.title} body={f.body} />
-              ))}
+              <div className="mt-12 grid gap-6 sm:grid-cols-2">
+                {clawKitchenBenefits.map((f) => (
+                  <Card key={f.title} title={f.title} body={f.body} />
+                ))}
+              </div>
+
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link
+                  className="rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
+                  href="/plugins/kitchen"
+                >
+                  Learn about ClawKitchen
+                </Link>
+                <Link
+                  className="rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
+                  href="/plugins/recipes"
+                >
+                  Learn about ClawRecipes
+                </Link>
+              </div>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link
-                className="rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-base font-semibold text-white shadow-md transition hover:brightness-95"
-                href="/plugins/kitchen"
-              >
-                Learn about ClawKitchen
-              </Link>
-              <Link
-                className="rounded-lg border border-[var(--border)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--text)] shadow-sm transition hover:border-[color:var(--coral-bright)]"
-                href="/plugins/recipes"
-              >
-                Learn about ClawRecipes
-              </Link>
+            <div className="grid gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                {kitchenImages.map((img) => (
+                  <div key={img.src} className="overflow-hidden rounded-2xl bg-white shadow-lg">
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      width={900}
+                      height={650}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-[var(--muted)]">
+                Real screenshots from ClawKitchen — teams, tickets, workflows, and artifacts in one place.
+              </p>
             </div>
           </div>
         </section>
