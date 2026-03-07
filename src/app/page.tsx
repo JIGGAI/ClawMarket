@@ -90,15 +90,6 @@ const whatYouGet = [
   },
 ];
 
-const voices = [
-  "Finally a real team system, not just prompt chaos.",
-  "File-first workflows made handoffs obvious and reviewable.",
-  "Scaffolded roles got us shipping faster in week one.",
-  "ClawKitchen made multi-agent ops usable day-to-day.",
-  "Marketplace templates saved us from reinventing setup.",
-  "Cron loops turned recurring ops into a predictable system.",
-];
-
 // These filenames include a narrow no-break space in the original screenshot name; use URL-encoded paths.
 const goalsImages = [
   {
@@ -289,35 +280,6 @@ export default async function HomePage() {
       <div className="border-y border-[var(--border)] bg-[color:var(--bg)]/75 py-6 text-center">
         <p className="text-lg text-[var(--muted)]">Best-in-class workflow automation for teams of all sizes.</p>
       </div>
-
-      <FadeIn>
-        <section id="community-voices" className="px-6 py-16 lg:px-16">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Community</p>
-                <h2 className="mt-2 text-3xl font-bold tracking-tight text-[var(--text)] lg:text-4xl">
-                  What People Are Saying
-                </h2>
-              </div>
-            </div>
-
-            <div className="marquee-wrap">
-              <div className="marquee-track gap-4">
-                {[...voices, ...voices].map((quote, idx) => (
-                  <article
-                    key={`${quote}-${idx}`}
-                    className="w-[320px] shrink-0 rounded-2xl border border-[color:color-mix(in_oklab,var(--coral-bright)_45%,var(--border))] bg-[color:var(--card)] p-5 shadow-[var(--shadow)]"
-                  >
-                    <div className="text-sm uppercase tracking-[0.14em] text-[color:var(--coral-bright)]">User feedback</div>
-                    <p className="mt-3 text-base leading-7 text-[var(--text)]">&ldquo;{quote}&rdquo;</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      </FadeIn>
 
       <FadeIn>
         <section id="quick-start" className="px-6 py-20 lg:px-16">
