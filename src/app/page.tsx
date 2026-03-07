@@ -24,11 +24,11 @@ const kitchenImages = Array.from({ length: 8 }).map((_, i) => {
   };
 });
 
-const teamsImages = [
-  { src: "/images/teams/team-building.png", alt: "Team building" },
-  { src: "/images/teams/create-custom-team.png", alt: "Create custom team" },
-  { src: "/images/teams/custom-team-2.png", alt: "Custom team details" },
-  { src: "/images/teams/marketing-team-editor.png", alt: "Marketing team editor" },
+const teamSlides = [
+  { label: "Team Builder", src: "/images/teams/team-building.png", alt: "Team builder" },
+  { label: "Create Team", src: "/images/teams/create-custom-team.png", alt: "Create custom team" },
+  { label: "Team Details", src: "/images/teams/custom-team-2.png", alt: "Custom team details" },
+  { label: "Team Editor", src: "/images/teams/marketing-team-editor.png", alt: "Marketing team editor" },
 ];
 
 const workflowSlides = [
@@ -207,10 +207,13 @@ export default async function HomePage() {
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
-                <span className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2">Shared context</span>
-                <span className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2">Teams of agents</span>
-                <span className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2">Cron workflows</span>
-                <span className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2">Agile lanes</span>
+                <a href="#proof" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Proof</a>
+                <a href="#quick-start" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Quick Start</a>
+                <a href="#shared-context" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Shared context</a>
+                <a href="#team-agents" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team agents</a>
+                <a href="#workflows" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Workflows</a>
+                <a href="#teams-showcase" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team builder</a>
+                <a href="#marketplace-section" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Marketplace</a>
               </div>
             </div>
 
@@ -233,7 +236,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="px-6 pb-6 lg:px-16 lg:pb-10">
+        <section id="proof" className="px-6 pb-6 lg:px-16 lg:pb-10">
           <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.25fr_0.75fr]">
             <div className="rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] lg:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">Proof</p>
@@ -243,7 +246,7 @@ export default async function HomePage() {
                     <div className={`inline-grid size-8 place-items-center rounded-lg ${stat.iconBg}`}>
                       <span className={`text-base ${stat.iconColor}`}>{stat.icon}</span>
                     </div>
-                    <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{stat.label}</div>
+                    <div className="mt-3 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{stat.label}</div>
                     <div className="mt-2 text-xl font-semibold text-[var(--text)]">{stat.value}</div>
                     <div className="mt-1 text-sm text-[var(--muted)]">{stat.blurb}</div>
                   </div>
@@ -289,7 +292,7 @@ export default async function HomePage() {
       </div>
 
       <FadeIn>
-        <section className="px-6 py-16 lg:px-16">
+        <section id="community-voices" className="px-6 py-16 lg:px-16">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6 flex items-end justify-between gap-4">
               <div>
@@ -318,7 +321,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="px-6 py-20 lg:px-16">
+        <section id="quick-start" className="px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-4xl">
             <h2 className="text-center text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
               <span className="mr-2 text-[color:var(--coral-bright)]">❯</span>
@@ -387,7 +390,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
+        <section id="shared-context" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-7xl">
             <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[color:var(--card)] px-8 py-12 lg:px-12">
               <div className="pointer-events-none absolute left-6 top-6 h-10 w-10 border-l-2 border-t-2 border-dashed border-[color:color-mix(in_oklab,var(--coral-bright)_30%,transparent)]" />
@@ -422,7 +425,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="px-6 py-20 lg:px-16">
+        <section id="team-agents" className="px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Line</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">A team of agents</h2>
@@ -454,7 +457,25 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
+        <section id="teams-showcase" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Teams</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Build custom teams from agents
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Create and edit team structures that match how you actually ship.
+            </p>
+
+            <div className="mt-10">
+              <WorkflowsShowcase slides={teamSlides} />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section id="workflows" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Timer</p>
@@ -533,24 +554,6 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
-      {/* FEATURE: Teams */}
-      <FadeIn>
-        <section className="px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Teams</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              Build custom teams from agents
-            </h2>
-            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Create and edit team structures that match how you actually ship.
-            </p>
-            <div className="mt-12">
-              <ScreenshotGrid items={teamsImages} columns="2" />
-            </div>
-          </div>
-        </section>
-      </FadeIn>
-
       {/* FEATURE: Goals */}
       <FadeIn>
         <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
@@ -571,7 +574,7 @@ export default async function HomePage() {
 
       {/* FEATURE: Marketplace */}
       <FadeIn>
-        <section className="px-6 py-20 lg:px-16">
+        <section id="marketplace-section" className="px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Marketplace</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
@@ -606,7 +609,7 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section className="px-6 py-20 lg:px-16">
+        <section id="live-visibility" className="px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--coral-bright)_55%,transparent)] bg-[linear-gradient(135deg,rgba(255,77,77,0.22),rgba(255,77,77,0.05))] p-8 shadow-[var(--shadow)] lg:p-12">
               <p className="text-xs uppercase tracking-[0.2em] text-[#ffc1c1]">Live Visibility</p>
@@ -614,23 +617,45 @@ export default async function HomePage() {
                 Create your team in &lt;30 seconds
               </h2>
               <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">
-                See what your agents are doing, what is blocked, and what shipped, without digging through scattered logs.
+                Install both plugins and launch a team-ready workspace immediately.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+
+              <div className="codeblock mt-8 overflow-hidden rounded-2xl bg-[#0a1019] shadow-2xl">
+                <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-4">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block size-3 rounded-full bg-red-500" />
+                    <span className="inline-block size-3 rounded-full bg-yellow-500" />
+                    <span className="inline-block size-3 rounded-full bg-green-500" />
+                  </div>
+                  <span className="ml-4 text-sm text-slate-400">Install Commands</span>
+                </div>
+
+                <div className="space-y-4 px-6 py-6 font-mono text-sm">
+                  <div className="flex items-start justify-between gap-3 text-slate-100">
+                    <div>
+                      <span className="mr-2 text-[var(--coral-bright)]">$</span>
+                      openclaw plugins install @jiggai/recipes
+                    </div>
+                    <CopyLineButton text="openclaw plugins install @jiggai/recipes" />
+                  </div>
+
+                  <div className="flex items-start justify-between gap-3 text-slate-100">
+                    <div>
+                      <span className="mr-2 text-[var(--coral-bright)]">$</span>
+                      openclaw plugins install @jiggai/kitchen
+                    </div>
+                    <CopyLineButton text="openclaw plugins install @jiggai/kitchen" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   href="/marketplace"
                   className="rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-sm font-semibold text-[#0b1220] transition hover:brightness-95"
                 >
                   Start from Marketplace
                 </Link>
-                <a
-                  href="https://discord.gg/BKGUkGTR"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-lg border border-[var(--border)] bg-black/20 px-6 py-3 text-sm font-semibold text-[var(--text)] transition hover:bg-black/30"
-                >
-                  See what your agents are doing →
-                </a>
               </div>
             </div>
           </div>
