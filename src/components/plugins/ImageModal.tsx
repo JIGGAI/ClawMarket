@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 export type ModalImageItem = { src: string; alt: string };
 
@@ -39,7 +40,7 @@ export function ImageModal({
 
   if (!open) return null;
 
-  return (
+  const node = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
       role="dialog"
@@ -98,4 +99,8 @@ export function ImageModal({
       </div>
     </div>
   );
+
+  // Anchor to <body> so layout/section containers can't clip or stack modals.
+  return createPortal(node, document.body);
+
 }

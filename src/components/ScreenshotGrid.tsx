@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 
-import { ImageModal, type ModalImageItem } from "@/components/plugins/ImageModal";
+import type { ModalImageItem } from "@/components/plugins/ImageModal";
+import { useModalGallery } from "@/components/ModalGalleryProvider";
 
 export function ScreenshotGrid({
   title,
@@ -16,8 +16,7 @@ export function ScreenshotGrid({
   items: ModalImageItem[];
   columns?: "2" | "3" | "4";
 }) {
-  const [open, setOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { openGallery } = useModalGallery();
 
   const gridCols =
     columns === "2"
@@ -37,10 +36,7 @@ export function ScreenshotGrid({
             key={s.src}
             type="button"
             className="overflow-hidden rounded-xl border border-slate-200 bg-white text-left hover:opacity-95"
-            onClick={() => {
-              setActiveIndex(idx);
-              setOpen(true);
-            }}
+            onClick={() => openGallery({ items, index: idx })}
           >
             {/* Standardize thumbnails: fixed aspect ratio + cover to avoid white bars */}
             <div className="relative aspect-[16/10] w-full bg-slate-50">
@@ -55,14 +51,6 @@ export function ScreenshotGrid({
           </button>
         ))}
       </div>
-
-      <ImageModal
-        open={open}
-        items={items}
-        index={activeIndex}
-        onChangeIndex={setActiveIndex}
-        onClose={() => setOpen(false)}
-      />
     </div>
   );
 }
