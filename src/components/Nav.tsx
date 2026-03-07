@@ -76,18 +76,12 @@ export function Nav() {
         </Link>
 
         <nav className="hidden items-center gap-6 text-base text-[var(--muted)] sm:flex">
-          <Link className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-[#0b1220] shadow-sm transition hover:brightness-95" href="/get-started">
+          <Link className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm transition hover:brightness-95" href="/get-started">
             Get Started
-          </Link>
-          <Link className="hover:text-[var(--text)]" href="/marketplace">
-            Marketplace
-          </Link>
-          <Link className="hover:text-[var(--text)]" href="/how-it-works">
-            How It Works
           </Link>
           <div className="group relative">
             <button type="button" className="inline-flex items-center gap-1 hover:text-[var(--text)]">
-              Our plugins
+              Plugins
               <ChevronDownIcon className="h-4 w-4" />
             </button>
             <div className="invisible absolute left-0 top-full z-50 mt-2 w-52 rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
@@ -99,6 +93,12 @@ export function Nav() {
               </Link>
             </div>
           </div>
+          <Link className="hover:text-[var(--text)]" href="/marketplace">
+            Marketplace
+          </Link>
+          <Link className="hover:text-[var(--text)]" href="/how-it-works">
+            How It Works
+          </Link>
           <a className="hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer">
             Docs
           </a>
@@ -150,7 +150,7 @@ export function Nav() {
                 </div>
               </div>
             ) : (
-              <Link className="ml-1 rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-[#0b1220] shadow-sm transition hover:brightness-95" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
+              <Link className="ml-1 rounded-full bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-95" href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
                 Login
               </Link>
             )}
@@ -175,7 +175,7 @@ export function Nav() {
           <div className="mx-auto max-w-7xl px-6 pb-4 lg:px-16">
             <div className="rounded-xl border border-[var(--border)] bg-[color:var(--bg-soft)] p-3 shadow-sm">
               <div className="flex flex-col gap-2 text-base text-[var(--muted)]">
-                <Link className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold text-[#0b1220] hover:brightness-95" href="/get-started" onClick={() => setOpen(false)}>
+                <Link className="rounded-lg bg-[color:var(--coral-bright)] px-3 py-2 font-semibold text-white hover:brightness-95" href="/get-started" onClick={() => setOpen(false)}>
                   Get Started
                 </Link>
                 <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>
@@ -189,7 +189,7 @@ export function Nav() {
                 </a>
                 <div className="my-2 h-px w-full bg-[var(--border)]" />
                 <div className="rounded-lg border border-[var(--border)] bg-white/5 p-2">
-                  <div className="px-2 pb-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Our plugins</div>
+                  <div className="px-2 pb-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Plugins</div>
                   <Link className="block rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/plugins/recipes" onClick={() => setOpen(false)}>
                     ClawRecipes
                   </Link>
@@ -230,7 +230,7 @@ export function Nav() {
                   </Link>
                 )}
 
-                <a className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-[#0b1220] shadow-sm hover:brightness-95" href={githubUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+                <a className="inline-flex items-center justify-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-base font-semibold text-white shadow-sm hover:brightness-95" href={githubUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                   GitHub
                 </a>
                 <a className="inline-flex items-center justify-center rounded-lg border border-[var(--border)] bg-transparent px-4 py-2 text-base font-semibold text-[var(--text)] shadow-sm hover:bg-white/5" href={xUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>

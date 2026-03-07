@@ -213,7 +213,6 @@ export default async function HomePage() {
                 <a href="#teams-showcase" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team builder</a>
                 <a href="#agile-process" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Agile</a>
                 <a href="#cron-automation" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Automation</a>
-                <a href="#marketplace-section" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Marketplace</a>
               </div>
             </div>
 

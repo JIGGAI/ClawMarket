@@ -123,7 +123,7 @@ export default function SignInOptions({
             <button
               type="button"
               disabled={signingIn}
-              className="rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
+              className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-3 text-center font-semibold text-white hover:brightness-110 disabled:opacity-60"
               onClick={async () => {
                 setError(null);
                 setSigningIn(true);
@@ -174,7 +174,7 @@ export default function SignInOptions({
             {oauthProviders.map((p) => (
               <button
                 key={p.id}
-                className="rounded-lg bg-slate-900 px-4 py-3 text-center font-semibold text-white hover:brightness-110"
+                className="rounded-lg bg-[color:var(--coral-bright)] px-4 py-3 text-center font-semibold text-white hover:brightness-110"
                 onClick={async () => {
                   setError(null);
                   try {
