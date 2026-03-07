@@ -57,6 +57,43 @@ const cronImages = [
   { src: "/images/cron/cron-2.png", alt: "Cron jobs" },
 ];
 
+const trustStats = [
+  { label: "GitHub Stars", value: "Community-loved", blurb: "Open source with an active contributor base." },
+  { label: "Installs", value: "Growing daily", blurb: "Teams are scaffolding real workflows every day." },
+  { label: "Countries", value: "Used worldwide", blurb: "Built for distributed teams and global contributors." },
+];
+
+const whatYouGet = [
+  {
+    title: "Multi-agent teams",
+    desc: "Lead, Dev, DevOps, QA templates ready to run.",
+    icon: "🧑‍🤝‍🧑",
+    iconBg: "bg-[#3b82f6]/20",
+    iconColor: "text-[#93c5fd]",
+  },
+  {
+    title: "Shared context",
+    desc: "File-first workflows in git, readable and reviewable.",
+    icon: "🧠",
+    iconBg: "bg-[#14b8a6]/20",
+    iconColor: "text-[#5eead4]",
+  },
+  {
+    title: "Cron automation",
+    desc: "Recurring ops loops with explicit install consent.",
+    icon: "⏰",
+    iconBg: "bg-[#f59e0b]/20",
+    iconColor: "text-[#fcd34d]",
+  },
+  {
+    title: "Recipe marketplace",
+    desc: "Install proven team and agent templates instantly.",
+    icon: "🛒",
+    iconBg: "bg-[#f43f5e]/20",
+    iconColor: "text-[#fda4af]",
+  },
+];
+
 // These filenames include a narrow no-break space in the original screenshot name; use URL-encoded paths.
 const goalsImages = [
   {
@@ -147,6 +184,55 @@ export default function HomePage() {
                 />
               </div>
             </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section className="px-6 pb-6 lg:px-16 lg:pb-10">
+          <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+            <div className="rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">Proof</p>
+              <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                {trustStats.map((stat) => (
+                  <div key={stat.label} className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+                    <div className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">{stat.label}</div>
+                    <div className="mt-2 text-xl font-semibold text-[var(--text)]">{stat.value}</div>
+                    <div className="mt-1 text-sm text-[var(--muted)]">{stat.blurb}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--coral-bright)_55%,transparent)] bg-[linear-gradient(135deg,rgba(255,140,48,0.18),rgba(255,140,48,0.04))] p-6 shadow-[var(--shadow)] lg:p-8">
+              <div className="inline-flex rounded-full border border-[var(--border)] bg-black/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#ffd1a7]">
+                Product Hunt
+              </div>
+              <h3 className="mt-4 text-2xl font-bold tracking-tight text-[var(--text)]">Featured launch: ClawRecipes</h3>
+              <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                Check the Product Hunt launch page and drop feedback from your workflow.
+              </p>
+              <a
+                className="mt-5 inline-flex items-center rounded-lg bg-[color:var(--coral-bright)] px-4 py-2 text-sm font-semibold text-[#0b1220] transition hover:brightness-95"
+                href="https://www.producthunt.com/products/clawrecipes-openclaw-recipes?launch=clawrecipes"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Product Hunt
+              </a>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-6 grid max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {whatYouGet.map((item) => (
+              <div key={item.title} className="rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-5 shadow-[var(--shadow)]">
+                <div className={`inline-grid size-10 place-items-center rounded-xl ${item.iconBg}`}>
+                  <span className={`text-lg ${item.iconColor}`}>{item.icon}</span>
+                </div>
+                <div className="mt-3 text-base font-semibold text-[var(--text)]">{item.title}</div>
+                <div className="mt-1 text-sm leading-6 text-[var(--muted)]">{item.desc}</div>
+              </div>
+            ))}
           </div>
         </section>
       </FadeIn>
@@ -354,7 +440,7 @@ export default function HomePage() {
 
       {/* FEATURE: Workflows */}
       <FadeIn>
-        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Workflows</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
@@ -390,7 +476,7 @@ export default function HomePage() {
 
       {/* FEATURE: Goals */}
       <FadeIn>
-        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Goals</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
@@ -426,7 +512,7 @@ export default function HomePage() {
 
       {/* FEATURE: ClawKitchen */}
       <FadeIn>
-        <section className="bg-slate-50 px-6 py-20 lg:px-16">
+        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">

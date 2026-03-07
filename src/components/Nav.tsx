@@ -74,6 +74,9 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/marketplace">
             Marketplace
           </Link>
+          <Link className="hover:text-[var(--text)]" href="/how-it-works">
+            How It Works
+          </Link>
           <Link className="hover:text-[var(--text)]" href="/plugins/recipes">
             Recipes Plugin
           </Link>
@@ -161,6 +164,9 @@ export function Nav() {
                 </Link>
                 <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/marketplace" onClick={() => setOpen(false)}>
                   Marketplace
+                </Link>
+                <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/how-it-works" onClick={() => setOpen(false)}>
+                  How It Works
                 </Link>
                 <a className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                   Docs

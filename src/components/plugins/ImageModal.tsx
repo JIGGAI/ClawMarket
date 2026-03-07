@@ -48,7 +48,7 @@ export function ImageModal({
       onClick={onClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-6xl overflow-auto rounded-2xl bg-white p-4 shadow-xl"
+        className="max-h-[90vh] w-full max-w-6xl overflow-auto rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
@@ -56,7 +56,7 @@ export function ImageModal({
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold hover:bg-slate-50 disabled:opacity-50"
+              className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm font-semibold transition hover:bg-white/5 disabled:opacity-50"
               onClick={() => (canPrev ? onChangeIndex(i - 1) : null)}
               disabled={!canPrev}
             >
@@ -64,7 +64,7 @@ export function ImageModal({
             </button>
             <button
               type="button"
-              className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold hover:bg-slate-50 disabled:opacity-50"
+              className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm font-semibold transition hover:bg-white/5 disabled:opacity-50"
               onClick={() => (canNext ? onChangeIndex(i + 1) : null)}
               disabled={!canNext}
             >
@@ -72,7 +72,7 @@ export function ImageModal({
             </button>
             <button
               type="button"
-              className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold hover:bg-slate-50"
+              className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm font-semibold transition hover:bg-white/5"
               onClick={onClose}
             >
               Close
@@ -82,7 +82,7 @@ export function ImageModal({
 
         <div className="flex flex-col">
           {/* Full-screen friendly: keep the image centered and contained */}
-          <div className="relative flex h-[75vh] w-full items-center justify-center overflow-hidden rounded-xl bg-slate-50">
+          <div className="relative flex h-[75vh] w-full items-center justify-center overflow-hidden rounded-xl bg-[color:var(--bg-soft)]">
             <Image
               src={active.src}
               alt={active.alt}
