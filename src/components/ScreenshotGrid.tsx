@@ -42,7 +42,16 @@ export function ScreenshotGrid({
               setOpen(true);
             }}
           >
-            <Image src={s.src} alt={s.alt} width={1200} height={750} className="h-auto w-full" />
+            {/* Standardize thumbnails: fixed aspect ratio + cover to avoid white bars */}
+            <div className="relative aspect-[16/10] w-full bg-slate-50">
+              <Image
+                src={s.src}
+                alt={s.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                className="object-cover"
+              />
+            </div>
           </button>
         ))}
       </div>
