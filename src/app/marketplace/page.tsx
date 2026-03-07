@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 import { fetchMarketplaceRecipes } from "@/lib/marketplace";
+import { NewsletterSubscribeForm } from "@/components/NewsletterSubscribeForm";
 // auth handled via /login page; marketplace landing is public
 
 export const metadata = {
@@ -195,6 +196,21 @@ export default async function MarketplacePage() {
                 View All Recipes on GitHub
               </a>
             </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section className="px-6 pb-20 lg:px-16">
+          <div className="mx-auto max-w-4xl rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
+            <div className="text-center">
+              <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Newsletter</p>
+              <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)]">Get product updates</h3>
+              <p className="mt-3 text-sm text-[var(--muted)]">
+                Monthly updates on new recipes, workflows, and agent operations best practices.
+              </p>
+            </div>
+            <NewsletterSubscribeForm />
           </div>
         </section>
       </FadeIn>
