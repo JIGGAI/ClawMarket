@@ -1,8 +1,8 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, OrbitControls } from "@react-three/drei";
-import { useMemo, useRef } from "react";
+import { Float, OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
+import { useEffect, useMemo, useRef } from "react";
 import type { Group, Mesh } from "three";
 
 function Steam() {
@@ -50,67 +50,37 @@ function Steam() {
 
 function ChefModel() {
   const root = useRef<Group>(null);
-  const rightArm = useRef<Group>(null);
-  const leftArm = useRef<Group>(null);
-  const pan = useRef<Group>(null);
+  const { scene, animations } = useGLTF("/models/chef-ant.glb");
+  const { actions } = useAnimations(animations, root);
+
+  useEffect(() => {
+    scene.traverse((obj) => {
+      const mesh = obj as Mesh;
+      if (mesh.isMesh) {
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
+    });
+  }, [scene]);
+
+  useEffect(() => {
+    const first = Object.values(actions)[0];
+    if (first) {
+      first.reset().fadeIn(0.25).play();
+    }
+    return () => {
+      first?.fadeOut(0.2);
+    };
+  }, [actions]);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    if (root.current) root.current.rotation.y = Math.sin(t * 0.55) * 0.12;
-    if (rightArm.current) rightArm.current.rotation.z = -0.65 + Math.sin(t * 3.1) * 0.28;
-    if (leftArm.current) leftArm.current.rotation.z = 0.45 + Math.sin(t * 2.6 + 0.4) * 0.14;
-    if (pan.current) {
-      pan.current.rotation.z = Math.sin(t * 3.1 + 0.7) * 0.22;
-      pan.current.position.y = 0.78 + Math.sin(t * 3.1) * 0.05;
-    }
+    if (root.current) root.current.rotation.y = Math.sin(t * 0.55) * 0.14;
   });
 
   return (
-    <group ref={root} position={[0, -1.2, 0]}>
-      <mesh position={[0, 0.1, 0]} castShadow>
-        <capsuleGeometry args={[0.6, 1.15, 10, 18]} />
-        <meshStandardMaterial color="#f8fafc" roughness={0.45} metalness={0.05} />
-      </mesh>
-
-      <mesh position={[0, 1.25, 0.04]} castShadow>
-        <sphereGeometry args={[0.45, 28, 28]} />
-        <meshStandardMaterial color="#ffd7b5" roughness={0.65} />
-      </mesh>
-
-      <mesh position={[0, 1.73, 0.03]} castShadow>
-        <cylinderGeometry args={[0.4, 0.48, 0.3, 24]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.38} />
-      </mesh>
-      <mesh position={[0, 1.98, 0.03]} castShadow>
-        <sphereGeometry args={[0.33, 24, 24]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.38} />
-      </mesh>
-
-      <group ref={leftArm} position={[-0.62, 0.72, 0.06]}>
-        <mesh castShadow>
-          <capsuleGeometry args={[0.12, 0.65, 8, 16]} />
-          <meshStandardMaterial color="#ffd7b5" roughness={0.65} />
-        </mesh>
-      </group>
-
-      <group ref={rightArm} position={[0.58, 0.8, 0.18]}>
-        <mesh castShadow>
-          <capsuleGeometry args={[0.12, 0.72, 8, 16]} />
-          <meshStandardMaterial color="#ffd7b5" roughness={0.65} />
-        </mesh>
-      </group>
-
-      <group ref={pan} position={[0.95, 0.78, 0.45]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.36, 0.4, 0.1, 32]} />
-          <meshStandardMaterial color="#334155" metalness={0.65} roughness={0.26} />
-        </mesh>
-        <mesh position={[0.45, 0.03, 0]} castShadow>
-          <boxGeometry args={[0.6, 0.05, 0.08]} />
-          <meshStandardMaterial color="#475569" metalness={0.5} roughness={0.35} />
-        </mesh>
-      </group>
-
+    <group ref={root} position={[0, -1.42, 0]} scale={1.95}>
+      <primitive object={scene} />
       <Steam />
     </group>
   );
@@ -141,3 +111,5 @@ export function Chef3D() {
     </div>
   );
 }
+
+useGLTF.preload("/models/chef-ant.glb");
