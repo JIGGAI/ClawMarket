@@ -297,8 +297,8 @@ export default async function HomePage() {
               <div className="px-6 py-6 font-mono text-base">
                 <div className="mb-4 text-slate-500"># Install ClawRecipes into OpenClaw (then restart gateway)</div>
 
-                <div className="flex items-start justify-between gap-3">
-                  <div className="text-slate-100">
+                <div className="flex items-start gap-3">
+                  <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-slate-100 [-webkit-overflow-scrolling:touch]">
                     <span className="mr-3 text-[var(--coral-bright)]">$</span>
                     <span>openclaw plugins install @jiggai/recipes</span>
                   </div>
@@ -307,8 +307,8 @@ export default async function HomePage() {
                   </span>
                 </div>
 
-                <div className="mt-4 flex items-start justify-between gap-3">
-                  <div className="text-slate-100">
+                <div className="mt-4 flex items-start gap-3">
+                  <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-slate-100 [-webkit-overflow-scrolling:touch]">
                     <span className="mr-3 text-[var(--coral-bright)]">$</span>
                     <span>openclaw gateway restart</span>
                   </div>
@@ -319,8 +319,8 @@ export default async function HomePage() {
 
                 <div className="mb-4 mt-6 text-slate-500"># Scaffold a dev team with shared workspace</div>
 
-                <div className="flex items-start justify-between gap-3">
-                  <div className="text-slate-100">
+                <div className="flex items-start gap-3">
+                  <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-slate-100 [-webkit-overflow-scrolling:touch]">
                     <span className="mr-3 text-[var(--coral-bright)]">$</span>
                     <span>openclaw recipes scaffold-team development-team -t my-dev-team --apply-config</span>
                   </div>
@@ -330,8 +330,8 @@ export default async function HomePage() {
                 </div>
 
                 <div className="mt-6 text-slate-500"># Or scaffold a single agent (e.g., researcher)</div>
-                <div className="mt-2 flex items-start justify-between gap-3">
-                  <div className="text-slate-100">
+                <div className="mt-2 flex items-start gap-3">
+                  <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-slate-100 [-webkit-overflow-scrolling:touch]">
                     <span className="mr-3 text-[var(--coral-bright)]">$</span>
                     <span>openclaw recipes scaffold researcher --agent-id my-researcher --apply-config</span>
                   </div>
@@ -587,20 +587,20 @@ export default async function HomePage() {
                 </div>
 
                 <div className="space-y-4 px-6 py-6 font-mono text-sm">
-                  <div className="flex items-start justify-between gap-3 text-slate-100">
-                    <div>
+                  <div className="flex items-start gap-3 text-slate-100">
+                    <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                       <span className="mr-2 text-[var(--coral-bright)]">$</span>
                       openclaw plugins install @jiggai/recipes
                     </div>
-                    <CopyLineButton text="openclaw plugins install @jiggai/recipes" />
+                    <CopyLineButton text="openclaw plugins install @jiggai/recipes" className="shrink-0" />
                   </div>
 
-                  <div className="flex items-start justify-between gap-3 text-slate-100">
-                    <div>
+                  <div className="flex items-start gap-3 text-slate-100">
+                    <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                       <span className="mr-2 text-[var(--coral-bright)]">$</span>
                       openclaw plugins install @jiggai/kitchen
                     </div>
-                    <CopyLineButton text="openclaw plugins install @jiggai/kitchen" />
+                    <CopyLineButton text="openclaw plugins install @jiggai/kitchen" className="shrink-0" />
                   </div>
                 </div>
               </div>
