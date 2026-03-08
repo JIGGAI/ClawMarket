@@ -270,8 +270,10 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
-      <div className="border-y border-[var(--border)] bg-[color:var(--bg)]/75 py-6 text-center">
-        <p className="text-lg text-[var(--muted)]">Best-in-class workflow automation for teams of all sizes.</p>
+      <div className="border-y border-[var(--border)] bg-[color:var(--bg)]/75 px-4 py-6 text-center">
+        <p className="mx-auto max-w-3xl text-base leading-relaxed text-[var(--muted)] break-words sm:text-lg">
+          Best-in-class workflow automation for teams of all sizes.
+        </p>
       </div>
 
       <FadeIn>

@@ -11,12 +11,12 @@ export const metadata = {
 
 function Cmd({ text }: { text: string }) {
   return (
-    <div className="flex items-start justify-between gap-3 text-slate-100">
-      <div className="overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
+    <div className="flex items-start gap-3 text-slate-100">
+      <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
         <span className="mr-2 text-[var(--coral-bright)]">$</span>
         {text}
       </div>
-      <CopyLineButton text={text} />
+      <CopyLineButton text={text} className="shrink-0" />
     </div>
   );
 }
@@ -59,7 +59,7 @@ function Step({
             ))}
           </div>
         ) : rawCode ? (
-          <pre className="overflow-x-auto px-4 py-4 text-xs text-slate-100">
+          <pre className="max-w-full overflow-x-auto px-4 py-4 text-xs text-slate-100">
             <code>{rawCode}</code>
           </pre>
         ) : null}
