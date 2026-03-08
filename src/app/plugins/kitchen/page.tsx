@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
 import { CopyLineButton } from "@/components/CopyLineButton";
+import { NewsletterSubscribeForm } from "@/components/NewsletterSubscribeForm";
 
 export const metadata = {
   title: "Kitchen Plugin – ClawRecipes",
@@ -150,6 +151,17 @@ export default function KitchenPluginPage() {
           <div className="mt-6">
             <ScreenshotGrid items={teamScreens} columns="2" />
           </div>
+        </section>
+
+        <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
+          <div className="text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Newsletter</p>
+            <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)]">Get product updates</h3>
+            <p className="mt-3 text-sm text-[var(--muted)]">
+              Monthly updates on new recipes, workflows, and agent operations best practices.
+            </p>
+          </div>
+          <NewsletterSubscribeForm />
         </section>
       </div>
     </main>
