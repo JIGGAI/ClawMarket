@@ -27,12 +27,14 @@ function Step({
   title,
   description,
   commands,
+  rawCode,
 }: {
   id: string;
   icon: string;
   title: string;
   description: string;
-  commands: string[];
+  commands?: string[];
+  rawCode?: string;
 }) {
   return (
     <article className="rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)] lg:p-7">
@@ -50,11 +52,17 @@ function Step({
           <span className="inline-block size-2.5 rounded-full bg-[#28c840]" />
           <span className="ml-3 text-xs text-slate-400">Terminal</span>
         </div>
-        <div className="space-y-3 px-4 py-4 font-mono text-sm">
-          {commands.map((c) => (
-            <Cmd key={c} text={c} />
-          ))}
-        </div>
+        {commands?.length ? (
+          <div className="space-y-3 px-4 py-4 font-mono text-sm">
+            {commands.map((c) => (
+              <Cmd key={c} text={c} />
+            ))}
+          </div>
+        ) : rawCode ? (
+          <pre className="overflow-x-auto px-4 py-4 text-xs text-slate-100">
+            <code>{rawCode}</code>
+          </pre>
+        ) : null}
       </div>
     </article>
   );
@@ -138,6 +146,25 @@ export default function GetStartedPage() {
           <FadeIn>
             <Step
               id="05"
+              icon="⚙️"
+              title="Configure ClawKitchen in openclaw.json"
+              description="Update your OpenClaw config so Kitchen is enabled with explicit host, auth token, and runtime settings."
+              rawCode={`"kitchen": {
+  "enabled": true,
+  "config": {
+    "dev": false,
+    "host": "<ipAddress>",
+    "port": 7777,
+    "authToken": "<your_password>",
+    "qaToken": "<randomHash_if_using_qa>"
+  }
+},`}
+            />
+          </FadeIn>
+
+          <FadeIn>
+            <Step
+              id="06"
               icon="🛠️"
               title="Common maintenance commands"
               description="Useful commands for help, updating existing teams, and removing a team safely."
@@ -151,7 +178,7 @@ export default function GetStartedPage() {
 
           <FadeIn>
             <Step
-              id="06"
+              id="07"
               icon="⬆️"
               title="Upgrade from older package names"
               description="If you previously used older package names, reinstall the current package and restart."
