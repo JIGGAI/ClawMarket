@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { CodeBlock } from "@/components/plugins/CodeBlock";
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
+import { NewsletterSubscribeForm } from "@/components/NewsletterSubscribeForm";
 
 export const metadata = {
   title: "Recipes Plugin – ClawRecipes",
@@ -89,6 +90,17 @@ export default function RecipesPluginPage() {
             <CodeBlock title="Tickets workflow" code={"openclaw recipes tickets --team-id <teamId>\nopenclaw recipes move-ticket --team-id <teamId> --ticket <ticket> --to testing\nopenclaw recipes complete --team-id <teamId> --ticket <ticket>"} />
             <CodeBlock title="Maintenance" code={"openclaw recipes remove-team --team-id <teamId>\nopenclaw recipes cleanup-workspaces --yes"} />
           </div>
+        </section>
+
+        <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
+          <div className="text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Newsletter</p>
+            <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)]">Get product updates</h3>
+            <p className="mt-3 text-sm text-[var(--muted)]">
+              Monthly updates on new recipes, workflows, and agent operations best practices.
+            </p>
+          </div>
+          <NewsletterSubscribeForm />
         </section>
       </div>
     </main>
