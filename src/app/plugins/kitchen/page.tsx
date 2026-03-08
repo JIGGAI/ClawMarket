@@ -91,19 +91,19 @@ export default function KitchenPluginPage() {
                 <div className="text-xs text-slate-400">Terminal</div>
               </div>
               <div className="space-y-4 px-4 py-4 font-mono text-sm">
-                <div className="flex items-start justify-between gap-3 text-slate-100">
-                  <div>
+                <div className="flex items-start gap-3 text-slate-100">
+                  <div className="w-0 min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                     <span className="mr-2 text-[var(--coral-bright)]">$</span>
                     openclaw plugins install @jiggai/kitchen
                   </div>
-                  <CopyLineButton text="openclaw plugins install @jiggai/kitchen" />
+                  <CopyLineButton text="openclaw plugins install @jiggai/kitchen" className="shrink-0" />
                 </div>
-                <div className="flex items-start justify-between gap-3 text-slate-100">
-                  <div>
+                <div className="flex items-start gap-3 text-slate-100">
+                  <div className="w-0 min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                     <span className="mr-2 text-[var(--coral-bright)]">$</span>
                     openclaw gateway restart
                   </div>
-                  <CopyLineButton text="openclaw gateway restart" />
+                  <CopyLineButton text="openclaw gateway restart" className="shrink-0" />
                 </div>
               </div>
             </article>
@@ -112,7 +112,7 @@ export default function KitchenPluginPage() {
               <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
                 <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 2</div>
                 <div className="mt-2 text-sm font-semibold text-[var(--text)]">Modify `openclaw.json`</div>
-                <pre className="mt-3 overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
+                <pre className="mt-3 max-w-full overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
                   <code>{`"kitchen": {"enable":true}`}</code>
                 </pre>
               </article>
@@ -120,7 +120,7 @@ export default function KitchenPluginPage() {
               <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
                 <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 3</div>
                 <div className="mt-2 text-sm font-semibold text-[var(--text)]">Update kitchen config</div>
-                <pre className="mt-3 overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
+                <pre className="mt-3 max-w-full overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
                   <code>{`"kitchen": {
   "enabled": true,
   "config": {
