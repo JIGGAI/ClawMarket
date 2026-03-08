@@ -109,18 +109,18 @@ export default function KitchenPluginPage() {
             </article>
 
             <div className="grid min-w-0 gap-4">
-              <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+              <article className="min-w-0 overflow-hidden rounded-2xl border border-[var(--border)] bg-white/5 p-4">
                 <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 2</div>
                 <div className="mt-2 text-sm font-semibold text-[var(--text)]">Modify `openclaw.json`</div>
-                <pre className="mt-3 max-w-full overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
+                <pre className="mt-3 block w-full max-w-full overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
                   <code>{`"kitchen": {"enable":true}`}</code>
                 </pre>
               </article>
 
-              <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+              <article className="min-w-0 overflow-hidden rounded-2xl border border-[var(--border)] bg-white/5 p-4">
                 <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 3</div>
                 <div className="mt-2 text-sm font-semibold text-[var(--text)]">Update kitchen config</div>
-                <pre className="mt-3 max-w-full overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
+                <pre className="mt-3 block w-full max-w-full overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
                   <code>{`"kitchen": {
   "enabled": true,
   "config": {
