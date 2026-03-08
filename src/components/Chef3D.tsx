@@ -1,10 +1,10 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
+import { Center, Float, OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
-import { Color, MeshStandardMaterial } from "three";
-import type { Group, Mesh } from "three";
+import { MeshStandardMaterial } from "three";
+import type { Group, Mesh, Object3D } from "three";
 
 function Steam() {
   const points = useRef<Mesh[]>([]);
@@ -56,39 +56,14 @@ function ChefModel() {
   const { actions } = useAnimations(animations, root);
 
   useEffect(() => {
-    scene.traverse((obj) => {
+    scene.traverse((obj: Object3D) => {
       const mesh = obj as Mesh;
       if (mesh.isMesh) {
-        const paletteMaterial = new MeshStandardMaterial({
+        mesh.material = new MeshStandardMaterial({
+          color: "#b71c1c",
           roughness: 0.56,
           metalness: 0.08,
         });
-        paletteMaterial.onBeforeCompile = (shader) => {
-          shader.vertexShader = shader.vertexShader.replace(
-            "void main() {",
-            "varying vec3 vLocalPos;\nvoid main() {\n  vLocalPos = position;",
-          );
-
-          shader.fragmentShader = shader.fragmentShader.replace(
-            "vec4 diffuseColor = vec4( diffuse, opacity );",
-            `
-              varying vec3 vLocalPos;
-              vec3 redBody = vec3(0.86, 0.16, 0.20);
-              vec3 whiteCloth = vec3(0.95, 0.97, 1.0);
-              vec3 darkTool = vec3(0.12, 0.16, 0.22);
-
-              bool hat = vLocalPos.y > 0.56;
-              bool coat = vLocalPos.y > -0.14 && vLocalPos.y < 0.38 && abs(vLocalPos.x) < 0.62;
-              bool toolSide = (vLocalPos.x > 0.52 && vLocalPos.y < 0.2) || (vLocalPos.z > 0.38 && vLocalPos.y < 0.12);
-
-              vec3 zoneColor = redBody;
-              if (coat || hat) zoneColor = whiteCloth;
-              if (toolSide) zoneColor = darkTool;
-              vec4 diffuseColor = vec4(zoneColor, opacity);
-            `,
-          );
-        };
-        mesh.material = paletteMaterial;
         mesh.castShadow = true;
         mesh.receiveShadow = true;
       }
@@ -120,17 +95,31 @@ function ChefModel() {
     }
   });
 
-  return (
-    <group ref={root} position={[0, -1.42, 0]} scale={1.95}>
-      <primitive object={scene} />
+    return (
+    <group ref={root} position={[0, -1.18, 0]} scale={1.7}>
+      <Center>
+        <primitive object={scene} />
+      </Center>
+      <mesh position={[0, 0.88, 0.04]} castShadow>
+        <cylinderGeometry args={[0.28, 0.34, 0.22, 24]} />
+        <meshStandardMaterial color="#f7fafc" roughness={0.3} metalness={0.04} />
+      </mesh>
+      <mesh position={[0, 1.03, 0.04]} castShadow>
+        <sphereGeometry args={[0.24, 20, 20]} />
+        <meshStandardMaterial color="#f8fbff" roughness={0.28} metalness={0.02} />
+      </mesh>
+      <mesh position={[0, 0.14, 0.08]} castShadow>
+        <capsuleGeometry args={[0.42, 0.55, 8, 16]} />
+        <meshStandardMaterial color="#f5f8ff" roughness={0.42} metalness={0.03} />
+      </mesh>
       <group ref={toolRig} position={[0.72, 0.62, 0.46]}>
         <mesh castShadow>
           <cylinderGeometry args={[0.19, 0.24, 0.08, 28]} />
-          <meshStandardMaterial color={new Color("#1a2434")} metalness={0.7} roughness={0.25} />
+          <meshStandardMaterial color="#1a2434" metalness={0.7} roughness={0.25} />
         </mesh>
         <mesh position={[0.28, 0.03, 0]} castShadow>
           <boxGeometry args={[0.34, 0.04, 0.07]} />
-          <meshStandardMaterial color={new Color("#111827")} metalness={0.55} roughness={0.3} />
+          <meshStandardMaterial color="#111827" metalness={0.55} roughness={0.3} />
         </mesh>
       </group>
       <Steam />
@@ -141,7 +130,7 @@ function ChefModel() {
 export function Chef3D() {
   return (
     <div className="chef-3d-wrap" aria-label="3D chef cooking scene">
-      <Canvas shadows camera={{ position: [0.2, 1.65, 4.15], fov: 33 }}>
+      <Canvas shadows camera={{ position: [0.24, 1.2, 4.8], fov: 36 }}>
         <color attach="background" args={["#0b1624"]} />
         <fog attach="fog" args={["#0b1624", 6, 10]} />
         <ambientLight intensity={0.48} />
