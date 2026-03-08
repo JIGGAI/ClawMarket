@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { FadeIn } from "@/components/FadeIn";
@@ -7,6 +6,7 @@ import { ScreenshotGrid } from "@/components/ScreenshotGrid";
 import { getPublicMetrics } from "@/lib/public-metrics";
 import { WorkflowsShowcase } from "@/components/WorkflowsShowcase";
 import { NewsletterSubscribeForm } from "@/components/NewsletterSubscribeForm";
+import { ChefPuppet } from "@/components/ChefPuppet";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
@@ -211,14 +211,7 @@ export default async function HomePage() {
               <div className="absolute -inset-4 rounded-3xl border-2 border-dashed border-[color:color-mix(in_oklab,var(--coral-bright)_35%,transparent)]" />
 
               <div className="relative rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)]">
-                <Image
-                  className="floaty mx-auto rounded-2xl"
-                  src="/chef.jpg"
-                  alt="ClawRecipes chef mascot"
-                  width={520}
-                  height={520}
-                  priority
-                />
+                <ChefPuppet />
               </div>
             </div>
           </div>
