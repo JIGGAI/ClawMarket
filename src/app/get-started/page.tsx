@@ -73,7 +73,7 @@ export default function GetStartedPage() {
     <main className="px-6 py-16 lg:px-16 lg:py-20">
       <div className="mx-auto max-w-6xl">
         <FadeIn>
-          <section className="rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-12">
+          <section className="mx-auto max-w-5xl rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-12">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Get Started</p>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-6xl">
               Install ClawRecipes and scaffold your first team
@@ -98,7 +98,7 @@ export default function GetStartedPage() {
           </section>
         </FadeIn>
 
-        <div className="mt-10 grid gap-5">
+        <div className="mx-auto mt-10 grid max-w-5xl gap-5">
           <FadeIn>
             <Step
               id="01"
