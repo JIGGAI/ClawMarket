@@ -79,26 +79,26 @@ export default function KitchenPluginPage() {
 
         <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
           <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Quick Install</p>
-          <div className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-            <article className="rounded-2xl border border-[var(--border)] bg-[#0a1019] shadow-[var(--shadow)]">
-              <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
+          <div className="mt-5 grid min-w-0 gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+            <article className="min-w-0 overflow-hidden rounded-2xl border border-[var(--border)] bg-[#0a1019] shadow-[var(--shadow)]">
+              <div className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3">
                 <div className="flex items-center gap-2">
                   <span className="inline-block size-2.5 rounded-full bg-[#ff5f57]" />
                   <span className="inline-block size-2.5 rounded-full bg-[#febc2e]" />
                   <span className="inline-block size-2.5 rounded-full bg-[#28c840]" />
                 </div>
-                <div className="text-xs font-semibold tracking-[0.16em] text-slate-400">STEP 1</div>
-                <div className="text-xs text-slate-400">Terminal</div>
+                <div className="ml-auto text-xs font-semibold tracking-[0.16em] text-slate-400">STEP 1</div>
+                <div className="hidden text-xs text-slate-400 sm:block">Terminal</div>
               </div>
               <div className="space-y-4 px-4 py-4 font-mono text-sm">
-                <div className="flex items-start gap-3 text-slate-100">
+                <div className="flex min-w-0 flex-wrap items-start gap-3 text-slate-100">
                   <div className="w-0 min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                     <span className="mr-2 text-[var(--coral-bright)]">$</span>
                     openclaw plugins install @jiggai/kitchen
                   </div>
                   <CopyLineButton text="openclaw plugins install @jiggai/kitchen" className="shrink-0" />
                 </div>
-                <div className="flex items-start gap-3 text-slate-100">
+                <div className="flex min-w-0 flex-wrap items-start gap-3 text-slate-100">
                   <div className="w-0 min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
                     <span className="mr-2 text-[var(--coral-bright)]">$</span>
                     openclaw gateway restart
@@ -108,7 +108,7 @@ export default function KitchenPluginPage() {
               </div>
             </article>
 
-            <div className="grid gap-4">
+            <div className="grid min-w-0 gap-4">
               <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
                 <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 2</div>
                 <div className="mt-2 text-sm font-semibold text-[var(--text)]">Modify `openclaw.json`</div>
