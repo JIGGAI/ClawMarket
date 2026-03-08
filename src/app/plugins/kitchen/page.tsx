@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { CodeBlock } from "@/components/plugins/CodeBlock";
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
+import { CopyLineButton } from "@/components/CopyLineButton";
 
 export const metadata = {
   title: "Kitchen Plugin – ClawRecipes",
@@ -79,9 +79,61 @@ export default function KitchenPluginPage() {
 
         <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
           <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Quick Install</p>
-          <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            <CodeBlock title="OpenClaw plugin" code="openclaw plugins install @jiggai/kitchen" />
-            <CodeBlock title="Restart gateway" code="openclaw gateway restart" />
+          <div className="mt-5 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+            <article className="rounded-2xl border border-[var(--border)] bg-[#0a1019] shadow-[var(--shadow)]">
+              <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block size-2.5 rounded-full bg-[#ff5f57]" />
+                  <span className="inline-block size-2.5 rounded-full bg-[#febc2e]" />
+                  <span className="inline-block size-2.5 rounded-full bg-[#28c840]" />
+                </div>
+                <div className="text-xs font-semibold tracking-[0.16em] text-slate-400">STEP 1</div>
+                <div className="text-xs text-slate-400">Terminal</div>
+              </div>
+              <div className="space-y-4 px-4 py-4 font-mono text-sm">
+                <div className="flex items-start justify-between gap-3 text-slate-100">
+                  <div>
+                    <span className="mr-2 text-[var(--coral-bright)]">$</span>
+                    openclaw plugins install @jiggai/kitchen
+                  </div>
+                  <CopyLineButton text="openclaw plugins install @jiggai/kitchen" />
+                </div>
+                <div className="flex items-start justify-between gap-3 text-slate-100">
+                  <div>
+                    <span className="mr-2 text-[var(--coral-bright)]">$</span>
+                    openclaw gateway restart
+                  </div>
+                  <CopyLineButton text="openclaw gateway restart" />
+                </div>
+              </div>
+            </article>
+
+            <div className="grid gap-4">
+              <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+                <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 2</div>
+                <div className="mt-2 text-sm font-semibold text-[var(--text)]">Modify `openclaw.json`</div>
+                <pre className="mt-3 overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
+                  <code>{`"kitchen": {"enable":true}`}</code>
+                </pre>
+              </article>
+
+              <article className="rounded-2xl border border-[var(--border)] bg-white/5 p-4">
+                <div className="text-xs font-semibold tracking-[0.16em] text-[color:var(--coral-bright)]">STEP 3</div>
+                <div className="mt-2 text-sm font-semibold text-[var(--text)]">Update kitchen config</div>
+                <pre className="mt-3 overflow-x-auto rounded-xl bg-[#0a1019] px-3 py-3 text-xs text-slate-100">
+                  <code>{`"kitchen": {
+  "enabled": true,
+  "config": {
+    "dev": false,
+    "host": "<ipAddress>",
+    "port": 7777,
+    "authToken": "<your_password>",
+    "qaToken": "<randomHash_if_using_qa>"
+  }
+},`}</code>
+                </pre>
+              </article>
+            </div>
           </div>
         </section>
 
