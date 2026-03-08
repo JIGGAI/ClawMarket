@@ -1,10 +1,9 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Center, Float, OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
-import { useEffect, useMemo, useRef } from "react";
-import { MeshStandardMaterial } from "three";
-import type { Group, Mesh, Object3D } from "three";
+import { Float, OrbitControls } from "@react-three/drei";
+import { useMemo, useRef } from "react";
+import type { Group, Mesh } from "three";
 
 function Steam() {
   const points = useRef<Mesh[]>([]);
@@ -51,75 +50,64 @@ function Steam() {
 
 function ChefModel() {
   const root = useRef<Group>(null);
-  const toolRig = useRef<Group>(null);
-  const { scene, animations } = useGLTF("/models/chef-ant.glb");
-  const { actions } = useAnimations(animations, root);
-
-  useEffect(() => {
-    scene.traverse((obj: Object3D) => {
-      const mesh = obj as Mesh;
-      if (mesh.isMesh) {
-        mesh.material = new MeshStandardMaterial({
-          color: "#b71c1c",
-          roughness: 0.56,
-          metalness: 0.08,
-        });
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-      }
-    });
-  }, [scene]);
-
-  useEffect(() => {
-    const first = Object.values(actions)[0];
-    if (first) {
-      first.timeScale = 1.15;
-      first.reset().fadeIn(0.25).play();
-    }
-    return () => {
-      first?.fadeOut(0.2);
-    };
-  }, [actions]);
+  const rightArm = useRef<Group>(null);
+  const leftArm = useRef<Group>(null);
+  const pan = useRef<Group>(null);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    if (root.current) {
-      root.current.rotation.y = Math.sin(t * 1.05) * 0.2;
-      root.current.rotation.z = Math.sin(t * 2.8) * 0.05;
-      root.current.position.y = -1.42 + Math.sin(t * 2.5) * 0.03;
-    }
-    if (toolRig.current) {
-      toolRig.current.rotation.z = -0.2 + Math.sin(t * 3.8) * 0.32;
-      toolRig.current.rotation.x = Math.sin(t * 4.2) * 0.1;
-      toolRig.current.position.y = 0.62 + Math.sin(t * 3.8) * 0.06;
+    if (root.current) root.current.rotation.y = Math.sin(t * 0.55) * 0.12;
+    if (rightArm.current) rightArm.current.rotation.z = -0.65 + Math.sin(t * 3.1) * 0.28;
+    if (leftArm.current) leftArm.current.rotation.z = 0.45 + Math.sin(t * 2.6 + 0.4) * 0.14;
+    if (pan.current) {
+      pan.current.rotation.z = Math.sin(t * 3.1 + 0.7) * 0.22;
+      pan.current.position.y = 0.78 + Math.sin(t * 3.1) * 0.05;
     }
   });
 
-    return (
-    <group ref={root} position={[0, -1.18, 0]} scale={1.7}>
-      <Center>
-        <primitive object={scene} />
-      </Center>
-      <mesh position={[0, 0.88, 0.04]} castShadow>
-        <cylinderGeometry args={[0.28, 0.34, 0.22, 24]} />
-        <meshStandardMaterial color="#f7fafc" roughness={0.3} metalness={0.04} />
+  return (
+    <group ref={root} position={[0, -1.2, 0]}>
+      <mesh position={[0, 0.1, 0]} castShadow>
+        <capsuleGeometry args={[0.6, 1.15, 10, 18]} />
+        <meshStandardMaterial color="#f8fafc" roughness={0.45} metalness={0.05} />
       </mesh>
-      <mesh position={[0, 1.03, 0.04]} castShadow>
-        <sphereGeometry args={[0.24, 20, 20]} />
-        <meshStandardMaterial color="#f8fbff" roughness={0.28} metalness={0.02} />
+
+      <mesh position={[0, 1.25, 0.04]} castShadow>
+        <sphereGeometry args={[0.45, 28, 28]} />
+        <meshStandardMaterial color="#ffd7b5" roughness={0.65} />
       </mesh>
-      <mesh position={[0, 0.14, 0.08]} castShadow>
-        <capsuleGeometry args={[0.42, 0.55, 8, 16]} />
-        <meshStandardMaterial color="#f5f8ff" roughness={0.42} metalness={0.03} />
+
+      <mesh position={[0, 1.73, 0.03]} castShadow>
+        <cylinderGeometry args={[0.4, 0.48, 0.3, 24]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.38} />
       </mesh>
-      <group ref={toolRig} position={[0.72, 0.62, 0.46]}>
+      <mesh position={[0, 1.98, 0.03]} castShadow>
+        <sphereGeometry args={[0.33, 24, 24]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.38} />
+      </mesh>
+
+      <group ref={leftArm} position={[-0.62, 0.72, 0.06]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.19, 0.24, 0.08, 28]} />
-          <meshStandardMaterial color="#1a2434" metalness={0.7} roughness={0.25} />
+          <capsuleGeometry args={[0.12, 0.65, 8, 16]} />
+          <meshStandardMaterial color="#ffd7b5" roughness={0.65} />
+        </mesh>
+      </group>
+
+      <group ref={rightArm} position={[0.58, 0.8, 0.18]}>
+        <mesh castShadow>
+          <capsuleGeometry args={[0.12, 0.72, 8, 16]} />
+          <meshStandardMaterial color="#ffd7b5" roughness={0.65} />
+        </mesh>
+      </group>
+
+      <group ref={pan} position={[0.95, 0.78, 0.45]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.36, 0.4, 0.1, 32]} />
+          <meshStandardMaterial color="#334155" metalness={0.65} roughness={0.26} />
         </mesh>
         <mesh position={[0.28, 0.03, 0]} castShadow>
-          <boxGeometry args={[0.34, 0.04, 0.07]} />
-          <meshStandardMaterial color="#111827" metalness={0.55} roughness={0.3} />
+          <boxGeometry args={[0.6, 0.05, 0.08]} />
+          <meshStandardMaterial color="#475569" metalness={0.5} roughness={0.35} />
         </mesh>
       </group>
       <Steam />
@@ -130,15 +118,15 @@ function ChefModel() {
 export function Chef3D() {
   return (
     <div className="chef-3d-wrap" aria-label="3D chef cooking scene">
-      <Canvas shadows camera={{ position: [0.24, 1.2, 4.8], fov: 36 }}>
+      <Canvas shadows camera={{ position: [0, 1.5, 5], fov: 36 }}>
         <color attach="background" args={["#0b1624"]} />
         <fog attach="fog" args={["#0b1624", 6, 10]} />
-        <ambientLight intensity={0.48} />
-        <directionalLight position={[3, 5, 2]} intensity={1.35} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
-        <pointLight position={[-2, 2.5, 1]} intensity={1.05} color="#ef4444" />
-        <pointLight position={[2, 2, 2]} intensity={0.35} color="#67e8f9" />
+        <ambientLight intensity={0.55} />
+        <directionalLight position={[3, 5, 2]} intensity={1.2} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
+        <pointLight position={[-2, 2.5, 1]} intensity={0.75} color="#ff6b6b" />
+        <pointLight position={[2, 2, 2]} intensity={0.5} color="#67e8f9" />
 
-        <Float speed={1.4} rotationIntensity={0.07} floatIntensity={0.08}>
+        <Float speed={1.25} rotationIntensity={0.08} floatIntensity={0.12}>
           <ChefModel />
         </Float>
 
@@ -147,10 +135,8 @@ export function Chef3D() {
           <meshStandardMaterial color="#0e1b2b" roughness={0.95} />
         </mesh>
 
-        <OrbitControls enableZoom={false} enablePan={false} minPolarAngle={1.1} maxPolarAngle={1.46} />
+        <OrbitControls enableZoom={false} enablePan={false} minPolarAngle={1.12} maxPolarAngle={1.5} />
       </Canvas>
     </div>
   );
 }
-
-useGLTF.preload("/models/chef-ant.glb");
