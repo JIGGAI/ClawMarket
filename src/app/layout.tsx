@@ -38,6 +38,21 @@ export const metadata: Metadata = {
       "Scaffold teams, ship work, keep it file-first. Browse featured recipes and launch a shared workspace in minutes.",
     type: "website",
     url: siteUrl,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ClawRecipes — OpenClaw Recipes",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ClawRecipes — OpenClaw Recipes",
+    description:
+      "Scaffold teams, ship work, keep it file-first. Browse featured recipes and launch a shared workspace in minutes.",
+    images: ["/twitter-image"],
   },
 };
 
