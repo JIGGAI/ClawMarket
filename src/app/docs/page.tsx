@@ -3,7 +3,7 @@ import { FadeIn } from "@/components/FadeIn";
 
 export const metadata = {
   title: "Docs – ClawRecipes",
-  description: "Documentation for ClawRecipes recipes and workflows.",
+  description: "Documentation for ClawRecipes, ClawKitchen, recipes, workflows, and team operations.",
 };
 
 export default function DocsPage() {
@@ -16,10 +16,10 @@ export default function DocsPage() {
               Documentation
             </p>
             <h1 className="mt-4 text-5xl font-bold tracking-tight text-[var(--text)] lg:text-6xl">
-              Docs coming soon
+              Product docs
             </h1>
             <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
-              We&apos;re working on comprehensive documentation for ClawRecipes recipes, team workflows, and agent configuration.
+              Browse the live docs for ClawRecipes, ClawKitchen, workflows, team operations, and setup guides.
             </p>
 
             <div className="mt-10 flex flex-wrap justify-center gap-4">
@@ -33,11 +33,11 @@ export default function DocsPage() {
               </a>
               <a
                 className="rounded-lg bg-white px-6 py-3 text-base font-semibold text-[var(--text)] shadow-md transition hover:bg-slate-50"
-                href="https://github.com/JIGGAI/ClawRecipes/tree/main/docs"
+                href="https://docs.clawkitchen.ai"
                 target="_blank"
                 rel="noreferrer"
               >
-                View on GitHub
+                Browse JIGGAI Docs
               </a>
             </div>
 
@@ -47,14 +47,14 @@ export default function DocsPage() {
                 <li>
                   📖 Check out the{" "}
                   <a
-                    href="https://github.com/JIGGAI/ClawRecipes/tree/main/docs"
+                    href="https://docs.clawkitchen.ai"
                     target="_blank"
                     rel="noreferrer"
                     className="text-[color:var(--coral-bright)] underline"
                   >
-                    README
+                    JIGGAI Docs
                   </a>{" "}
-                  for quick start guides
+                  for product and setup guides
                 </li>
                 <li>
                   🍳 Browse{" "}
