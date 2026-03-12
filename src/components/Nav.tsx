@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
-const docsUrl = "https://github.com/JIGGAI/ClawRecipes/tree/main/docs";
+const docsUrl = "https://docs.clawkitchen.ai";
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
 const xUrl = "https://x.com/clawrecipes";
 const discordUrl = "https://discord.gg/BKGUkGTR";
