@@ -15,10 +15,16 @@ function kindLabel(kind: MarketplaceRecipe["kind"]) {
   return kind === "team" ? "Team Recipe" : "Agent Recipe";
 }
 
-function installCommand(r: MarketplaceRecipe) {
+function scaffoldCommand(r: MarketplaceRecipe) {
   return r.kind === "team"
     ? `openclaw recipes scaffold-team ${r.slug} -t my-${r.slug} --apply-config`
     : `openclaw recipes scaffold ${r.slug} --agent-id my-${r.slug.replace(/-/g, "")} --apply-config`;
+}
+
+function manualInstallCommand(r: MarketplaceRecipe) {
+  return `mkdir -p ~/.openclaw/workspace/recipes
+# then move/copy the recipe Markdown into that folder
+# e.g. mv ~/Downloads/${r.slug}.md ~/.openclaw/workspace/recipes/`;
 }
 
 // (formatIsoDate removed: no longer needed after removing duplicate metadata card)
@@ -201,7 +207,8 @@ export default async function MarketplaceRecipeDetailPage({
     );
   }
 
-  const cmd = installCommand(recipe);
+  const scaffoldCmd = scaffoldCommand(recipe);
+  const manualInstallCmd = manualInstallCommand(recipe);
   const moderation = canModerate ? await fetchModerationForRecipe(recipe) : null;
 
   // For unpublished UGC, recipe.sourceUrl may point at a route that requires moderator cookies;
@@ -263,19 +270,50 @@ export default async function MarketplaceRecipeDetailPage({
           <div className="mx-auto max-w-6xl">
             <h2 className="text-2xl font-bold text-[var(--text)]">Install / Scaffold</h2>
             <p className="mt-2 text-[var(--muted)]">
-              Copy-paste the command below in a terminal where OpenClaw is installed.
+              {recipe.origin === "bundled"
+                ? "Built-in recipes can be scaffolded directly."
+                : "Community recipes need to be copied into your local workspace first, then scaffolded."}
             </p>
 
-            <div className="mt-5 max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
-                  <span className="text-emerald-400">$</span> {cmd}
-                </div>
-                <div className="self-end sm:self-auto">
-                  <CopyLineButton text={cmd} />
+            {recipe.origin === "bundled" ? (
+              <div className="mt-5 max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Scaffold command</div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
+                    <span className="text-emerald-400">$</span> {scaffoldCmd}
+                  </div>
+                  <div className="self-end sm:self-auto">
+                    <CopyLineButton text={scaffoldCmd} />
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="mt-5 grid gap-4">
+                <div className="max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+                  <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">1) Copy recipe into workspace</div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <pre className="w-full overflow-x-auto whitespace-pre-wrap break-words sm:whitespace-pre [-webkit-overflow-scrolling:touch]">
+                      <code>{manualInstallCmd}</code>
+                    </pre>
+                    <div className="self-end sm:self-auto">
+                      <CopyLineButton text={manualInstallCmd} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="max-w-full rounded-xl bg-slate-900/95 px-4 py-3 font-mono text-sm text-slate-200">
+                  <div className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">2) Scaffold from that recipe</div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
+                      <span className="text-emerald-400">$</span> {scaffoldCmd}
+                    </div>
+                    <div className="self-end sm:self-auto">
+                      <CopyLineButton text={scaffoldCmd} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Mobile-first layout: structured summary above raw recipe source */}
             <div className="mt-12 grid gap-10 lg:grid-cols-3">
@@ -373,29 +411,46 @@ export default async function MarketplaceRecipeDetailPage({
                 {/* removed duplicate top "How to install" (metadata) card per RJ */}
 
                 <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/70 p-6">
-                  <h3 className="text-lg font-bold text-[var(--text)]">How to install</h3>
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    To install community recipes manually, download the recipe Markdown and place it into your OpenClaw
-                    workspace.
-                  </p>
+                  <h3 className="text-lg font-bold text-[var(--text)]">
+                    {recipe.origin === "bundled" ? "How to scaffold" : "How to install"}
+                  </h3>
 
-                  <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
-                    <li>
-                      Click <span className="font-semibold">View raw</span> below to open the recipe Markdown.
-                    </li>
-                    <li>
-                      Save it locally as <span className="font-mono">{recipe.slug}.md</span>.
-                    </li>
-                    <li>Move it into your workspace recipes folder:</li>
-                  </ol>
+                  {recipe.origin === "bundled" ? (
+                    <>
+                      <p className="mt-2 text-sm text-[var(--muted)]">
+                        This recipe is built in, so you do not need to download or copy any Markdown first.
+                      </p>
+                      <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
+                        <li>Open a terminal where OpenClaw is installed.</li>
+                        <li>Run the scaffold command shown above.</li>
+                        <li>Adjust the generated team or agent id if you want a different local name.</li>
+                      </ol>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mt-2 text-sm text-[var(--muted)]">
+                        Community recipes need to be downloaded as Markdown, copied into your OpenClaw workspace, and
+                        then scaffolded locally.
+                      </p>
 
-                  <pre className="mt-3 max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]">
-                    <code>{`mkdir -p ~/.openclaw/workspace/recipes
-# then move/copy the file into that folder
-# e.g. mv ~/Downloads/${recipe.slug}.md ~/.openclaw/workspace/recipes/`}</code>
-                  </pre>
+                      <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--text)]">
+                        <li>
+                          Click <span className="font-semibold">View raw</span> below to open the recipe Markdown.
+                        </li>
+                        <li>
+                          Save it locally as <span className="font-mono">{recipe.slug}.md</span>.
+                        </li>
+                        <li>Move it into your workspace recipes folder.</li>
+                        <li>Run the scaffold command shown above.</li>
+                      </ol>
 
-                  <p className="mt-3 text-sm text-[var(--muted)]">After that, it should show up in your local OpenClaw recipes list.</p>
+                      <pre className="mt-3 max-w-full overflow-x-auto overflow-y-auto whitespace-pre-wrap break-words sm:whitespace-pre rounded-xl bg-slate-900/95 px-4 py-3 text-sm text-slate-200 [-webkit-overflow-scrolling:touch]">
+                        <code>{manualInstallCmd}</code>
+                      </pre>
+
+                      <p className="mt-3 text-sm text-[var(--muted)]">After that, it should show up in your local OpenClaw recipes list and be ready to scaffold.</p>
+                    </>
+                  )}
                 </div>
               </aside>
 
