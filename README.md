@@ -1,4 +1,4 @@
-# ClawMarket (clawkitchen.ai)
+# ClawMarket (clawkitchen.ai, clawrecipes.com)
 
 Next.js app for the ClawKitchen marketing site + marketplace (recipes + UGC submissions/moderation).
 
