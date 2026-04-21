@@ -5,8 +5,8 @@ import { CopyLineButton } from "@/components/CopyLineButton";
 import { ScreenshotGrid } from "@/components/ScreenshotGrid";
 import { getPublicMetrics } from "@/lib/public-metrics";
 import { WorkflowsShowcase } from "@/components/WorkflowsShowcase";
-import { NewsletterSubscribeForm } from "@/components/NewsletterSubscribeForm";
 import { Chef3D } from "@/components/Chef3D";
+import { ManagedServiceInterestForm } from "@/components/ManagedServiceInterestForm";
 
 const agents = [
   { name: "Lead", icon: "🧑‍🍳", blurb: "Owns the plan and keeps the kitchen moving." },
@@ -15,7 +15,6 @@ const agents = [
   { name: "QA", icon: "🔍", blurb: "Verifies recipes and catches regressions." },
 ];
 
-// Screenshots (openable in modal)
 const kitchenImages = Array.from({ length: 8 }).map((_, i) => {
   const n = String(i + 1).padStart(2, "0");
   return {
@@ -23,6 +22,13 @@ const kitchenImages = Array.from({ length: 8 }).map((_, i) => {
     alt: `ClawKitchen screenshot ${n}`,
   };
 });
+
+const marketingPluginConceptImages = [
+  { src: "/images/plugins/kitchen/kitchen-01.jpg", alt: "Marketing plugin concept, dashboard shell" },
+  { src: "/images/plugins/kitchen/kitchen-04.jpg", alt: "Marketing plugin concept, workflow and approvals" },
+  { src: "/images/plugins/kitchen/kitchen-06.jpg", alt: "Marketing plugin concept, team and content operations" },
+  { src: "/images/workflows/workflow-runs-detail.png", alt: "Marketing workflow run detail" },
+];
 
 const teamSlides = [
   { label: "Team Builder", src: "/images/teams/team-building.png", alt: "Team builder" },
@@ -36,12 +42,6 @@ const workflowSlides = [
   { label: "Run Queue", src: "/images/workflows/workflow-runs.png", alt: "Workflow run queue" },
   { label: "Run Detail", src: "/images/workflows/workflow-runs-detail.png", alt: "Workflow run detail" },
   { label: "Execution View", src: "/images/workflows/workflow-3.png", alt: "Workflow execution view" },
-];
-
-const ticketsImages = [
-  { src: "/images/tickets/tickets-1.png", alt: "Tickets" },
-  { src: "/images/tickets/tickets-2.png", alt: "Tickets" },
-  { src: "/images/tickets/edit-tickets.png", alt: "Edit ticket" },
 ];
 
 const agentsImages = [
@@ -62,43 +62,42 @@ const cronImages = [
 const whatYouGet = [
   {
     title: "Multi-agent teams",
-    desc: "Lead, Dev, DevOps, QA templates ready to run.",
+    desc: "Lead, dev, DevOps, QA, marketing, and custom-role templates ready to run.",
     icon: "🧑‍🤝‍🧑",
     iconBg: "bg-[#3b82f6]/20",
     iconColor: "text-[#93c5fd]",
   },
   {
-    title: "Shared context",
-    desc: "File-first workflows in git, readable and reviewable.",
+    title: "Managed team memory",
+    desc: "Shared memory, file-first context, and durable workspace continuity across runs and roles.",
     icon: "🧠",
     iconBg: "bg-[#14b8a6]/20",
     iconColor: "text-[#5eead4]",
   },
   {
-    title: "Cron automation",
-    desc: "Recurring ops loops with explicit install consent.",
+    title: "Workflow triggers + node types",
+    desc: "Manual, cron, and event-driven workflows across LLM, approvals, handoffs, media, and publishing.",
     icon: "⏰",
     iconBg: "bg-[#f59e0b]/20",
     iconColor: "text-[#fcd34d]",
   },
   {
-    title: "Recipe marketplace",
-    desc: "Install proven team and agent templates instantly.",
+    title: "Plugins, skills, and recipes",
+    desc: "Install proven capabilities, team systems, and operator surfaces directly into OpenClaw.",
     icon: "🛒",
     iconBg: "bg-[#f43f5e]/20",
     iconColor: "text-[#fda4af]",
   },
 ];
 
-// These filenames include a narrow no-break space in the original screenshot name; use URL-encoded paths.
 const goalsImages = [
   {
     src: "/images/goals/Screenshot%202026-03-06%20at%2010.57.02%E2%80%AFPM.png",
-    alt: "Goals" ,
+    alt: "Goals",
   },
   {
     src: "/images/goals/Screenshot%202026-03-06%20at%2010.57.31%E2%80%AFPM.png",
-    alt: "Goals" ,
+    alt: "Goals",
   },
 ];
 
@@ -165,8 +164,8 @@ export default async function HomePage() {
               </h1>
 
               <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)] lg:text-2xl">
-                Markdown blueprints build complete OpenClaw teams: file-first context, recurring cron magic, coworker-style
-                specialists, agile flow locked in git. From scaffold to shipped, repeatable and reviewable every time.
+                ClawRecipes and ClawKitchen turn OpenClaw into a full operating stack: installable teams, managed memory,
+                orchestrated workflows, plugin-powered capabilities, and operator-grade visibility from scaffold to ship.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4">
@@ -198,12 +197,12 @@ export default async function HomePage() {
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
-                <a href="#shared-context" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Shared context</a>
+                <a href="#shared-context" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Managed memory</a>
                 <a href="#team-agents" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team agents</a>
                 <a href="#run-structured" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Workflows</a>
                 <a href="#teams-showcase" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Team builder</a>
-                <a href="#agile-process" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Agile</a>
-                <a href="#cron-automation" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Automation</a>
+                <a href="#plugins-spotlight" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Plugins</a>
+                <a href="#managed-ai-team" className="rounded-full border border-[var(--border)] bg-white/5 px-4 py-2 transition hover:bg-white/10">Managed AI teams</a>
               </div>
             </div>
 
@@ -355,10 +354,10 @@ export default async function HomePage() {
               <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
                 <div>
                   <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Pantry</p>
-                  <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Shared, file-based context</h2>
+                  <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">Managed team memory, not fragile chat context</h2>
                   <p className="mt-6 text-xl leading-8 text-[var(--muted)]">
                     Your team doesn&apos;t forget. Context lives in a shared workspace: Markdown notes, tickets, checklists,
-                    and artifacts that stay reviewable, greppable, and versioned.
+                    and artifacts that stay reviewable, greppable, versioned, and reusable across runs.
                   </p>
                 </div>
 
@@ -369,7 +368,7 @@ export default async function HomePage() {
                   />
                   <Card
                     title="Deterministic scaffolding"
-                    body="Start from a known-good structure every time: lanes, roles, templates, and conventions included."
+                    body="Start from a known-good structure every time: lanes, roles, templates, conventions, and durable memory included."
                   />
                 </div>
               </div>
@@ -385,7 +384,7 @@ export default async function HomePage() {
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">A team of agents</h2>
             <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
               Specialists you can message like coworkers. Each role has its own tools, templates, and responsibilities,
-              and you can extend them with recipes.
+              and you can extend them with recipes and skills.
             </p>
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -458,47 +457,15 @@ export default async function HomePage() {
       </FadeIn>
 
       <FadeIn>
-        <section id="agile-process" className="px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">The Pass</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">An agile process that sticks</h2>
-            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Dispatch → backlog → in-progress → testing → done. Simple swim lanes, clean handoffs, and verification
-              checklists as files.
-            </p>
-
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {["Backlog", "In progress", "Testing", "Done"].map((lane, idx) => (
-                <div key={lane} className="rounded-2xl border border-[var(--border)] bg-[color:var(--card)] p-6 shadow-[var(--shadow)]">
-                  <div className="text-sm uppercase tracking-[0.2em] text-[var(--muted)]">Lane {idx + 1}</div>
-                  <div className="mt-3 text-2xl font-bold text-[var(--text)]">{lane}</div>
-                  <div className="mt-3 text-base text-[var(--muted)]">
-                    {idx === 0 && "What's next, written down."}
-                    {idx === 1 && "Focused work, owned."}
-                    {idx === 2 && "Proof, verification, QA."}
-                    {idx === 3 && "Shipped and documented."}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12">
-              <ScreenshotGrid title="Tickets" items={ticketsImages} columns="3" />
-            </div>
-          </div>
-        </section>
-      </FadeIn>
-
-      {/* FEATURE: Workflows */}
-      <FadeIn>
         <section id="run-structured" className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
             <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Workflows</p>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              Run structured work — and see the artifacts
+              Trigger structured work across multiple node types
             </h2>
             <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Queue runs, run now, inspect outputs, and keep everything file-first.
+              Queue runs from manual, cron, and event-driven triggers, then move work through LLM steps, approvals, handoffs,
+              media generation, and publishing with visible artifacts.
             </p>
 
             <div className="mt-10">
@@ -508,7 +475,64 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
-      {/* FEATURE: Goals */}
+      <FadeIn>
+        <section id="plugins-spotlight" className="px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Plugins</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Marketing plugin visual direction
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Show concrete value, not abstract claims: planning, assets, approval flow, and publishing in one visible operator surface.
+            </p>
+
+            <div className="mt-12">
+              <ScreenshotGrid items={marketingPluginConceptImages} columns="4" />
+            </div>
+
+            <div className="mt-8 grid gap-4 lg:grid-cols-3">
+              <Card title="Content calendar + previews" body="A planning surface that makes campaign work feel organized and real." />
+              <Card title="Media library + assets" body="Uploads, reusable media, and preview-friendly composition that buyers instantly understand." />
+              <Card title="Workflow-driven publishing" body="Research, copy, approvals, and Postiz-backed publishing tied into one operating system." />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Marketplace</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              Install proven templates instead of reinventing everything
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Browse team recipes and agent recipes, then scaffold into your own OpenClaw workspace.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={recipesImages} columns="2" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <section className="px-6 py-20 lg:px-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
+              A UI that makes agent teams usable
+            </h2>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
+              Screenshots you can click through, showing the operator layer that makes teams, workflows, and plugins usable day to day.
+            </p>
+            <div className="mt-12">
+              <ScreenshotGrid items={kitchenImages} columns="4" />
+            </div>
+          </div>
+        </section>
+      </FadeIn>
+
       <FadeIn>
         <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
           <div className="mx-auto max-w-6xl">
@@ -526,108 +550,18 @@ export default async function HomePage() {
         </section>
       </FadeIn>
 
-      {/* FEATURE: Marketplace */}
       <FadeIn>
-        <section id="marketplace-section" className="px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">Marketplace</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              Install proven templates instead of reinventing everything
-            </h2>
-            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Browse team recipes and agent recipes — then scaffold into your own OpenClaw workspace.
-            </p>
-            <div className="mt-12">
-              <ScreenshotGrid items={recipesImages} columns="2" />
-            </div>
-          </div>
-        </section>
-      </FadeIn>
-
-      {/* FEATURE: ClawKitchen */}
-      <FadeIn>
-        <section className="bg-[color:var(--bg)]/45 px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <p className="text-sm uppercase tracking-[0.25em] text-[color:var(--coral-bright)]">ClawKitchen</p>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-5xl">
-              A UI that makes agent teams usable
-            </h2>
-            <p className="mt-6 max-w-3xl text-xl leading-8 text-[var(--muted)]">
-              Screenshots you can click through — same modal behavior as the Kitchen plugin page.
-            </p>
-            <div className="mt-12">
-              <ScreenshotGrid items={kitchenImages} columns="4" />
-            </div>
-          </div>
-        </section>
-      </FadeIn>
-
-      <FadeIn>
-        <section id="live-visibility" className="px-6 py-20 lg:px-16">
-          <div className="mx-auto max-w-6xl">
-            <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--coral-bright)_55%,transparent)] bg-[linear-gradient(135deg,rgba(255,77,77,0.22),rgba(255,77,77,0.05))] p-8 shadow-[var(--shadow)] lg:p-12">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#ffc1c1]">Live Visibility</p>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight text-[var(--text)] lg:text-6xl">
-                Create your team in &lt;30 seconds
-              </h2>
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--muted)]">
-                Install both plugins and launch a team-ready workspace immediately.
-              </p>
-
-              <div className="codeblock mt-8 overflow-hidden rounded-2xl bg-[#0a1019] shadow-2xl">
-                <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-4">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-block size-3 rounded-full bg-red-500" />
-                    <span className="inline-block size-3 rounded-full bg-yellow-500" />
-                    <span className="inline-block size-3 rounded-full bg-green-500" />
-                  </div>
-                  <span className="ml-4 text-sm text-slate-400">Install Commands</span>
-                </div>
-
-                <div className="space-y-4 px-6 py-6 font-mono text-sm">
-                  <div className="flex items-start gap-3 text-slate-100">
-                    <div className="w-0 min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
-                      <span className="mr-2 text-[var(--coral-bright)]">$</span>
-                      openclaw plugins install @jiggai/recipes
-                    </div>
-                    <CopyLineButton text="openclaw plugins install @jiggai/recipes" className="shrink-0" />
-                  </div>
-
-                  <div className="flex items-start gap-3 text-slate-100">
-                    <div className="w-0 min-w-0 flex-1 overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]">
-                      <span className="mr-2 text-[var(--coral-bright)]">$</span>
-                      openclaw plugins install @jiggai/kitchen
-                    </div>
-                    <CopyLineButton text="openclaw plugins install @jiggai/kitchen" className="shrink-0" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/marketplace"
-                  className="rounded-lg bg-[color:var(--coral-bright)] px-6 py-3 text-sm font-semibold text-[#0b1220] transition hover:brightness-95"
-                >
-                  Start from Marketplace
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-      </FadeIn>
-
-      <FadeIn>
-        <section className="px-6 pb-20 lg:px-16">
-          <div className="mx-auto max-w-4xl rounded-3xl border border-[var(--border)] bg-[color:var(--card)] p-8 shadow-[var(--shadow)] lg:p-10">
+        <section id="managed-ai-team" className="px-6 pb-20 lg:px-16">
+          <div className="mx-auto max-w-4xl rounded-3xl border border-[color:color-mix(in_oklab,var(--coral-bright)_55%,transparent)] bg-[linear-gradient(135deg,rgba(255,77,77,0.14),rgba(255,77,77,0.04))] p-8 shadow-[var(--shadow)] lg:p-10">
             <div className="text-center">
-              <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--coral-bright)]">Newsletter</p>
-              <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)]">Get product updates</h3>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#ffc1c1]">Coming soon</p>
+              <h3 className="mt-3 text-3xl font-bold tracking-tight text-[var(--text)]">Managed AI teams</h3>
               <p className="mt-3 text-sm text-[var(--muted)]">
-                Monthly updates on new recipes, workflows, and agent operations best practices.
+                Want a team designed, installed, and tuned for your company? Join the list for the managed AI team product and service.
               </p>
             </div>
 
-            <NewsletterSubscribeForm />
+            <ManagedServiceInterestForm source="homepage-managed-ai-team" />
           </div>
         </section>
       </FadeIn>
