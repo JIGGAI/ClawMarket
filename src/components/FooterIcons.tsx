@@ -1,6 +1,6 @@
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
 const xUrl = "https://x.com/clawrecipes";
-const discordUrl = "https://discord.gg/BKGUkGTR";
+const discordUrl = "https://discord.com/invite/qKfbeAk6zA";
 
 function XIcon({ className }: { className?: string }) {
   return (
