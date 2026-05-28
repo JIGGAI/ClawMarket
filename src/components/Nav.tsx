@@ -85,6 +85,9 @@ export function Nav() {
           <Link className="hover:text-[var(--text)]" href="/how-it-works">
             How It Works
           </Link>
+          <Link className="hover:text-[var(--text)]" href="/jigga">
+            JIGGA
+          </Link>
           <div className="group relative">
             <button type="button" className="inline-flex items-center gap-1 hover:text-[var(--text)]">
               Our Plugins
@@ -185,6 +188,9 @@ export function Nav() {
                 </Link>
                 <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/how-it-works" onClick={() => setOpen(false)}>
                   How It Works
+                </Link>
+                <Link className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href="/jigga" onClick={() => setOpen(false)}>
+                  JIGGA
                 </Link>
                 <a className="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-[var(--text)]" href={docsUrl} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                   Docs
