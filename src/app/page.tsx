@@ -189,7 +189,7 @@ export default async function HomePage() {
               <div className="mt-4">
                 <a
                   className="inline-flex items-center rounded-lg border border-[var(--border)] bg-white/5 px-5 py-2.5 text-sm font-semibold text-[var(--text)] transition hover:bg-white/10"
-                  href="https://discord.gg/BKGUkGTR"
+                  href="https://discord.com/invite/qKfbeAk6zA"
                   target="_blank"
                   rel="noreferrer"
                 >

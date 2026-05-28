@@ -66,7 +66,7 @@ export default function DocsPage() {
                 <li>
                   💬 Join the{" "}
                   <a
-                    href="https://discord.com/invite/clawd"
+                    href="https://discord.com/invite/qKfbeAk6zA"
                     target="_blank"
                     rel="noreferrer"
                     className="text-[color:var(--coral-bright)] underline"

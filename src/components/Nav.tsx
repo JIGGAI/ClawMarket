@@ -8,7 +8,7 @@ import { useSession, signOut } from "next-auth/react";
 const docsUrl = "https://docs.clawkitchen.ai";
 const githubUrl = "https://github.com/JIGGAI/ClawRecipes";
 const xUrl = "https://x.com/clawrecipes";
-const discordUrl = "https://discord.gg/BKGUkGTR";
+const discordUrl = "https://discord.com/invite/qKfbeAk6zA";
 
 function DiscordIcon({ className }: { className?: string }) {
   return (
