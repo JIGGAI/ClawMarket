@@ -15,4 +15,7 @@ else
 fi
 
 echo "[build] running next build"
-next build
+# Force a production build regardless of the caller's shell NODE_ENV.
+# Next will warn and can behave inconsistently if NODE_ENV is non-standard (e.g. "development").
+export NODE_ENV=production
+NODE_ENV=production next build

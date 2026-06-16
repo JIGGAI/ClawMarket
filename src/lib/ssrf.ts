@@ -97,6 +97,19 @@ export async function validateHttpUrlNoPrivateIps(raw: string, opts?: { requireZ
     return { ok: false, error: "URL host must not be a private IP" };
   }
 
+  // Disallow credentials in URLs (e.g., https://user:pass@example.com)
+  if (u.username || u.password) {
+    return { ok: false, error: "URL must not include credentials" };
+  }
+
+  // Restrict ports to the protocol defaults (reduces SSRF surface area).
+  // - http  => 80
+  // - https => 443
+  if (u.port) {
+    const allowed = u.protocol === "http:" ? u.port === "80" : u.port === "443";
+    if (!allowed) return { ok: false, error: "URL must not specify a non-default port" };
+  }
+
   // DNS resolve to prevent hostnames that resolve to private IPs.
   // Fail-closed: if we can't resolve, reject.
   try {
